@@ -77,7 +77,7 @@ class Body extends StatelessWidget {
                 type: TextInputType.number, // this makes sure that only integers are taken in this text field
                 validate: (value) {
                   if (value == null) {
-                    return "Invalid number. Please re-enter."; // if value is null, return this
+                    return "Invalid phone number. Please re-enter."; // if value is null, return this
                   }
                   final n = num.tryParse(value);
                   if (n == null) {
