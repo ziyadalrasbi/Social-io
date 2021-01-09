@@ -130,7 +130,7 @@ class Body extends StatelessWidget {
                       ),
                     )
                   : Scaffold.of(context).showSnackBar(
-                    SnackBar(content: Text("This is not a valid.")));
+                    SnackBar(content: Text("This is not valid.")));
                 },
               ),
             ],
