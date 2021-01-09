@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:login_page/pages/home/parts/background.dart';
-import 'package:login_page/constants.dart';
 import 'package:login_page/pages/login/login_screen.dart';
 import 'package:login_page/pages/signup/sign_up_first.dart';
 import 'package:login_page/parts/button.dart';
@@ -43,7 +42,7 @@ class Body extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) {
                       return SignUpFirst();
-                    }
+                    },
                   ),
                 );
               },
