@@ -8,6 +8,7 @@ import 'package:login_page/parts/text_field_box.dart';
 class InputField extends StatelessWidget {
   final String hint; // the hint text, that goes on top of the text box
   final Function validate; // a validator function that is used to validate different inputs
+  final TextEditingController control;
   final TextInputType type; // the input type for a field (e.g. integer, string, date etc.)
   final ValueChanged<String> changes; // this is used to detect the changes, good for async validation
   InputField({
@@ -15,6 +16,7 @@ class InputField extends StatelessWidget {
     this.hint,
     this.validate,
     this.type,
+    this.control,
     this.changes,
   }) : super(key: key);
 
@@ -22,6 +24,7 @@ class InputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldBox(
       child: TextFormField(
+        controller: control,
         validator: validate, 
         onChanged: changes,
         keyboardType: type,

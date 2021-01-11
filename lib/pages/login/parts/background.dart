@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:login_page/pages/login/login_screen.dart';
 
 
 class Background extends StatelessWidget {
   final Widget child;
   const Background({
     Key key, 
+
     @required this.child
   }) : super(key: key);
 
@@ -18,6 +20,7 @@ class Background extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
+          
           child,
         ],
       )

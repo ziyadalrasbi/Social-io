@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 
+
 // the background of the welcome screen page
 // things such as patterns or colours can go here on the background
 // this section is overlapped by the body
+
+
 
 class Background extends StatelessWidget {
   final Widget child;
