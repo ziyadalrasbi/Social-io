@@ -10,8 +10,10 @@ class PassField extends StatelessWidget {
   final ValueChanged<String> changes; // this is used for detecting changes in a text field
   final TextEditingController control; // this control is used later for confirming passwords
   final Function validate; // input validator function
+  final String hint;
   const PassField({
     Key key, 
+    this.hint,
     this.control,
     this.changes,
     this.validate,
@@ -27,7 +29,7 @@ class PassField extends StatelessWidget {
         onChanged: changes,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: "Password",
+          hintText: hint,
           suffixIcon: Icon(
             Icons.visibility, 
             color: primaryDarkColour,

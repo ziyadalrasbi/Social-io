@@ -15,6 +15,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
         StreamProvider(
           create: (context) => context.read<AuthService>().authStateChanges,
-        ),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: primaryLightColour,
           scaffoldBackgroundColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: AuthWrapper(),
       ),
@@ -45,9 +47,18 @@ class AuthWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseuser = context.watch<User>();
     
+    Future.delayed(Duration.zero, () {
     if (firebaseuser != null) {
-      return SignUpFirst();
-    }
-    return HomePage();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return SignUpFirst();
+          }
+        ),
+      );
+    } 
+    });
+  return HomePage();
   }
 }

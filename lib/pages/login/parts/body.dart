@@ -14,18 +14,17 @@ import 'package:provider/provider.dart';
 // the login page
 
 class Body extends StatelessWidget {
-  final Widget home;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
   Body({
     Key key,
-    this.home,
   }) : super(key: key);
 
 
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passController = TextEditingController();
+    
 
     Size dimensions = MediaQuery.of(context).size;
     return Background(
@@ -46,7 +45,7 @@ class Body extends StatelessWidget {
           ),
           MainButton(
             text: "Log In",
-            pressed: () {
+            pressed: () async {
               context.read<AuthService>().logIn(
                 email: emailController.text,
                 pass: passController.text,
