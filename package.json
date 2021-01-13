@@ -1,0 +1,29 @@
+{
+  "name": "login_page",
+  "version": "1.0.0",
+  "description": "Photo sharing social media platform.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config prod.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ziyadalrasbi/Social-io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ziyadalrasbi/Social-io/issues"
+  },
+  "homepage": "https://github.com/ziyadalrasbi/Social-io#readme",
+  "dependencies": {
+    "webpack": "^5.13.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.3.1"
+  }
+}
