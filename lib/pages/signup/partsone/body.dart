@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_page/pages/login/login_screen.dart';
 import 'package:login_page/pages/signup/partsone/background.dart';
-import 'package:login_page/pages/signup/sign_up_first.dart';
 import 'package:login_page/pages/signup/sign_up_second.dart';
 import 'package:login_page/parts/account_recheck.dart';
 import 'package:login_page/parts/button.dart';
@@ -20,7 +19,6 @@ class Body extends StatelessWidget {
     }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Size dimensions = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(

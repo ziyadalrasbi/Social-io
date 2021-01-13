@@ -11,19 +11,17 @@ import 'package:login_page/parts/button.dart';
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size dimensions = MediaQuery.of(context).size; // always using the dimensions of the screen to compare to
     return Background(
       child: SingleChildScrollView (
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // aligning everything central
           children: <Widget>[
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Image.asset(
+            
+              
+              Image.asset(
                 'assets/icons/LOGONEW.png',
               ),
-            ),
+            
             // over here we can put pictures or whatever
             MainButton( // login button
               text: "Login",

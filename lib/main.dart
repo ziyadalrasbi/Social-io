@@ -4,7 +4,6 @@ import 'package:login_page/form_authentication.dart';
 import 'package:login_page/pages/home/home_page.dart';
 import 'package:login_page/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:login_page/pages/login/login_screen.dart';
 import 'package:login_page/pages/signup/sign_up_first.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,6 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

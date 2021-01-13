@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_page/pages/home/home_page.dart';
 import 'package:login_page/pages/signup/partstwo/background.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:login_page/parts/input_field_box.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:login_page/parts/password_field_box.dart';
-import 'package:login_page/pages/signup/partstwo/body.dart';
 import 'package:login_page/form_authentication.dart';
 
 // the last sign up page that asks for the final details
@@ -30,7 +28,6 @@ class Body extends StatelessWidget {
     }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Size dimensions = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Form(
@@ -119,7 +116,7 @@ class Body extends StatelessWidget {
                 changes: (value) {},
               ),
               PassField( // the first "enter password" field
-                
+                control: _pass,
                 validate: (value) {
                   if (value.isEmpty) {
                     return "Password cannot be empty."; // check that passwords cant be empty
@@ -132,12 +129,12 @@ class Body extends StatelessWidget {
                   }
                   return null;
                 },
-                control: _pass, // the first controller is used here
+                // the first controller is used here
                 hint: "Password",
                 changes: (value) {},
               ),
               PassField( // this is the "confirm password" field
-                
+                control: _confirmPass,
                 validate: (value) {
                   if (value.isEmpty) {
                     return "Password cannot be empty."; // makes sure that it is not empty
@@ -148,14 +145,15 @@ class Body extends StatelessWidget {
                   return null;
                 },
                 hint: "Confirm password",
-                control: _confirmPass, // the controller for the confirm pass
+                 // the controller for the confirm pass
                 changes: (value) {},
               ),
               MainButton( // final sign up button
                 text: "Sign up",
                 pressed: () async {
-                  _formKey.currentState.validate();// form key to validate all the info
+                  // form key to validate all the info
                   try {
+                    _formKey.currentState.validate();
                     UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: emailController.text,
                       password: _pass.text,
@@ -167,8 +165,8 @@ class Body extends StatelessWidget {
                     signUp(usernameController.text);
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {
-                        print('The account already exists for that email.');
-                    }
+                        return('The account already exists for that email.');
+                      }
                   } catch (e) {
                     print(e);
                   }

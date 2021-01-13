@@ -1,15 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
-import 'package:login_page/form_authentication.dart';
-import 'package:login_page/pages/login/login_screen.dart';
 import 'package:login_page/pages/login/parts/background.dart';
 import 'package:login_page/pages/signup/sign_up_first.dart';
 import 'package:login_page/parts/account_recheck.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:login_page/parts/input_field_box.dart';
 import 'package:login_page/parts/password_field_box.dart';
-import 'package:login_page/parts/text_field_box.dart';
-import 'package:provider/provider.dart';
+
 
 // the login page
 
@@ -24,9 +21,6 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
-    Size dimensions = MediaQuery.of(context).size;
     return Background(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -47,10 +41,18 @@ class Body extends StatelessWidget {
           MainButton(
             text: "Log In",
             pressed: () async {
-              context.read<AuthService>().logIn(
-                email: emailController.text,
-                pass: passController.text,
-              );
+              try {
+                UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: emailController.text,
+                  password: passController.text
+                );
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'user-not-found') {
+                  print('No user found for that email.');
+                } else if (e.code == 'wrong-password') {
+                  print('Wrong password provided for that user.');
+                }
+              }
             },
           ),
           AccountRecheck(
