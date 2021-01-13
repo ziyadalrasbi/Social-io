@@ -36,11 +36,12 @@ class Body extends StatelessWidget {
           ),
           InputField(
             control: emailController,
-            hint: "Username or email address",
+            hint: "Email address",
             
           ),
           PassField(
             control: passController,
+            hint: "Password"
             
           ),
           MainButton(

@@ -17,8 +17,12 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // aligning everything central
           children: <Widget>[
-            Text(
-            "social io (logo here)", // the logo text
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Image.asset(
+                'assets/icons/LOGONEW.png',
+              ),
             ),
             // over here we can put pictures or whatever
             MainButton( // login button
