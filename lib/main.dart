@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/form_authentication.dart';
 import 'package:login_page/pages/home/home_page.dart';
+import 'package:login_page/extra/aboutus/about_us.dart';
 import 'package:login_page/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:login_page/pages/signup/sign_up_first.dart';
@@ -51,12 +52,12 @@ class AuthWrapper extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return SignUpFirst();
+            return AboutUs();
           }
         ),
       );
     } 
     });
-  return HomePage();
+    return HomePage();
   }
 }
