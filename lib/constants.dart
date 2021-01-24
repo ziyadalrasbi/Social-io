@@ -8,3 +8,6 @@ const primaryLightColour = Color(0xFFB0BEC5);
 // dark theme colour
 const primaryDarkColour = Colors.blueGrey;
 
+class Constants {
+  static String myName = "";
+}

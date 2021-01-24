@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:login_page/extra/aboutus/parts/background.dart';
+import 'package:login_page/extra/chatpage/chat_page.dart';
 import 'package:login_page/form_authentication.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:provider/provider.dart';
@@ -40,9 +41,11 @@ class Body extends StatelessWidget {
           MainButton(
             text: "Sign Out",
             pressed: () async { 
-              context.read<AuthService>().signOut();
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(),
+                ));
             },
           ),
         ],

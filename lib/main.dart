@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/form_authentication.dart';
+import 'package:login_page/helpers.dart';
 import 'package:login_page/pages/home/home_page.dart';
 import 'package:login_page/extra/aboutus/about_us.dart';
 import 'package:login_page/constants.dart';
@@ -14,8 +15,29 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+
+@override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async {
+    await HelperFunction.getLoggedInSharedPref();
+      setState(() {  
+      });
+     
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -41,6 +63,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,8 +79,14 @@ class AuthWrapper extends StatelessWidget {
           }
         ),
       );
-    } 
-    });
+    } else {
+      return HomePage();
+    }
+    }); 
     return HomePage();
   }
 }
+
+
+
+

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:login_page/database.dart';
+import 'package:login_page/helpers.dart';
 import 'package:login_page/pages/signup/partstwo/background.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:login_page/parts/input_field_box.dart';
@@ -9,8 +11,13 @@ import 'package:login_page/form_authentication.dart';
 
 // the last sign up page that asks for the final details
 // different types of validation used here
-class Body extends StatelessWidget {
-  final Widget child;
+class Body extends StatefulWidget {
+ @override
+ _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  Widget child;
   static final validNameCharacters = RegExp(r'^([A-Za-z])+$'); // these are the valid characters that a first/last name can have, which is only letter
   static final validEmailCharacters = RegExp(r'^[a-zA-Z0-9.@]+$'); // valid email characters
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // a form key for input validation
@@ -20,12 +27,10 @@ class Body extends StatelessWidget {
   final TextEditingController fnameController = TextEditingController();
   final TextEditingController lnameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
-    final TextEditingController mobileController = TextEditingController();
-  
-  Body({
-    Key key, 
-    @required this.child
-    }) : super(key: key);
+  final TextEditingController mobileController = TextEditingController();
+  bool isLoading = false;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+ 
   @override
   Widget build(BuildContext context) {
     return Background(
@@ -152,8 +157,15 @@ class Body extends StatelessWidget {
                 text: "Sign up",
                 pressed: () async {
                   // form key to validate all the info
+                  HelperFunction.saveUserEmailSharedPref(emailController.text);
+                  HelperFunction.saveUserNameSharedPref(usernameController.text);
+                  if (_formKey.currentState.validate()) {
+                    setState(() {
+                      isLoading = true;              
+                    });
+                  }
+                  
                   try {
-                    _formKey.currentState.validate();
                     UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: emailController.text,
                       password: _pass.text,
@@ -162,7 +174,10 @@ class Body extends StatelessWidget {
                     updateUser.updateProfile(
                       displayName: usernameController.text,
                     );
-                    signUp(usernameController.text);
+                    signUp(
+                      usernameController.text,
+                      emailController.text
+                      );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {
                         return('The account already exists for that email.');
@@ -170,6 +185,7 @@ class Body extends StatelessWidget {
                   } catch (e) {
                     print(e);
                   }
+                  HelperFunction.saveLoggedInSharedPref(true);
                 },
               ),
             ],
