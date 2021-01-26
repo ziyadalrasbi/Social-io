@@ -19,9 +19,7 @@ class AuthService {
     }
   }
 
-  Future<void> signOut() async {
-    await _firebaseAuth.signOut();
-  }
+  
 
   
 }
@@ -36,6 +34,15 @@ Future<void> signUp(String userName, String email) async {
         'uid': uid
       });
       return;
+}
+
+  Future signOut() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      return await auth.signOut();
+    } catch(e) {
+
+    }
   }
 
   

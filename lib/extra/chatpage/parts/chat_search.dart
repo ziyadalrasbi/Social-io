@@ -23,6 +23,7 @@ class _ChatSearchState extends State<ChatSearch> {
   QuerySnapshot searchshot;
   
 
+
   
   @override
   void initState() {
@@ -103,6 +104,19 @@ class _ChatSearchState extends State<ChatSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          Image.asset(
+            "assets/icons/LOGONEW.png", 
+            height: 50, 
+            alignment: Alignment.center,
+          ),
+          ],
+        ),
+      ),
       body: Container(
         child: Column(
           children: [
@@ -116,8 +130,8 @@ class _ChatSearchState extends State<ChatSearch> {
                       hint: "Search for users",
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () { 
+                  FloatingActionButton(
+                    onPressed: () { 
                       initSearch();
                     },
                     child: Container(

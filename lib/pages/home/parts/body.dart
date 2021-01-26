@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:login_page/pages/home/parts/background.dart';
 import 'package:login_page/pages/login/login_screen.dart';
-import 'package:login_page/pages/signup/sign_up_first.dart';
+
+import 'package:login_page/pages/signup/sign_up_second.dart';
 import 'package:login_page/parts/button.dart';
 
 // the body of the welcome screen
@@ -43,7 +44,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return SignUpFirst();
+                      return SignUpSecond();
                     },
                   ),
                 );

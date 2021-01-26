@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/database.dart';
 import 'package:login_page/extra/chatpage/chat_page.dart';
+import 'package:login_page/form_authentication.dart';
 import 'package:login_page/helpers.dart';
 import 'package:login_page/pages/login/parts/background.dart';
-import 'package:login_page/pages/signup/sign_up_first.dart';
+
+import 'package:login_page/pages/signup/sign_up_second.dart';
 import 'package:login_page/parts/account_recheck.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:login_page/parts/input_field_box.dart';
@@ -32,18 +34,39 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Background(
       child: Column(
+        key: _formKey,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
             "Login (maybe a picture here or just a nice font)"
           ),
           InputField(
-            key: _formKey,
+            validate: (value) {
+                  if (value.isEmpty) {
+                    return "This can't be empty.";
+                  }
+                  
+                  if (value.length < 2) {
+                    return "Usernames must be at least 2 characters.";
+                  }
+            },
             control: emailController,
             hint: "Email address",
             
           ),
           PassField(
+            validate: (value) {
+                  if (value.isEmpty) {
+                    return "Password cannot be empty."; // check that passwords cant be empty
+                  }
+                  if (value.length < 6) {
+                    return "Password cannot be less than 6 characters."; // passwords cant be less than 6 and greater than 15 characters
+                  }
+                  if (value.length > 15) {
+                    return "Password cannot be greater than 15 characters.";
+                  }
+                  return null;
+                },
             control: passController,
             hint: "Password"
             
@@ -51,7 +74,6 @@ class _BodyState extends State<Body> {
           MainButton(
             text: "Log In",
             pressed: () async {
-              if (_formKey.currentState.validate()) {
               HelperFunction.saveUserEmailSharedPref(emailController.text);
               setState(() {
                 isLoading = true;   
@@ -74,7 +96,7 @@ class _BodyState extends State<Body> {
                 }
               }
               HelperFunction.saveLoggedInSharedPref(true);
-              }
+              
             },
           ),
           AccountRecheck(
@@ -83,7 +105,7 @@ class _BodyState extends State<Body> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return SignUpFirst();
+                    return SignUpSecond();
                   }
                 ),
               );

@@ -6,7 +6,7 @@ import 'package:login_page/extra/chatpage/parts/background.dart';
 import 'package:login_page/extra/chatpage/parts/chat_search.dart';
 import 'package:login_page/extra/chatpage/parts/conversation_room.dart';
 import 'package:login_page/helpers.dart';
-import 'package:login_page/pages/signup/sign_up_first.dart';
+
 import 'package:login_page/parts/account_recheck.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:login_page/parts/input_field_box.dart';
@@ -37,7 +37,7 @@ class _BodyState extends State<Body> {
              snapshot.data.docs[index].data()["roomId"]
             );
           }
-        ) : Container();
+        ) : SizedBox(height: 0, width: 0);
       },
     );
   }
@@ -60,24 +60,51 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Background(
-      body: roomList(),
-      child: Column(
-        children: [
-          FloatingActionButton(
-            child:
+    return Scaffold(
+      body: new Container(
+        child: ListView(
+      children:[
+         AppBar(
+           automaticallyImplyLeading: false,
+           backgroundColor: Colors.blue,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
               Image.asset(
-              'assets/icons/ICON_search.png',
+                "assets/icons/LOGONEW.png", 
+                height: 50, 
+                alignment: Alignment.center,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => ChatSearch(),
-                ));
-              },
+              ],
+            ),
+            actions: <Widget>[
+              FloatingActionButton(
+                child:
+                  Image.asset(
+                  'assets/icons/ICON_search.png',
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ChatSearch(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ), 
+        Background(
+          
+          body: roomList(),
+          child: Column(
+            children: [
+              
+            ],
           ),
-        ],
+        ),
+      ],
+      ),
       ),
     );
   }
@@ -95,8 +122,8 @@ class RoomTile extends StatelessWidget {
         Navigator.push(
           context, 
           MaterialPageRoute(
-            builder: (context) => ConversationRoom(chatRoom)
-          )
+            builder: (context) => ConversationRoom(chatRoom),
+          ),
         );
       },
       child: Container(

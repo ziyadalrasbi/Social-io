@@ -63,7 +63,21 @@ class _ConversationRoomState extends State<ConversationRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          Image.asset(
+            "assets/icons/LOGONEW.png", 
+            height: 50, 
+            alignment: Alignment.center,
+          ),
+          ],
+        ),
+      ),
       body: Container(
+        
         child: Stack(
           children: [
             MessageList(),
@@ -87,7 +101,7 @@ class _ConversationRoomState extends State<ConversationRoom> {
                         height: 50,
                         width: 50,
                         padding: EdgeInsets.all(12),
-                        child: Image.asset("assets/icons/ICON_search.png")
+                        child: Image.asset("assets/icons/ICON_send.png")
                       ),
                     ),
                   ],
