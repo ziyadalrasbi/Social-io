@@ -82,6 +82,7 @@ class _BodyState extends State<Body> {
               .then((val){
                 querySnapshot = val;
                 HelperFunction.saveUserNameSharedPref(querySnapshot.docs[0].data()['username']);
+                HelperFunction.saveUserTypeSharedPref(querySnapshot.docs[0].data()['accType']);
               }); 
               try {
                 UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
