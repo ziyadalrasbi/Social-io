@@ -24,13 +24,14 @@ class AuthService {
   
 }
 
-Future<void> signUp(String userName, String email) async {
+Future<void> signUp(String userName, String email, String accType) async {
       CollectionReference users = FirebaseFirestore.instance.collection('users');
       FirebaseAuth auth = FirebaseAuth.instance;
       String uid = auth.currentUser.uid.toString();
       users.add({
         'username': userName,
         'email': email,
+        'accType': accType,
         'uid': uid
       });
       return;

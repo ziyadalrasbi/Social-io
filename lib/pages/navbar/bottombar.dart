@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:login_page/pages/navbar/setting.dart';
 import 'package:login_page/pages/navbar/fake_timeline.dart';
-import 'package:login_page/pages/navbar/fake_search.dart';
+import 'package:login_page/pages/navbar/search/user_search.dart';
 import 'package:login_page/pages/navbar/fake_profile.dart';
 import 'package:login_page/pages/profile/profile_1.dart';
 
@@ -24,7 +24,7 @@ class _BottomBar extends State<BottomBar> {
 
   List _pageList = [
     TargetPage(), //class name of timeline
-    TargetPage3(), //class name of search
+    UserSearch(), //class name of search
     Profile(), //class name of profile
     Setup_page(), //class name of setting
   ];

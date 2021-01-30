@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HelperFunction{
   static String sharedPrefUserLoggedInKey = "ISLOGGEDIN";
   static String sharedPrefUserNameKey = "USERNAMEKEY";
   static String sharedPrefUserEmailKey = "USEREMAILKEY";
+  static String sharedPrefUserTypeKey = "USERTYPEKEY";
 
   // save data
   static Future<bool> saveLoggedInSharedPref(bool isLogged) async {
@@ -22,6 +24,11 @@ class HelperFunction{
     return await preferences.setString(sharedPrefUserEmailKey, email);
   }
 
+  static Future<bool> saveUserTypeSharedPref(String accType) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPrefUserTypeKey, accType);
+  }
+
   // load data
   static Future<bool> getLoggedInSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -36,6 +43,11 @@ class HelperFunction{
   static Future<String> getUserEmailSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPrefUserEmailKey);
+  }
+
+  static Future<String> getUserTypeSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPrefUserTypeKey);
   }
 
 }

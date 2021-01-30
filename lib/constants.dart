@@ -10,6 +10,7 @@ const primaryDarkColour = Colors.blueGrey;
 
 class Constants {
   static String myName = "";
+  static String accType = "";
 }
 
 class ThemeChange with ChangeNotifier {

@@ -47,6 +47,7 @@ class _ConversationRoomState extends State<ConversationRoom> {
       "time": DateTime.now().millisecondsSinceEpoch,
     };
     databaseMethods.addConvoText(widget.roomId, textMap);
+    messageController.clear();
     }
   }
 

@@ -48,6 +48,7 @@ class _ChatSearchState extends State<ChatSearch> {
     .then((val){
       setState(() {
         searchshot = val;
+        searchEditingController.clear();
       });
     });
   }

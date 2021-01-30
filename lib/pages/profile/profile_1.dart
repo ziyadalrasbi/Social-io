@@ -3,6 +3,7 @@ import 'package:login_page/constants.dart';
 import 'package:login_page/extra/chatpage/parts/conversation_room.dart';
 import 'package:login_page/helpers.dart';
 
+
 class Profile extends StatefulWidget {
   @override
   _Profile1State createState() => _Profile1State();
@@ -10,6 +11,8 @@ class Profile extends StatefulWidget {
 
 class _Profile1State extends State<Profile> {
 
+  int listCount = 0;
+  bool listWanted = false;
   @override
   void initState() {
     getUserInfo();
@@ -18,19 +21,16 @@ class _Profile1State extends State<Profile> {
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-    databaseMethods.getRooms(Constants.myName).then((val){
+    Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    
       setState(() {       
       });
-    });
-  }
 
-  displayPics() {
-    return GridView.count(
-      crossAxisCount: 3,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      physics: BouncingScrollPhysics(),
-      children: List.generate(12, (index) {
+  }
+  
+
+  printImages() {
+    return List.generate(12, (index) {
         return GestureDetector(
           onTap: () {
             return ThemeData.from(colorScheme: ColorScheme.dark());
@@ -43,7 +43,7 @@ class _Profile1State extends State<Profile> {
               
               image: DecorationImage(
                 
-                image: AssetImage("assets/images/photo_" +
+                image: AssetImage("assets/images/pic" +
                     index.toString() +
                     ".jpg"),
                     
@@ -53,7 +53,28 @@ class _Profile1State extends State<Profile> {
             ),
           ),
         );
-      }),
+      });
+  }
+
+  displayPics() {
+    return GridView.count(
+      crossAxisCount: 3,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+      physics: BouncingScrollPhysics(),
+      children: printImages(),
+    );
+  }
+
+  
+
+  displayPicsList() {
+    return GridView.count(
+      crossAxisCount: 1,
+      crossAxisSpacing: 8,
+      mainAxisSpacing: 8,
+      physics: BouncingScrollPhysics(),
+      children: printImages(),
     );
   }
 
@@ -93,7 +114,7 @@ class _Profile1State extends State<Profile> {
                   height: size.height * 0.40,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/background1.jpg"),
+                      image: AssetImage("assets/images/background.jpg"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -105,7 +126,7 @@ class _Profile1State extends State<Profile> {
                       CircleAvatar(
                         radius: 48,
                         backgroundImage:
-                            AssetImage("assets/images/avatar1.jpg"),
+                            AssetImage("assets/images/wrestler.png"),
                       ),
                       SizedBox(
                         height: 16,
@@ -122,7 +143,7 @@ class _Profile1State extends State<Profile> {
                         height: 4,
                       ),
                       Text(
-                        "Flutter Developer",
+                        "Flutter " + Constants.accType,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -140,15 +161,7 @@ class _Profile1State extends State<Profile> {
                             Expanded(
                               child: Container(),
                             ),
-                            Container(
-                              width: 110,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  
-                                ],
-                              ),
-                            ),
+                            
                             Container(
                               width: 110,
                               child: Column(
@@ -213,25 +226,41 @@ class _Profile1State extends State<Profile> {
                 Material(
                   elevation: 1,
                   child: Container(
+                    
                     height: 56,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Icon(
-                          Icons.web,
-                          color: Colors.black,
+                        GestureDetector(
+                          onTap: () {
+                            listCount++;
+                            setState(() {
+                                listWanted = false;                          
+                            });
+                          },
+                          child: Icon(
+                          Icons.grid_view,
+                          color: listWanted ? Colors.grey : Colors.black,
                           size: 28,
+                          ),
                         ),
-                        Icon(
-                          Icons.image,
-                          color: Colors.black,
-                          size: 28,
+                        
+                        
+                        
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                                listWanted = true;                      
+                            });
+                            
+                          },
+                          child: Icon(
+                          Icons.view_list,
+                          color: listWanted ? Colors.black : Colors.grey,
+                          size: 30,
+                          ),
                         ),
-                        Icon(
-                          Icons.play_circle_outline,
-                          color: Colors.black,
-                          size: 28,
-                        ),
+                        
                       ],
                     ),
                   ),
@@ -244,7 +273,7 @@ class _Profile1State extends State<Profile> {
                     top: 0,
                     bottom: 24,
                   ),
-                  child: displayPics(),
+                  child: listWanted ? displayPicsList() : displayPics(),
                 ),
               ],
             ),

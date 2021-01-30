@@ -138,7 +138,7 @@ class RoomTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  ),
+                ),
               ),
               ),
               SizedBox(

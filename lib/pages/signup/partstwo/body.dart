@@ -17,6 +17,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  String dropdownValue = "User";
   Widget child;
   static final validNameCharacters = RegExp(r'^([A-Za-z])+$'); // these are the valid characters that a first/last name can have, which is only letter
   static final validEmailCharacters = RegExp(r'^[a-zA-Z0-9.@]+$'); // valid email characters
@@ -28,6 +29,7 @@ class _BodyState extends State<Body> {
   final TextEditingController lnameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
+  final TextEditingController accTypeController = TextEditingController();
   bool isLoading = false;
   DatabaseMethods databaseMethods = new DatabaseMethods();
  
@@ -61,39 +63,6 @@ class _BodyState extends State<Body> {
                 changes: (value) {},
               ),
               InputField(
-                type: TextInputType.name,
-                validate: (value) {
-                  if (value.isEmpty) {
-                    return "This can't be empty.";
-                  }
-                  if(!validNameCharacters.hasMatch(value)) {            // first check for first name, just simple validation
-                    return "No special characters allowed in name.";
-                  }
-                  if (value.length < 2) {
-                    return "Name must be at least 2 characters.";
-                  }
-                },
-                hint: "First name",
-                control: fnameController,
-                changes: (value) {},
-              ),
-              InputField(
-                validate: (value) {
-                  if (value.isEmpty) {
-                    return "This can't be empty.";
-                  }
-                  if(!validNameCharacters.hasMatch(value)) {
-                    return "No special characters allowed in name.";    // exact same validation for second name
-                  }
-                  if (value.length < 2) {
-                    return "Name must be at least 2 characters.";
-                  }
-                },
-                hint: "Last name",
-                control: lnameController,
-                changes: (value) {},
-              ),
-              InputField(
                 validate: (value) {
                   final bool isValid = EmailValidator.validate(value); // flutter has an EmailValidator function that lets you validate emails with a boolean
                   if (!isValid) {
@@ -102,22 +71,6 @@ class _BodyState extends State<Body> {
                 },
                 hint: "Email",
                 control: emailController,
-                changes: (value) {},
-              ),
-              InputField( // the mobile number text field
-                type: TextInputType.number, // this makes sure that only integers are taken in this text field
-                validate: (value) {
-                  if (value == null) {
-                    return "Invalid phone number. Please re-enter."; // if value is null, return this
-                  }
-                  final n = num.tryParse(value);
-                  if (n == null) {
-                    return '"$value" is an invalid number. Please re-enter.'; // if the number is invalid, return this
-                  }
-                  return null;
-                },
-                control: mobileController,
-                hint: "Mobile number",
                 changes: (value) {},
               ),
               PassField( // the first "enter password" field
@@ -153,12 +106,37 @@ class _BodyState extends State<Body> {
                  // the controller for the confirm pass
                 changes: (value) {},
               ),
+              DropdownButton(
+                
+              value: dropdownValue,
+              icon: Icon(Icons.arrow_drop_down_circle),
+              iconSize: 20,
+              elevation: 15,
+              underline: Container(
+                height: 2
+              ),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;                  
+                });
+              },
+              items: <String>[
+                "User", "Creator", "Student"
+              ].map<DropdownMenuItem<String>>((String val) {
+                return DropdownMenuItem<String>(
+                  value: val,
+                  child: Text(val),
+                );
+              }).toList(),
+              ),
+
               MainButton( // final sign up button
                 text: "Sign up",
                 pressed: () async {
                   // form key to validate all the info
                   HelperFunction.saveUserEmailSharedPref(emailController.text);
                   HelperFunction.saveUserNameSharedPref(usernameController.text);
+                  HelperFunction.saveUserTypeSharedPref(dropdownValue);
                   if (_formKey.currentState.validate()) {
                     setState(() {
                       isLoading = true;              
@@ -176,7 +154,8 @@ class _BodyState extends State<Body> {
                     );
                     signUp(
                       usernameController.text,
-                      emailController.text
+                      emailController.text,
+                      dropdownValue.toString()
                       );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {

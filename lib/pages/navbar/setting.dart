@@ -81,17 +81,53 @@ class _Setup_pageState extends State<Setup_page> {
           ElevatedButton(
             child: Text('           Logout            '),
             onPressed: () {
-              signOut();
-              Navigator.pushReplacement(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-              );
+              cancelSignOut(context);
             },
           ),
         ],
       )),
     );
   }
+}
+
+
+cancelSignOut(BuildContext context) {
+
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("Cancel"),
+    onPressed:  () {
+      Navigator.of(context).pop();
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: Text("Sign Out"),
+    onPressed:  () {
+      signOut();
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("AlertDialog"),
+    content: Text("Are you sure you want to sign out?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
