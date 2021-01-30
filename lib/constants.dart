@@ -11,3 +11,19 @@ const primaryDarkColour = Colors.blueGrey;
 class Constants {
   static String myName = "";
 }
+
+class ThemeChange with ChangeNotifier {
+  ThemeData _themeData;
+
+  ThemeChange(this._themeData);
+
+  getTheme() => _themeData;
+
+  setTheme(ThemeData theme) {
+    _themeData = theme;
+  }
+  
+  notifyListeners();
+      
+  
+}

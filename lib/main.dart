@@ -6,6 +6,7 @@ import 'package:login_page/helpers.dart';
 import 'package:login_page/pages/home/home_page.dart';
 import 'package:login_page/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:login_page/pages/profile/profile_1.dart';
 
 import 'package:provider/provider.dart';
 
@@ -55,7 +56,8 @@ bool userLogged = false;
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Home Page',
+        title: 'Social-io',
+        
         theme: ThemeData(
           primaryColor: primaryLightColour,
           scaffoldBackgroundColor: Colors.white,
@@ -79,7 +81,7 @@ class AuthWrapper extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return ChatPage();
+            return Profile();
           }
         ),
       );

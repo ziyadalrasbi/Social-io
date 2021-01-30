@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1076008784633:android:2775977b8cbd32d6c6c828",
         "android_client_info": {
-          "package_name": "com.social.io"
+          "package_name": "com.example.login_page"
         }
       },
       "oauth_client": [

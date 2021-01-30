@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/constants.dart';
 import 'package:login_page/database.dart';
@@ -6,11 +5,6 @@ import 'package:login_page/extra/chatpage/parts/background.dart';
 import 'package:login_page/extra/chatpage/parts/chat_search.dart';
 import 'package:login_page/extra/chatpage/parts/conversation_room.dart';
 import 'package:login_page/helpers.dart';
-
-import 'package:login_page/parts/account_recheck.dart';
-import 'package:login_page/parts/button.dart';
-import 'package:login_page/parts/input_field_box.dart';
-import 'package:login_page/parts/password_field_box.dart';
 
 
 

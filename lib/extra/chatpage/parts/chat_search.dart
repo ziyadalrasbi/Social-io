@@ -128,6 +128,8 @@ class _ChatSearchState extends State<ChatSearch> {
                     child: InputField(
                       control: searchEditingController,
                       hint: "Search for users",
+                      changes: (val) {
+                      },
                     ),
                   ),
                   FloatingActionButton(

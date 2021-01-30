@@ -68,7 +68,7 @@ class _BodyState extends State<Body> {
                   return null;
                 },
             control: passController,
-            hint: "Password"
+            hint: "Password",
             
           ),
           MainButton(
