@@ -34,6 +34,7 @@ dependencies:
   provider: ^4.3.2+1
   shared_preferences: ^0.5.12+4
   url_launcher: ^5.7.10
+  bubble_bottom_bar: ^1.2.0
 
 dev_dependencies:
   flutter_test:

@@ -59,7 +59,7 @@ class _BodyState extends State<Body> {
         child: ListView(
       children:[
          AppBar(
-           automaticallyImplyLeading: false,
+           
            backgroundColor: Colors.blue,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
