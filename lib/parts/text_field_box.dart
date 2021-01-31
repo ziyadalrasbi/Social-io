@@ -7,9 +7,11 @@ import 'package:login_page/constants.dart';
 
 class TextFieldBox extends StatelessWidget {
   final Widget child;
+  final Color color;
   const TextFieldBox({
     Key key, 
     this.child,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class TextFieldBox extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
-        color: primaryLightColour,
+        color: color,
       ),
       child: child,
     );

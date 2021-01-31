@@ -11,9 +11,11 @@ class PassField extends StatelessWidget {
   final TextEditingController control; // this control is used later for confirming passwords
   final Function validate; // input validator function
   final String hint;
+  final Color color;
   const PassField({
     Key key, 
     this.hint,
+    this.color,
     this.control,
     this.changes,
     this.validate,
@@ -22,6 +24,7 @@ class PassField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFieldBox(
+      color: color,
       child: TextFormField(
         validator: validate,
         controller: control,
@@ -30,10 +33,7 @@ class PassField extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,
-          suffixIcon: Icon(
-            Icons.visibility, 
-            color: primaryDarkColour,
-            ),
+          
         ),
       ),
     );

@@ -141,6 +141,7 @@ class _UserSearchState extends State<UserSearch> {
                 children: [
                   Expanded(
                     child: InputField(
+                      color: Colors.blueGrey[200],
                       control: searchEditingController,
                       hint: "Search for users",
                       changes: (val) {

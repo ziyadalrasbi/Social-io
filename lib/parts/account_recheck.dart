@@ -21,13 +21,13 @@ class AccountRecheck extends StatelessWidget {
       children: <Widget>[ // creating a widget
         Text(
           logged ? "Don't have an account? " : "Already have an account? ", // this is where the comparison is done, instead of having 2 seperate classes it can be done in one class
-          style: TextStyle(color: primaryDarkColour), // making the initial text have a lighter colour
+          style: TextStyle(color: Colors.black, fontSize: 15), // making the initial text have a lighter colour
         ),
         GestureDetector( // gesture detector just checks gestures
           onTap: pressed, // here it checks if the "sign up" or "log in" buttons were pressed
           child: Text(
             logged ? "Sign up" : "Log in", // again the boolean check which will take the user to either page
-            style: TextStyle(color: primaryDarkColour, fontWeight: FontWeight.bold), // making the other text bold and darker to make it easier to click
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15), // making the other text bold and darker to make it easier to click
           ),
         ),
       ],

@@ -127,6 +127,7 @@ class _ChatSearchState extends State<ChatSearch> {
                 children: [
                   Expanded(
                     child: InputField(
+                      color: Colors.blueGrey[200],
                       control: searchEditingController,
                       hint: "Search for users",
                       changes: (val) {

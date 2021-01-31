@@ -28,6 +28,7 @@ class _BodyState extends State<Body> {
   bool isLoading = false;
   DatabaseMethods databaseMethods = new DatabaseMethods();
   QuerySnapshot querySnapshot;
+  
 
 
   @override
@@ -37,10 +38,9 @@ class _BodyState extends State<Body> {
         key: _formKey,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            "Login (maybe a picture here or just a nice font)"
-          ),
+          
           InputField(
+            color: Colors.white,
             validate: (value) {
                   if (value.isEmpty) {
                     return "This can't be empty.";
@@ -55,6 +55,7 @@ class _BodyState extends State<Body> {
             
           ),
           PassField(
+            color: Colors.white,
             validate: (value) {
                   if (value.isEmpty) {
                     return "Password cannot be empty."; // check that passwords cant be empty
@@ -73,6 +74,8 @@ class _BodyState extends State<Body> {
           ),
           MainButton(
             text: "Log In",
+            textColor: Colors.white,
+              color: Colors.indigo[500],
             pressed: () async {
               HelperFunction.saveUserEmailSharedPref(emailController.text);
               setState(() {

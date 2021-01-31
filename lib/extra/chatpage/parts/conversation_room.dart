@@ -90,6 +90,7 @@ class _ConversationRoomState extends State<ConversationRoom> {
                   children: [
                     Expanded(
                       child: InputField(
+                        color: Colors.blueGrey[200],
                         control: messageController,
                         hint: "Message...",
                       ),

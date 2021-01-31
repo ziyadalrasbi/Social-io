@@ -26,6 +26,8 @@ class Body extends StatelessWidget {
             // over here we can put pictures or whatever
             MainButton( // login button
               text: "Login",
+              textColor: Colors.white,
+              color: Colors.indigo[500],
               pressed: () { // when a button is pressed
                 Navigator.push( // Navigator.push is just used to return something when a button is pressed
                 context, 
@@ -39,6 +41,10 @@ class Body extends StatelessWidget {
             ),
             MainButton( // sign up button
               text: "Sign Up",
+              
+
+              color: Colors.white,
+              textColor: Colors.indigo,
               pressed: () {
                 Navigator.push(
                   context,

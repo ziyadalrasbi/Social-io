@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login_page/database.dart';
 import 'package:login_page/helpers.dart';
+import 'package:login_page/pages/login/login_screen.dart';
 import 'package:login_page/pages/signup/partstwo/background.dart';
+import 'package:login_page/parts/account_recheck.dart';
 import 'package:login_page/parts/button.dart';
 import 'package:login_page/parts/input_field_box.dart';
 import 'package:email_validator/email_validator.dart';
@@ -35,6 +37,7 @@ class _BodyState extends State<Body> {
  
   @override
   Widget build(BuildContext context) {
+    Size dimensions = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Form(
@@ -42,10 +45,8 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "Finally, enter the following details."
-              ),
                InputField(
+                 color: Colors.white,
                 type: TextInputType.name,
                 validate: (value) {
                   if (value.isEmpty) {
@@ -63,6 +64,7 @@ class _BodyState extends State<Body> {
                 changes: (value) {},
               ),
               InputField(
+                color: Colors.white,
                 validate: (value) {
                   final bool isValid = EmailValidator.validate(value); // flutter has an EmailValidator function that lets you validate emails with a boolean
                   if (!isValid) {
@@ -74,6 +76,7 @@ class _BodyState extends State<Body> {
                 changes: (value) {},
               ),
               PassField( // the first "enter password" field
+                color: Colors.white,
                 control: _pass,
                 validate: (value) {
                   if (value.isEmpty) {
@@ -92,6 +95,7 @@ class _BodyState extends State<Body> {
                 changes: (value) {},
               ),
               PassField( // this is the "confirm password" field
+                color: Colors.white,
                 control: _confirmPass,
                 validate: (value) {
                   if (value.isEmpty) {
@@ -106,32 +110,47 @@ class _BodyState extends State<Body> {
                  // the controller for the confirm pass
                 changes: (value) {},
               ),
-              DropdownButton(
-                
-              value: dropdownValue,
-              icon: Icon(Icons.arrow_drop_down_circle),
-              iconSize: 20,
-              elevation: 15,
-              underline: Container(
-                height: 2
+              Container(
+                height: 8,
               ),
-              onChanged: (String newValue) {
-                setState(() {
-                  dropdownValue = newValue;                  
-                });
-              },
-              items: <String>[
-                "User", "Creator", "Student"
-              ].map<DropdownMenuItem<String>>((String val) {
-                return DropdownMenuItem<String>(
-                  value: val,
-                  child: Text(val),
-                );
-              }).toList(),
+              Container(
+                width: dimensions.width * 0.8,
+                padding: EdgeInsets.symmetric(vertical: 7, horizontal: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                
+                child: DropdownButton(
+                isExpanded: true,
+                value: dropdownValue,
+                icon: Icon(Icons.arrow_drop_down_circle),
+                iconSize: 20,
+                elevation: 15,
+                underline: Container(
+                  
+                  height: 2
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue = newValue;                  
+                  });
+                },
+                items: <String>[
+                  "User", "Creator", "Student"
+                ].map<DropdownMenuItem<String>>((String val) {
+                  return DropdownMenuItem<String>(
+                    value: val,
+                    child: Text(val),
+                  );
+                }).toList(),
+                ),
               ),
 
               MainButton( // final sign up button
                 text: "Sign up",
+                textColor: Colors.white,
+                color: Colors.indigo[500],
                 pressed: () async {
                   // form key to validate all the info
                   HelperFunction.saveUserEmailSharedPref(emailController.text);
@@ -165,6 +184,19 @@ class _BodyState extends State<Body> {
                     print(e);
                   }
                   HelperFunction.saveLoggedInSharedPref(true);
+                },
+              ),
+              AccountRecheck(
+                logged: false,
+                pressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return LoginPage();
+                      }
+                    ),
+                  );
                 },
               ),
             ],
