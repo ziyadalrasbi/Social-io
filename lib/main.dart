@@ -4,6 +4,7 @@ import 'package:login_page/extra/chatpage/chat_page.dart';
 import 'package:login_page/form_authentication.dart';
 import 'package:login_page/helpers.dart';
 import 'package:login_page/pages/home/home_page.dart';
+import 'package:login_page/pages/camera/camera.dart';
 import 'package:login_page/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:login_page/pages/navbar/bottombar.dart';
@@ -12,7 +13,6 @@ import 'package:login_page/pages/profile/profile_1.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -25,24 +25,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool userLogged = false;
 
-bool userLogged = false;
-
-@override
+  @override
   void initState() {
     getUserInfo();
     super.initState();
   }
 
-
   getUserInfo() async {
-    await HelperFunction.getLoggedInSharedPref().then((val){
-      setState(() {  
-      userLogged = val;
+    await HelperFunction.getLoggedInSharedPref().then((val) {
+      setState(() {
+        userLogged = val;
       });
     });
-    
-     
   }
 
   @override
@@ -59,7 +55,6 @@ bool userLogged = false;
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Social-io',
-        
         theme: ThemeData(
           primaryColor: primaryLightColour,
           scaffoldBackgroundColor: Colors.white,
@@ -71,30 +66,23 @@ bool userLogged = false;
   }
 }
 
-
 class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseuser = context.watch<User>();
-    
+
     Future.delayed(Duration.zero, () {
-    if (firebaseuser != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
+      if (firebaseuser != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
             return BottomBar();
-          }
-        ),
-      );
-    } else {
-      return HomePage();
-    }
-    }); 
+          }),
+        );
+      } else {
+        return HomePage();
+      }
+    });
     return HomePage();
   }
 }
-
-
-
-

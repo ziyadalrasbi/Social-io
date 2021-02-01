@@ -7,6 +7,7 @@ import 'package:login_page/pages/navbar/fake_timeline.dart';
 import 'package:login_page/pages/navbar/search/user_search.dart';
 import 'package:login_page/pages/navbar/fake_profile.dart';
 import 'package:login_page/pages/profile/profile_1.dart';
+import 'package:login_page/pages/camera/camera.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -32,11 +33,15 @@ class _BottomBar extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: this._pageList[this._currentIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CameraPage()),
+          );
+        },
         child: Icon(Icons.camera_alt_outlined),
         backgroundColor: Colors.blue,
       ),
@@ -54,7 +59,7 @@ class _BottomBar extends State<BottomBar> {
         // onTap: changePage,
 
         onTap: (int index) {
-             // this._currentIndex=index; //won't rerender
+          // this._currentIndex=index; //won't rerender
           setState(() {
             this._currentIndex = index;
           });
@@ -69,7 +74,6 @@ class _BottomBar extends State<BottomBar> {
               width: 20,
               height: 20,
             ),
-            
             activeIcon: Image.asset(
               "assets/icons/ICON_home.png",
               color: Colors.blue,

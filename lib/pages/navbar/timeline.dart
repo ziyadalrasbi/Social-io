@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:login_page/extra/chatpage/chat_page.dart';
 
-
 class Posts extends StatefulWidget {
   @override
   _PostsState createState() => _PostsState();
@@ -26,8 +25,8 @@ class _PostsState extends State<Posts> {
   ];
   List<String> postUpvotes = ['76,263', '243,503', '54'];
 
-  bool upVoted = false; 
-  bool downVoted = false; 
+  bool upVoted = false;
+  bool downVoted = false;
 
   Widget _getPost() {
     Size size = MediaQuery.of(context).size;
@@ -96,12 +95,12 @@ class _PostsState extends State<Posts> {
                       },
                     ),
                     height: size.height * 0.5,
-                  padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 0,
-                    bottom: 24,
-                  ),
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 0,
+                      bottom: 24,
+                    ),
                     // constraints: BoxConstraints(maxHeight: 50),
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -124,20 +123,18 @@ class _PostsState extends State<Posts> {
                 // upvote + downvote + comment + send + save icons
                 children: <Widget>[
                   Container(
-                    color: upVoted ? Colors.blue : Colors.white,
+                      color: upVoted ? Colors.blue : Colors.white,
                       margin: EdgeInsets.only(right: 8),
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_upvote.png'),
                         iconSize: 25,
                         onPressed: () {
                           setState(() {
-                            upVoted = true; 
-                            downVoted = false;                        
+                            upVoted = true;
+                            downVoted = false;
                           });
                         },
-                      )
-                      
-                  ),
+                      )),
                   Container(
                       color: downVoted ? Colors.blue : Colors.white,
                       margin: EdgeInsets.only(right: 8),
@@ -147,10 +144,9 @@ class _PostsState extends State<Posts> {
                         onPressed: () {
                           setState(() {
                             downVoted = true;
-                            upVoted = false;                         
+                            upVoted = false;
                           });
                         },
-                        
                       )),
                   Container(
                       margin: EdgeInsets.only(right: 8),
@@ -305,35 +301,34 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.blue,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
             Image.asset(
-              "assets/icons/LOGONEW.png", 
-              height: 50, 
+              "assets/icons/LOGONEW.png",
+              height: 50,
               alignment: Alignment.center,
             ),
           ],
         ),
         actions: <Widget>[
           FlatButton(
-                child:
-                  Image.asset(
-                  'assets/icons/ICON_inbox.png',
-                  width: 45,
-                  height: 45,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(),
-                    ),
-                  );
-                },
-              ),
+            child: Image.asset(
+              'assets/icons/ICON_inbox.png',
+              width: 45,
+              height: 45,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatPage(),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: _getPost(),
