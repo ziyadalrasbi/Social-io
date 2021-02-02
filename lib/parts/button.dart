@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
 
 // the main button class that creates a button
 

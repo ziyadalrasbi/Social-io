@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/pages/home/parts/body.dart';
+import 'package:socialio/pages/home/parts/body.dart';
 
 // each page has the parts to it which is the body and the background
 // they make up what the page looks like

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:login_page/extra/chatpage/chat_page.dart';
+import 'package:socialio/extra/chatpage/chat_page.dart';
 
 class Posts extends StatefulWidget {
   @override

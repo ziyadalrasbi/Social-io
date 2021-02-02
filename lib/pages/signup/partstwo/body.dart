@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_page/database.dart';
-import 'package:login_page/helpers.dart';
-import 'package:login_page/pages/login/login_screen.dart';
-import 'package:login_page/pages/signup/partstwo/background.dart';
-import 'package:login_page/parts/account_recheck.dart';
-import 'package:login_page/parts/button.dart';
-import 'package:login_page/parts/input_field_box.dart';
+import 'package:socialio/database.dart';
+import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/login/login_screen.dart';
+import 'package:socialio/pages/signup/partstwo/background.dart';
+import 'package:socialio/parts/account_recheck.dart';
+import 'package:socialio/parts/button.dart';
+import 'package:socialio/parts/input_field_box.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:login_page/parts/password_field_box.dart';
-import 'package:login_page/form_authentication.dart';
+import 'package:socialio/parts/password_field_box.dart';
+import 'package:socialio/form_authentication.dart';
 
 // the last sign up page that asks for the final details
 // different types of validation used here

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/pages/home/parts/background.dart';
-import 'package:login_page/pages/login/login_screen.dart';
+import 'package:socialio/pages/home/parts/background.dart';
+import 'package:socialio/pages/login/login_screen.dart';
 
-import 'package:login_page/pages/signup/sign_up_second.dart';
-import 'package:login_page/parts/button.dart';
+import 'package:socialio/pages/signup/sign_up_second.dart';
+import 'package:socialio/parts/button.dart';
 
 // the body of the welcome screen
 // this has the login/signup buttons

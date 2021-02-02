@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
+import 'package:socialio/constants.dart';
 
 
 // this is a text field box that goes on top of the input field box

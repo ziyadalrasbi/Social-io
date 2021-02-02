@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:login_page/extra/chatpage/chat_page.dart';
-import 'package:login_page/form_authentication.dart';
-import 'package:login_page/helpers.dart';
-import 'package:login_page/pages/home/home_page.dart';
-import 'package:login_page/pages/camera/camera.dart';
-import 'package:login_page/constants.dart';
+import 'package:socialio/extra/chatpage/chat_page.dart';
+import 'package:socialio/form_authentication.dart';
+import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/home/home_page.dart';
+import 'package:socialio/pages/camera/camera.dart';
+import 'package:socialio/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:login_page/pages/navbar/bottombar.dart';
-import 'package:login_page/pages/profile/profile_1.dart';
+import 'package:socialio/pages/navbar/bottombar.dart';
+import 'package:socialio/pages/profile/profile_1.dart';
 
 import 'package:provider/provider.dart';
 

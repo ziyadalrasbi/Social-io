@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
+import 'package:socialio/constants.dart';
 
 
 // this is a small section for when someone clicks "dont have an account" or "alread have an account"

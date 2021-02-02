@@ -1,8 +1,8 @@
-import 'package:login_page/form_authentication.dart';
-import 'package:login_page/pages/home/home_page.dart';
-import 'package:login_page/pages/navbar/fake_timeline.dart';
+import 'package:socialio/form_authentication.dart';
+import 'package:socialio/pages/home/home_page.dart';
+import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:login_page/pages/navbar/bottombar.dart';
+import 'package:socialio/pages/navbar/bottombar.dart';
 
 class Setup_page extends StatefulWidget {
   @override

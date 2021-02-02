@@ -1,13 +1,13 @@
 // import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
-import 'package:login_page/pages/navbar/timeline.dart';
-import 'package:login_page/pages/navbar/setting.dart';
-import 'package:login_page/pages/navbar/fake_timeline.dart';
-import 'package:login_page/pages/navbar/search/user_search.dart';
-import 'package:login_page/pages/navbar/fake_profile.dart';
-import 'package:login_page/pages/profile/profile_1.dart';
-import 'package:login_page/pages/camera/camera.dart';
+import 'package:socialio/pages/navbar/timeline.dart';
+import 'package:socialio/pages/navbar/setting.dart';
+import 'package:socialio/pages/navbar/fake_timeline.dart';
+import 'package:socialio/pages/navbar/search/user_search.dart';
+import 'package:socialio/pages/navbar/fake_profile.dart';
+import 'package:socialio/pages/profile/profile_1.dart';
+import 'package:socialio/pages/camera/camera.dart';
 
 void main() {
   runApp(MaterialApp(

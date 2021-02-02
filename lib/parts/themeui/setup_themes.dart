@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
+import 'package:socialio/constants.dart';
 
 List<ThemeData> getThemes() {
   return [

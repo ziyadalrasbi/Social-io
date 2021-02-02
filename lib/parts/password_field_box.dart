@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
-import 'package:login_page/parts/text_field_box.dart';
+import 'package:socialio/constants.dart';
+import 'package:socialio/parts/text_field_box.dart';
 
 
 // this class creates a password field box

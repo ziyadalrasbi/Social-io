@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
-import 'package:login_page/database.dart';
-import 'package:login_page/extra/chatpage/parts/conversation_room.dart';
-import 'package:login_page/helpers.dart';
-import 'package:login_page/parts/input_field_box.dart';
+import 'package:socialio/constants.dart';
+import 'package:socialio/database.dart';
+import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
+import 'package:socialio/helpers.dart';
+import 'package:socialio/parts/input_field_box.dart';
 
 
 // class to create the search functionality in the direct message page

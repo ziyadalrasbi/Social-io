@@ -1,5 +1,5 @@
-name: login_page
-description: A new Flutter project.
+name: socialio
+description: Photo sharing social media platform.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

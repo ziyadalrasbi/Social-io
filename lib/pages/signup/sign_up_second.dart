@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/pages/signup/partstwo/body.dart';
+import 'package:socialio/pages/signup/partstwo/body.dart';
 
 class  SignUpSecond extends StatelessWidget {
   @override

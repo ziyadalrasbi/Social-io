@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
-import 'package:login_page/database.dart';
-import 'package:login_page/parts/input_field_box.dart';
+import 'package:socialio/constants.dart';
+import 'package:socialio/database.dart';
+import 'package:socialio/parts/input_field_box.dart';
 import 'package:flutter/widgets.dart';
 
 class ConversationRoom extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/constants.dart';
-import 'package:login_page/extra/chatpage/parts/conversation_room.dart';
-import 'package:login_page/helpers.dart';
+import 'package:socialio/constants.dart';
+import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
+import 'package:socialio/helpers.dart';
 
 
 class Profile extends StatefulWidget {

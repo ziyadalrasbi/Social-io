@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:login_page/parts/text_field_box.dart';
+import 'package:socialio/parts/text_field_box.dart';
 
 
 // this is a field box that takes an input from a user

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_page/pages/login/parts/body.dart';
+import 'package:socialio/pages/login/parts/body.dart';
 
 
 
