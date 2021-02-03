@@ -68,12 +68,13 @@ class _Setup_pageState extends State<Setup_page> {
           ),
           ElevatedButton(
             child: Text('              Help              '),
+            
             onPressed: () {
               // show help page
             },
           ),
           ElevatedButton(
-            child: Text('            About Us             '),
+            child: Text('         About Us          '),
             onPressed: () {
               // show about page
             },
