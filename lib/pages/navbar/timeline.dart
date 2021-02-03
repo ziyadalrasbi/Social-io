@@ -9,7 +9,7 @@ class Posts extends StatefulWidget {
 
 class _PostsState extends State<Posts> {
   bool isVisible = false;
-
+  
   //Assets used will be replaced with json
 
   List<ExactAssetImage> displayPic = [
@@ -23,10 +23,22 @@ class _PostsState extends State<Posts> {
     ExactAssetImage('assets/pictures/edinburgh.jpg'),
     ExactAssetImage('assets/pictures/water.jpeg')
   ];
-  List<String> postUpvotes = ['76,263', '243,503', '54'];
+  List<int> postUpvotes = [76263, 243503, 54];
 
   bool upVoted = false;
   bool downVoted = false;
+  
+  bool upvoteDisabled = false;
+  bool downvoteDisabled = false;
+  bool votedBefore = false;
+  
+  @override
+    void initState() {
+      upvoteDisabled = false;
+      downvoteDisabled = false;
+      votedBefore = false;  
+      super.initState();
+    }
 
   Widget _getPost() {
     Size size = MediaQuery.of(context).size;
@@ -133,7 +145,12 @@ class _PostsState extends State<Posts> {
                           setState(() {
                             upVoted = true;
                             downVoted = false;
+                            upvoteDisabled ? null : downvoteDisabled ? postUpvotes[userIndex] = postUpvotes[userIndex] + 2 : postUpvotes[userIndex]++; 
+                            downvoteDisabled = false;
+                            upvoteDisabled = true;
+                            
                           });
+                          
                         },
                       )),
                   Container(
@@ -146,6 +163,9 @@ class _PostsState extends State<Posts> {
                           setState(() {
                             downVoted = true;
                             upVoted = false;
+                            downvoteDisabled ? null : upvoteDisabled ? postUpvotes[userIndex] = postUpvotes[userIndex] - 2 : postUpvotes[userIndex]--; 
+                            upvoteDisabled = false;
+                            downvoteDisabled = true;
                           });
                         },
                       )),
@@ -214,7 +234,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: postUpvotes[userIndex] + ' upvotes',
+                              text: postUpvotes[userIndex].toString() + ' upvotes',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -298,6 +318,7 @@ class _PostsState extends State<Posts> {
         });
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
