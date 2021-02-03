@@ -115,7 +115,7 @@ cancelSignOut(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("AlertDialog"),
+    title: Text("Sign Out"),
     content: Text("Are you sure you want to sign out?"),
     actions: [
       cancelButton,

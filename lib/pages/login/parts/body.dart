@@ -77,7 +77,7 @@ class _BodyState extends State<Body> {
             textColor: Colors.white,
               color: Colors.indigo[500],
             pressed: () async {
-              if (_formKey.currentState.validate()) {
+              
               HelperFunction.saveUserEmailSharedPref(emailController.text);
               setState(() {
                 isLoading = true;   
@@ -102,8 +102,8 @@ class _BodyState extends State<Body> {
               }
               HelperFunction.saveLoggedInSharedPref(true);
               
-            }
             },
+            
           ),
           AccountRecheck(
             pressed: () {
