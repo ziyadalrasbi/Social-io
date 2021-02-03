@@ -25,6 +25,7 @@ class MainButton extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 16), // the margin of the button, making space below and above it
       child: ClipRRect( // ClipRRect makes a child be bound to a rectangle. for neatness, helpful for the buttons
         child: FlatButton(
+        
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
             

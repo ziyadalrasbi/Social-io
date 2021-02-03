@@ -47,7 +47,7 @@ class _BodyState extends State<Body> {
                   }
                   
                   if (value.length < 2) {
-                    return "Usernames must be at least 2 characters.";
+                    return "Must be a valid email.";
                   }
             },
             control: emailController,
@@ -77,6 +77,7 @@ class _BodyState extends State<Body> {
             textColor: Colors.white,
               color: Colors.indigo[500],
             pressed: () async {
+              if (_formKey.currentState.validate()) {
               HelperFunction.saveUserEmailSharedPref(emailController.text);
               setState(() {
                 isLoading = true;   
@@ -101,6 +102,7 @@ class _BodyState extends State<Body> {
               }
               HelperFunction.saveLoggedInSharedPref(true);
               
+            }
             },
           ),
           AccountRecheck(

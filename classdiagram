@@ -1,0 +1,374 @@
+@startuml
+set namespaceSeparator ::
+
+class "socialio::constants.dart::Constants" {
+  {static} +String myName
+  {static} +String accType
+}
+
+class "socialio::constants.dart::ThemeChange" {
+  -dynamic _themeData
+  +dynamic getTheme()
+  +dynamic setTheme()
+  +dynamic notifyListeners()
+}
+
+class "socialio::database.dart::DatabaseMethods" {
+  +dynamic getUsername()
+  +dynamic getEmail()
+  +dynamic createChat()
+  +dynamic getConvoText()
+  +dynamic addConvoText()
+  +dynamic getRooms()
+}
+
+class "socialio::extra::chatpage::chat_page.dart::ChatPage" {
+  +dynamic build()
+}
+
+class "socialio::extra::chatpage::parts::background.dart::Background" {
+  +dynamic child
+  +dynamic body
+  +dynamic build()
+}
+
+class "socialio::extra::chatpage::parts::body.dart::Body" {
+  +_BodyState createState()
+}
+
+class "socialio::extra::chatpage::parts::body.dart::_BodyState" {
+  +DatabaseMethods databaseMethods
+  +Stream roomStream
+  +dynamic roomList()
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic build()
+}
+
+"socialio::extra::chatpage::parts::body.dart::_BodyState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::extra::chatpage::parts::body.dart::_BodyState" o-- "dart::async::Stream"
+
+class "socialio::extra::chatpage::parts::body.dart::RoomTile" {
+  +String userName
+  +String chatRoom
+  +dynamic build()
+}
+
+class "socialio::extra::chatpage::parts::chat_search.dart::ChatSearch" {
+  +_ChatSearchState createState()
+}
+
+class "socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState" {
+  +DatabaseMethods databaseMethods
+  +dynamic searchEditingController
+  +dynamic searchshot
+  +void initState()
+  +dynamic listSearch()
+  +dynamic initSearch()
+  +dynamic SearchTile()
+  +dynamic createChat()
+  +dynamic build()
+}
+
+"socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState" o-- "socialio::database.dart::DatabaseMethods"
+
+class "socialio::extra::chatpage::parts::conversation_room.dart::ConversationRoom" {
+  +String roomId
+  +_ConversationRoomState createState()
+}
+
+class "socialio::extra::chatpage::parts::conversation_room.dart::_ConversationRoomState" {
+  +dynamic MessageList()
+  +dynamic sendMessage()
+  +void initState()
+  +dynamic build()
+}
+
+class "socialio::extra::chatpage::parts::conversation_room.dart::TextTile" {
+  +bool sentByMe
+  +String message
+  +dynamic build()
+}
+
+class "socialio::form_authentication.dart::AuthService" {
+  -dynamic _firebaseAuth
+  +Stream authStateChanges
+  +Future logIn()
+}
+
+"socialio::form_authentication.dart::AuthService" o-- "dart::async::Stream"
+
+class "socialio::helpers.dart::HelperFunction" {
+  {static} +String sharedPrefUserLoggedInKey
+  {static} +String sharedPrefUserNameKey
+  {static} +String sharedPrefUserEmailKey
+  {static} +String sharedPrefUserTypeKey
+  {static} +Future saveLoggedInSharedPref()
+  {static} +Future saveUserNameSharedPref()
+  {static} +Future saveUserEmailSharedPref()
+  {static} +Future saveUserTypeSharedPref()
+  {static} +Future getLoggedInSharedPref()
+  {static} +Future getUserNameSharedPref()
+  {static} +Future getUserEmailSharedPref()
+  {static} +Future getUserTypeSharedPref()
+}
+
+class "socialio::main.dart::MyApp" {
+  +_MyAppState createState()
+}
+
+class "socialio::main.dart::_MyAppState" {
+  +bool userLogged
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic build()
+}
+
+class "socialio::main.dart::AuthWrapper" {
+  +dynamic build()
+}
+
+class "socialio::pages::camera::camera.dart::CameraPage" {
+  +dynamic build()
+}
+
+class "socialio::pages::camera::parts::background.dart::Background" {
+  +dynamic child
+  +dynamic build()
+}
+
+class "socialio::pages::camera::parts::body.dart::Body" {
+  +dynamic build()
+}
+
+class "socialio::pages::camera::parts::body.dart::ImageCapture" {
+  +dynamic createState()
+}
+
+class "socialio::pages::camera::parts::body.dart::_ImageCaptureState" {
+  -File _imageFile
+  -Future _pickImage()
+  -void _clear()
+  -Future _cropImage()
+  +dynamic build()
+}
+
+"socialio::pages::camera::parts::body.dart::_ImageCaptureState" o-- "dart::io::File"
+
+class "socialio::pages::camera::parts::body.dart::Uploader" {
+  +File file
+  +dynamic createState()
+}
+
+"socialio::pages::camera::parts::body.dart::Uploader" o-- "dart::io::File"
+
+class "socialio::pages::camera::parts::body.dart::_UploaderState" {
+  -dynamic _storage
+  -dynamic _uploadTask
+  -void _startUpload()
+  +dynamic build()
+}
+
+class "socialio::pages::home::home_page.dart::HomePage" {
+  +dynamic build()
+}
+
+class "socialio::pages::home::parts::background.dart::Background" {
+  +dynamic child
+  +dynamic build()
+}
+
+class "socialio::pages::home::parts::body.dart::Body" {
+  +dynamic build()
+}
+
+class "socialio::pages::login::login_screen.dart::LoginPage" {
+  +dynamic build()
+}
+
+class "socialio::pages::login::parts::background.dart::Background" {
+  +dynamic child
+  +dynamic build()
+}
+
+class "socialio::pages::login::parts::body.dart::Body" {
+  +_BodyState createState()
+}
+
+class "socialio::pages::login::parts::body.dart::_BodyState" {
+  -dynamic _formKey
+  +dynamic emailController
+  +dynamic passController
+  +bool isLoading
+  +DatabaseMethods databaseMethods
+  +dynamic querySnapshot
+  +dynamic build()
+}
+
+"socialio::pages::login::parts::body.dart::_BodyState" o-- "socialio::database.dart::DatabaseMethods"
+
+class "socialio::pages::navbar::bottombar.dart::BottomBar" {
+  +_BottomBar createState()
+}
+
+class "socialio::pages::navbar::bottombar.dart::_BottomBar" {
+  -int _currentIndex
+  -List _pageList
+  +dynamic build()
+}
+
+class "socialio::pages::navbar::fake_profile.dart::TargetPage4" {
+  +dynamic build()
+}
+
+class "socialio::pages::navbar::fake_timeline.dart::TargetPage" {
+  +_TargetPageState createState()
+}
+
+class "socialio::pages::navbar::fake_timeline.dart::_TargetPageState" {
+  +dynamic build()
+}
+
+class "socialio::pages::navbar::search::user_search.dart::UserSearch" {
+  +_UserSearchState createState()
+}
+
+class "socialio::pages::navbar::search::user_search.dart::_UserSearchState" {
+  +DatabaseMethods databaseMethods
+  +dynamic searchEditingController
+  +dynamic searchshot
+  +void initState()
+  +dynamic listSearch()
+  +dynamic initSearch()
+  +dynamic SearchTile()
+  +dynamic createChat()
+  +dynamic build()
+}
+
+"socialio::pages::navbar::search::user_search.dart::_UserSearchState" o-- "socialio::database.dart::DatabaseMethods"
+
+class "socialio::pages::navbar::setting.dart::Setup_page" {
+  +_Setup_pageState createState()
+}
+
+class "socialio::pages::navbar::setting.dart::_Setup_pageState" {
+  -dynamic _bottomNavigationColor
+  -int _currentIndex
+  +dynamic build()
+}
+
+class "socialio::pages::navbar::timeline.dart::Posts" {
+  +_PostsState createState()
+}
+
+class "socialio::pages::navbar::timeline.dart::_PostsState" {
+  +bool isVisible
+  +List displayPic
+  +List<String> userPosts
+  +List userPostImage
+  +List<String> postUpvotes
+  +bool upVoted
+  +bool downVoted
+  -dynamic _getPost()
+  +dynamic build()
+}
+
+class "socialio::pages::profile::profile_1.dart::Profile" {
+  +_Profile1State createState()
+}
+
+class "socialio::pages::profile::profile_1.dart::_Profile1State" {
+  +int listCount
+  +bool listWanted
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic displayPicsList()
+  +dynamic build()
+}
+
+class "socialio::pages::signup::partstwo::background.dart::Background" {
+  +dynamic child
+  +dynamic build()
+}
+
+class "socialio::pages::signup::partstwo::body.dart::Body" {
+  +_BodyState createState()
+}
+
+class "socialio::pages::signup::partstwo::body.dart::_BodyState" {
+  +String dropdownValue
+  +dynamic child
+  {static} +RegExp validNameCharacters
+  {static} +RegExp validEmailCharacters
+  -dynamic _formKey
+  -dynamic _pass
+  -dynamic _confirmPass
+  +dynamic emailController
+  +dynamic fnameController
+  +dynamic lnameController
+  +dynamic usernameController
+  +dynamic mobileController
+  +dynamic accTypeController
+  +bool isLoading
+  +DatabaseMethods databaseMethods
+  +dynamic build()
+}
+
+"socialio::pages::signup::partstwo::body.dart::_BodyState" o-- "socialio::database.dart::DatabaseMethods"
+
+class "socialio::pages::signup::sign_up_second.dart::SignUpSecond" {
+  +dynamic build()
+}
+
+class "socialio::parts::account_recheck.dart::AccountRecheck" {
+  +bool logged
+  +Function pressed
+  +dynamic build()
+}
+
+class "socialio::parts::button.dart::MainButton" {
+  +String text
+  +dynamic color
+  +dynamic textColor
+  +Function pressed
+  +dynamic build()
+}
+
+class "socialio::parts::input_field_box.dart::InputField" {
+  +dynamic color
+  +String hint
+  +Function validate
+  +dynamic control
+  +dynamic type
+  +dynamic changes
+  +dynamic build()
+}
+
+class "socialio::parts::password_field_box.dart::PassField" {
+  +dynamic changes
+  +dynamic control
+  +Function validate
+  +String hint
+  +dynamic color
+  +dynamic build()
+}
+
+class "socialio::parts::text_field_box.dart::TextFieldBox" {
+  +dynamic child
+  +dynamic color
+  +dynamic build()
+}
+
+class "socialio::parts::user.dart::User" {
+  +String id
+  +String username
+  +String email
+  +String photoUrl
+  +String displayName
+  +String bio
+}
+
+
+@enduml

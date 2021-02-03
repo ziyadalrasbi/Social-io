@@ -21,7 +21,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String dropdownValue = "User";
   Widget child;
-  static final validNameCharacters = RegExp(r'^([A-Za-z])+$'); // these are the valid characters that a first/last name can have, which is only letter
+  static final validNameCharacters = RegExp(r"^[a-zA-Z0-9.]*$"); // these are the valid characters that a first/last name can have, which is only letter
   static final validEmailCharacters = RegExp(r'^[a-zA-Z0-9.@]+$'); // valid email characters
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // a form key for input validation
   final TextEditingController _pass = TextEditingController(); // this is used for the password/confirm password section. this is only used if you need to confirm password
@@ -35,6 +35,11 @@ class _BodyState extends State<Body> {
   bool isLoading = false;
   DatabaseMethods databaseMethods = new DatabaseMethods();
  
+
+  printEmailError() {
+    print("This email is already in use");
+  }
+
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
@@ -88,7 +93,7 @@ class _BodyState extends State<Body> {
                   if (value.length > 15) {
                     return "Password cannot be greater than 15 characters.";
                   }
-                  return null;
+                  
                 },
                 // the first controller is used here
                 hint: "Password",
@@ -104,7 +109,7 @@ class _BodyState extends State<Body> {
                   if (value != _pass.text) {
                     return "Passwords do not match."; // now, check if the value is equal to the previous password field. this is why the controller is used, to connect them
                   }
-                  return null;
+                  
                 },
                 hint: "Confirm password",
                  // the controller for the confirm pass
@@ -153,6 +158,8 @@ class _BodyState extends State<Body> {
                 color: Colors.indigo[500],
                 pressed: () async {
                   // form key to validate all the info
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
                   HelperFunction.saveUserEmailSharedPref(emailController.text);
                   HelperFunction.saveUserNameSharedPref(usernameController.text);
                   HelperFunction.saveUserTypeSharedPref(dropdownValue);
@@ -163,6 +170,7 @@ class _BodyState extends State<Body> {
                   }
                   
                   try {
+                    
                     UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: emailController.text,
                       password: _pass.text,
@@ -178,12 +186,13 @@ class _BodyState extends State<Body> {
                       );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {
-                        return('The account already exists for that email.');
-                      }
+                        print('The account already exists for that email.');
+                      } 
                   } catch (e) {
                     print(e);
                   }
                   HelperFunction.saveLoggedInSharedPref(true);
+                }
                 },
               ),
               AccountRecheck(

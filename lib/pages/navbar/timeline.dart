@@ -8,7 +8,7 @@ class Posts extends StatefulWidget {
 }
 
 class _PostsState extends State<Posts> {
-  bool isVisible = true;
+  bool isVisible = false;
 
   //Assets used will be replaced with json
 
@@ -51,6 +51,7 @@ class _PostsState extends State<Posts> {
                                   print('Will take to profile of user');
                                 },
                                 child: CircleAvatar(
+                                
                                   backgroundImage: displayPic[userIndex],
                                 ))),
                         RichText(
