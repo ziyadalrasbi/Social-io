@@ -323,15 +323,17 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.blue,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Image.asset(
               "assets/icons/LOGONEW.png",
               height: 50,
-              alignment: Alignment.center,
+              
             ),
           ],
         ),

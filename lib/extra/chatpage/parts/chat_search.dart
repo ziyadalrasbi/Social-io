@@ -106,9 +106,11 @@ class _ChatSearchState extends State<ChatSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.blue,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
           Image.asset(
             "assets/icons/LOGONEW.png", 
