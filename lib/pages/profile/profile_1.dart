@@ -68,11 +68,14 @@ class _Profile1State extends State<Profile> {
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
-            image: DecorationImage(
-              image: NetworkImage(url),
-              fit: BoxFit.cover,
-            ),
+            
+              
+            
           ),
+          child: Image.network(
+            url,
+            fit: BoxFit.cover,
+            ),
         ),
       );
     });
