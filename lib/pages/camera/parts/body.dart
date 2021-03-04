@@ -1,7 +1,11 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:socialio/constants.dart';
+import 'package:socialio/database.dart';
+import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/navbar/bottombar.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -20,6 +24,9 @@ class Body extends StatelessWidget {
   }
 }
 
+
+
+
 //widget to capture and crop the image
 class ImageCapture extends StatefulWidget {
   createState() => _ImageCaptureState();
@@ -28,7 +35,7 @@ class ImageCapture extends StatefulWidget {
 class _ImageCaptureState extends State<ImageCapture> {
   //Active image file
   File _imageFile;
-
+  
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
 
@@ -109,19 +116,50 @@ class _ImageCaptureState extends State<ImageCapture> {
 
 class Uploader extends StatefulWidget {
   final File file;
+  
   Uploader({Key key, this.file}) : super(key: key);
 
   createState() => _UploaderState();
 }
 
 class _UploaderState extends State<Uploader> {
+  DatabaseMethods databaseMethods = new DatabaseMethods();
   final FirebaseStorage _storage =
       FirebaseStorage(storageBucket: 'gs://social-io-102b4.appspot.com/');
-
+      FirebaseAuth auth = FirebaseAuth.instance;
+  List<String> files;
+      
   StorageUploadTask _uploadTask;
+@override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async {
+    Constants.myName = await HelperFunction.getUserNameSharedPref();
+    databaseMethods.getUsername(Constants.myName).then((val){
+    setState(() {  
+    });
+  });
+  
+  }
+  
 
   void _startUpload() {
+    String uid = auth.currentUser.uid.toString();
     String filePath = 'images/${DateTime.now()}.png';
+    Map<String,dynamic> uploadMap = {
+      "username": Constants.myName,
+    };
+    databaseMethods.uploadImage(Constants.myName, uploadMap);
+
+    Map<String,dynamic> imageMap = {
+      "username": Constants.myName,
+      "imageid": filePath,
+      "time": DateTime.now().millisecondsSinceEpoch,
+    };
+    databaseMethods.addImage(Constants.myName, imageMap);
 
     setState(() {
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
@@ -151,8 +189,13 @@ class _UploaderState extends State<Uploader> {
       return FlatButton.icon(
         label: Text('Upload to Firebase'),
         icon: Icon(Icons.cloud_upload),
-        onPressed: _startUpload,
+        
+        onPressed:
+           _startUpload,
+        
+        
       );
     }
   }
+ 
 }

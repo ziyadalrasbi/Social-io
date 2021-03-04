@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
-
 
 class Profile extends StatefulWidget {
   @override
@@ -10,50 +11,71 @@ class Profile extends StatefulWidget {
 }
 
 class _Profile1State extends State<Profile> {
-
+  int imageCount = 0;
   int listCount = 0;
   bool listWanted = false;
+  List<String> images = [];
+  var url;
   @override
   void initState() {
     getUserInfo();
+    checkImages();
     super.initState();
   }
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
-    
-      setState(() {       
-      });
 
+    setState(() {});
   }
-  
+
+  void checkImages() async {
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(result.id)
+            .collection("images")
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((result) async {
+            imageCount++;
+            final ref =
+                FirebaseStorage.instance.ref().child(result.data()['imageid']);
+            url = await ref.getDownloadURL();
+            setState(() {
+              printImages();
+            });
+          });
+        });
+      });
+    });
+  }
 
   printImages() {
-    return List.generate(12, (index) {
-        return GestureDetector(
-          onTap: () {
-            return ThemeData.from(colorScheme: ColorScheme.dark());
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              
-              image: DecorationImage(
-                
-                image: AssetImage("assets/images/pic" +
-                    index.toString() +
-                    ".jpg"),
-                    
-                fit: BoxFit.cover,
-                
-              ),
+    return List.generate(imageCount, (index) {
+      return GestureDetector(
+        onTap: () {
+          return ThemeData.from(colorScheme: ColorScheme.dark());
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+            image: DecorationImage(
+              image: NetworkImage(url),
+              fit: BoxFit.cover,
             ),
           ),
-        );
-      });
+        ),
+      );
+    });
   }
 
   displayPics() {
@@ -66,8 +88,6 @@ class _Profile1State extends State<Profile> {
     );
   }
 
-  
-
   displayPicsList() {
     return GridView.count(
       crossAxisCount: 1,
@@ -77,10 +97,6 @@ class _Profile1State extends State<Profile> {
       children: printImages(),
     );
   }
-
-  
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,15 +109,14 @@ class _Profile1State extends State<Profile> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-          Image.asset(
-            "assets/icons/LOGONEW.png", 
-            height: 50, 
-            alignment: Alignment.center,
-          ),
+            Image.asset(
+              "assets/icons/LOGONEW.png",
+              height: 50,
+              alignment: Alignment.center,
+            ),
           ],
         ),
       ),
-      
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
@@ -109,7 +124,6 @@ class _Profile1State extends State<Profile> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-
                 Container(
                   height: size.height * 0.40,
                   decoration: BoxDecoration(
@@ -123,10 +137,13 @@ class _Profile1State extends State<Profile> {
                       SizedBox(
                         height: 36,
                       ),
-                      CircleAvatar(
-                        radius: 48,
-                        backgroundImage:
-                            AssetImage("assets/images/wrestler.png"),
+                      GestureDetector(
+                        onTap: checkImages,
+                        child: CircleAvatar(
+                          radius: 48,
+                          backgroundImage:
+                              AssetImage("assets/images/wrestler.png"),
+                        ),
                       ),
                       SizedBox(
                         height: 16,
@@ -161,7 +178,6 @@ class _Profile1State extends State<Profile> {
                             Expanded(
                               child: Container(),
                             ),
-                            
                             Container(
                               width: 110,
                               child: Column(
@@ -226,7 +242,6 @@ class _Profile1State extends State<Profile> {
                 Material(
                   elevation: 1,
                   child: Container(
-                    
                     height: 56,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -235,32 +250,27 @@ class _Profile1State extends State<Profile> {
                           onTap: () {
                             listCount++;
                             setState(() {
-                                listWanted = false;                          
+                              listWanted = false;
                             });
                           },
                           child: Icon(
-                          Icons.grid_view,
-                          color: listWanted ? Colors.grey : Colors.black,
-                          size: 28,
+                            Icons.grid_view,
+                            color: listWanted ? Colors.grey : Colors.black,
+                            size: 28,
                           ),
                         ),
-                        
-                        
-                        
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                                listWanted = true;                      
+                              listWanted = true;
                             });
-                            
                           },
                           child: Icon(
-                          Icons.view_list,
-                          color: listWanted ? Colors.black : Colors.grey,
-                          size: 30,
+                            Icons.view_list,
+                            color: listWanted ? Colors.black : Colors.grey,
+                            size: 30,
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
