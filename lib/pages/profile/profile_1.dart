@@ -72,8 +72,9 @@ class _Profile1State extends State<Profile> {
               
             
           ),
+          
           child: Image.network(
-            url,
+            url.toString(),
             fit: BoxFit.cover,
             ),
         ),
