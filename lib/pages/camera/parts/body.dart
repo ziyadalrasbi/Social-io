@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socialio/constants.dart';
@@ -34,15 +35,23 @@ class ImageCapture extends StatefulWidget {
 
 class _ImageCaptureState extends State<ImageCapture> {
   //Active image file
-  File _imageFile;
+  PickedFile _imageFile;
   
   Future<void> _pickImage(ImageSource source) async {
     final _picker = ImagePicker();
     PickedFile selected = await _picker.getImage(source: source);
     
     setState(() {
-      _imageFile = File(selected.path);
+        _imageFile = selected;
     });
+
+    if (_imageFile != null) {
+      if (kIsWeb) {
+        return Image.network(_imageFile.path);
+      } else {
+        return Image.file(File(_imageFile.path));
+      }
+    }
   }
 
   void _clear() {
@@ -94,7 +103,7 @@ class _ImageCaptureState extends State<ImageCapture> {
       body: ListView(
         children: <Widget>[
           if (_imageFile != null) ...[
-            Image.file(_imageFile),
+            
             Row(
               children: <Widget>[
                 FlatButton(
@@ -105,7 +114,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                   child: Icon(Icons.refresh),
                   onPressed: _clear,
                 ),
-                Uploader(file: _imageFile)
+                Uploader(pickedFile: _imageFile,),
               ],
             ),
           ]
@@ -117,8 +126,8 @@ class _ImageCaptureState extends State<ImageCapture> {
 
 class Uploader extends StatefulWidget {
   final File file;
-  
-  Uploader({Key key, this.file}) : super(key: key);
+  final PickedFile pickedFile;
+  Uploader({Key key, this.file, this.pickedFile}) : super(key: key);
 
   createState() => _UploaderState();
 }
