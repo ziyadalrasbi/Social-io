@@ -4,6 +4,7 @@ import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/navbar/search/user_profile.dart';
 import 'package:socialio/parts/input_field_box.dart';
 
 
@@ -54,6 +55,20 @@ class _UserSearchState extends State<UserSearch> {
     });
   }
 
+  
+  createChat({String userName}) {
+    if (userName != Constants.myName) {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => UserProfile(userName)
+        ),
+      );
+    } else {
+      print("Can't chat with yourself!");
+    }
+  }
+  
   Widget SearchTile({String userName, String userEmail}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -62,59 +77,27 @@ class _UserSearchState extends State<UserSearch> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-              children: [
-              Container(
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: primaryDarkColour,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Text(
-                "${userName.substring(0,1).toUpperCase()}", 
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  ),
-              ),
-              ),
-              SizedBox(
-                width: 8,
-              ),
               Text(userName),
-              ],
-              ),
             ],
           ),
           Spacer(),
-          
+          GestureDetector(
+            onTap: () {
+              createChat(
+                userName: userName,
+              );
+            },
+            child: Container(
+              color: primaryDarkColour,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Text("View"),
+            ),
+          ),
         ],
       ),
     );
   }
-  createChat({String userName}) {
-    if (userName != Constants.myName) {
-    String roomId = getRoomId(userName, Constants.myName);
-    List<String> users = [userName, Constants.myName];
-    Map<String, dynamic> roomMap = {
-      "users": users,
-      "roomId": roomId,
-    };
-    DatabaseMethods().createChat(roomId, roomMap);
-    Navigator.push(
-      context, 
-      MaterialPageRoute(
-        builder: (context) => ConversationRoom(roomId)
-        ),
-      );
-    } else {
-      print("Can't chat with yourself!");
-    }
-  }
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

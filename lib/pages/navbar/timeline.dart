@@ -47,7 +47,7 @@ class _PostsState extends State<Posts> {
       super.initState();
     }
 
-    checkPosts() async {
+    void checkPosts() async {
     FirebaseFirestore.instance
         .collection("uploads")
         .get()
@@ -388,7 +388,7 @@ class _PostsState extends State<Posts> {
           ),
         ],
       ),
-      body: checkPosts(),
+      body: _getPost(),
     );
   }
 }
