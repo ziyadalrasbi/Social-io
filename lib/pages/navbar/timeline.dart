@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
+
 
 class Posts extends StatefulWidget {
   @override
@@ -11,8 +9,8 @@ class Posts extends StatefulWidget {
 }
 
 class _PostsState extends State<Posts> {
-  bool isVisible = false;
-  int temp = 0;
+  bool isVisible = true;
+
   //Assets used will be replaced with json
 
   List<ExactAssetImage> displayPic = [
@@ -26,59 +24,16 @@ class _PostsState extends State<Posts> {
     ExactAssetImage('assets/pictures/edinburgh.jpg'),
     ExactAssetImage('assets/pictures/water.jpeg')
   ];
-  List<int> postUpvotes = [76263, 243503, 54];
+  List<String> postUpvotes = ['76,263', '243,503', '54'];
 
-  bool upVoted = false;
-  bool downVoted = false;
-  
-  bool upvoteDisabled = false;
-  bool downvoteDisabled = false;
-  bool votedBefore = false;
+  bool upVoted = false; 
+  bool downVoted = false; 
 
-  int postCount;
-  var url;
-  String poster;
-  @override
-    void initState() {
-      upvoteDisabled = false;
-      downvoteDisabled = false;
-      votedBefore = false;  
-      checkPosts();
-      super.initState();
-    }
-
-    void checkPosts() async {
-    FirebaseFirestore.instance
-        .collection("uploads")
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        FirebaseFirestore.instance
-            .collection("uploads")
-            .doc(result.id)
-            .collection("images")
-            .get()
-            .then((querySnapshot) {
-          querySnapshot.docs.forEach((result) async {
-            postCount++;
-            final ref =
-                FirebaseStorage.instance.ref().child(result.data()['imageid']);
-            url = await ref.getDownloadURL();
-            poster = result.data()['username'].toString();
-            setState(() {
-              _getPost();
-            });
-          });
-        });
-      });
-    });
-  }
-
-   _getPost() {
+  Widget _getPost() {
     Size size = MediaQuery.of(context).size;
     return new ListView.builder(
-        itemCount: postCount,
-        itemBuilder: (BuildContext context, int index) {
+        itemCount: userPosts.length,
+        itemBuilder: (BuildContext context, int userIndex) {
           return Container(
               child: Column(
             children: <Widget>[
@@ -97,12 +52,12 @@ class _PostsState extends State<Posts> {
                                   print('Will take to profile of user');
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.blue,
+                                  backgroundImage: displayPic[userIndex],
                                 ))),
                         RichText(
                           text: TextSpan(children: <TextSpan>[
                             TextSpan(
-                                text: poster,
+                                text: userPosts[userIndex],
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15.0),
                                 recognizer: TapGestureRecognizer()
@@ -141,16 +96,16 @@ class _PostsState extends State<Posts> {
                       },
                     ),
                     height: size.height * 0.5,
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 0,
-                      bottom: 24,
-                    ),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 0,
+                    bottom: 24,
+                  ),
                     // constraints: BoxConstraints(maxHeight: 50),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          fit: BoxFit.fill, image:  NetworkImage(url.toString())),
+                          fit: BoxFit.fill, image: userPostImage[userIndex]),
                     )),
                 Positioned(
                     top: 25,
@@ -169,23 +124,20 @@ class _PostsState extends State<Posts> {
                 // upvote + downvote + comment + send + save icons
                 children: <Widget>[
                   Container(
-                      color: upVoted ? Colors.blue : Colors.white,
+                    color: upVoted ? Colors.blue : Colors.white,
                       margin: EdgeInsets.only(right: 8),
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_upvote.png'),
                         iconSize: 25,
                         onPressed: () {
                           setState(() {
-                            upVoted = true;
-                            downVoted = false;
-                            upvoteDisabled ? null : downvoteDisabled ? temp = temp + 2 : temp++; 
-                            downvoteDisabled = false;
-                            upvoteDisabled = true;
-                            
+                            upVoted = true; 
+                            downVoted = false;                        
                           });
-                          
                         },
-                      )),
+                      )
+
+                  ),
                   Container(
                       color: downVoted ? Colors.blue : Colors.white,
                       margin: EdgeInsets.only(right: 8),
@@ -195,12 +147,10 @@ class _PostsState extends State<Posts> {
                         onPressed: () {
                           setState(() {
                             downVoted = true;
-                            upVoted = false;
-                            downvoteDisabled ? null : upvoteDisabled ? temp = temp - 2 : temp--; 
-                            upvoteDisabled = false;
-                            downvoteDisabled = true;
+                            upVoted = false;                         
                           });
                         },
+
                       )),
                   Container(
                       margin: EdgeInsets.only(right: 8),
@@ -247,7 +197,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: poster.toString() + ': ',
+                              text: userPosts[userIndex] + ': ',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -267,7 +217,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: temp.toString() + ' upvotes',
+                              text: postUpvotes[userIndex] + ' upvotes',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -351,41 +301,39 @@ class _PostsState extends State<Posts> {
         });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
             Image.asset(
-              "assets/icons/LOGONEW.png",
-              height: 50,
-              
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
             ),
           ],
         ),
         actions: <Widget>[
           FlatButton(
-            child: Image.asset(
-              'assets/icons/ICON_inbox.png',
-              width: 45,
-              height: 45,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatPage(),
-                ),
-              );
-            },
-          ),
+                child:
+                  Image.asset(
+                  'assets/icons/ICON_inbox.png',
+                  width: 45,
+                  height: 45,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ChatPage(),
+                    ),
+                  );
+                },
+              ),
         ],
       ),
       body: _getPost(),
