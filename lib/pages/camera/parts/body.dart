@@ -125,11 +125,11 @@ class Uploader extends StatefulWidget {
 class _UploaderState extends State<Uploader> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   final FirebaseStorage _storage =
-      FirebaseStorage(storageBucket: 'gs://social-io-102b4.appspot.com/');
+      FirebaseStorage.instanceFor(bucket: 'gs://social-io-102b4.appspot.com/');
       FirebaseAuth auth = FirebaseAuth.instance;
   List<String> files;
       
-  StorageUploadTask _uploadTask;
+  UploadTask _uploadTask;
 @override
   void initState() {
     getUserInfo();
@@ -163,39 +163,30 @@ class _UploaderState extends State<Uploader> {
 
     setState(() {
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
+      _uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) { 
+        print('Snapshot state: ${snapshot.state}');
+        print('Progess: ${snapshot.totalBytes / snapshot.bytesTransferred}');
+      }, onError: (Object e) {
+        print(e);
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_uploadTask != null) {
-      return StreamBuilder<StorageTaskEvent>(
-          stream: _uploadTask.events,
-          builder: (context, snapshot) {
-            var event = snapshot?.data?.snapshot;
-
-            double progressPercent = event != null
-                ? event.bytesTransferred / event.totalByteCount
-                : 0;
-
-            return Column(
-              children: [
-                if (_uploadTask.isComplete) Text('Upload Complete'),
-                Text('${(progressPercent * 100).toStringAsFixed(2)} %'),
-              ],
-            );
-          });
-    } else {
-      return FlatButton.icon(
+      
+      
+        return FlatButton.icon(
         label: Text('Upload to Firebase'),
         icon: Icon(Icons.cloud_upload),
-        
         onPressed:
            _startUpload,
-        
-        
       );
-    }
+
+
+
+      
+    
   }
  
 }

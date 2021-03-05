@@ -20,6 +20,7 @@ class _Profile1State extends State<Profile> {
   void initState() {
     getUserInfo();
     checkImages();
+    printImages();
     super.initState();
   }
 
@@ -61,22 +62,18 @@ class _Profile1State extends State<Profile> {
     return List.generate(imageCount, (index) {
       return GestureDetector(
         onTap: () {
-          return ThemeData.from(colorScheme: ColorScheme.dark());
+          print( "hello");
         },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
-            
-              
-            
           ),
-          
           child: Image.network(
             url.toString(),
             fit: BoxFit.cover,
-            ),
+          ),
         ),
       );
     });

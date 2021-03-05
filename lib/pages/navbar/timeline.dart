@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
 
 class Posts extends StatefulWidget {
@@ -9,7 +12,7 @@ class Posts extends StatefulWidget {
 
 class _PostsState extends State<Posts> {
   bool isVisible = false;
-  
+  int temp = 0;
   //Assets used will be replaced with json
 
   List<ExactAssetImage> displayPic = [
@@ -31,20 +34,51 @@ class _PostsState extends State<Posts> {
   bool upvoteDisabled = false;
   bool downvoteDisabled = false;
   bool votedBefore = false;
-  
+
+  int postCount;
+  var url;
+  String poster;
   @override
     void initState() {
       upvoteDisabled = false;
       downvoteDisabled = false;
       votedBefore = false;  
+      checkPosts();
       super.initState();
     }
 
-  Widget _getPost() {
+    checkPosts() async {
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(result.id)
+            .collection("images")
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((result) async {
+            postCount++;
+            final ref =
+                FirebaseStorage.instance.ref().child(result.data()['imageid']);
+            url = await ref.getDownloadURL();
+            poster = result.data()['username'].toString();
+            setState(() {
+              _getPost();
+            });
+          });
+        });
+      });
+    });
+  }
+
+   _getPost() {
     Size size = MediaQuery.of(context).size;
     return new ListView.builder(
-        itemCount: userPosts.length,
-        itemBuilder: (BuildContext context, int userIndex) {
+        itemCount: postCount,
+        itemBuilder: (BuildContext context, int index) {
           return Container(
               child: Column(
             children: <Widget>[
@@ -63,13 +97,12 @@ class _PostsState extends State<Posts> {
                                   print('Will take to profile of user');
                                 },
                                 child: CircleAvatar(
-                                
-                                  backgroundImage: displayPic[userIndex],
+                                  backgroundColor: Colors.blue,
                                 ))),
                         RichText(
                           text: TextSpan(children: <TextSpan>[
                             TextSpan(
-                                text: userPosts[userIndex],
+                                text: poster,
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15.0),
                                 recognizer: TapGestureRecognizer()
@@ -117,7 +150,7 @@ class _PostsState extends State<Posts> {
                     // constraints: BoxConstraints(maxHeight: 50),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          fit: BoxFit.fill, image: userPostImage[userIndex]),
+                          fit: BoxFit.fill, image:  NetworkImage(url.toString())),
                     )),
                 Positioned(
                     top: 25,
@@ -145,7 +178,7 @@ class _PostsState extends State<Posts> {
                           setState(() {
                             upVoted = true;
                             downVoted = false;
-                            upvoteDisabled ? null : downvoteDisabled ? postUpvotes[userIndex] = postUpvotes[userIndex] + 2 : postUpvotes[userIndex]++; 
+                            upvoteDisabled ? null : downvoteDisabled ? temp = temp + 2 : temp++; 
                             downvoteDisabled = false;
                             upvoteDisabled = true;
                             
@@ -163,7 +196,7 @@ class _PostsState extends State<Posts> {
                           setState(() {
                             downVoted = true;
                             upVoted = false;
-                            downvoteDisabled ? null : upvoteDisabled ? postUpvotes[userIndex] = postUpvotes[userIndex] - 2 : postUpvotes[userIndex]--; 
+                            downvoteDisabled ? null : upvoteDisabled ? temp = temp - 2 : temp--; 
                             upvoteDisabled = false;
                             downvoteDisabled = true;
                           });
@@ -214,7 +247,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: userPosts[userIndex] + ': ',
+                              text: poster.toString() + ': ',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -234,7 +267,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: postUpvotes[userIndex].toString() + ' upvotes',
+                              text: temp.toString() + ' upvotes',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -355,7 +388,7 @@ class _PostsState extends State<Posts> {
           ),
         ],
       ),
-      body: _getPost(),
+      body: checkPosts(),
     );
   }
 }
