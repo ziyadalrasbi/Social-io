@@ -37,10 +37,11 @@ class _ImageCaptureState extends State<ImageCapture> {
   File _imageFile;
   
   Future<void> _pickImage(ImageSource source) async {
-    File selected = await ImagePicker.pickImage(source: source);
-
+    final _picker = ImagePicker();
+    PickedFile selected = await _picker.getImage(source: source);
+    
     setState(() {
-      _imageFile = selected;
+      _imageFile = File(selected.path);
     });
   }
 
