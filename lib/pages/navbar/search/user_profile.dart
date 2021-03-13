@@ -25,6 +25,8 @@ class _UserProfile1State extends State<UserProfile> {
     getUserInfo();
     checkUser();
     printImages();
+    displayPics();
+    displayPicsList();
     super.initState();
   }
 
