@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
@@ -85,6 +86,17 @@ class _PostsState extends State<Posts> {
     });
   }
 
+ 
+
+  returnWidth() {
+    Size size = MediaQuery.of(context).size;
+    if (kIsWeb) {
+      return 600;
+    } else {
+      return size.width; 
+    }
+  }
+
     
 
      _getPost() {
@@ -162,6 +174,7 @@ class _PostsState extends State<Posts> {
                           
                       },
                     ),
+                    width: returnWidth(),
                     height: size.height * 0.5,
                   padding: EdgeInsets.only(
                     left: 16,
