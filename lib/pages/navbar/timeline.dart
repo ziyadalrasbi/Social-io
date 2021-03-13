@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
+import 'package:socialio/pages/navbar/search/user_profile.dart';
+
+import '../../constants.dart';
+import '../../helpers.dart';
 
 
 class Posts extends StatefulWidget {
@@ -24,16 +30,71 @@ class _PostsState extends State<Posts> {
     ExactAssetImage('assets/pictures/edinburgh.jpg'),
     ExactAssetImage('assets/pictures/water.jpeg')
   ];
-  List<String> postUpvotes = ['76,263', '243,503', '54'];
 
+  List<String> test;
+  var url;
+  int postCount = 0;
+  List<String> postUpvotes = ['76,263', '243,503', '54'];
+  String posterName;
   bool upVoted = false; 
   bool downVoted = false; 
 
-  Widget _getPost() {
+  List<String> images = [];
+  List<String> usernames = [];
+  getUserInfo() async {
+    Constants.myName = await HelperFunction.getUserNameSharedPref();
+    Constants.accType = await HelperFunction.getUserTypeSharedPref();
+
+    setState(() {});
+  }
+@override
+  void initState() {
+    checkImages();
+    super.initState();
+  }
+
+  void checkImages() async {
+    int index = 0;
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .get()
+        
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(result.id)
+            .collection("images")
+            .get()
+            .then((querySnapshot) {
+              
+          querySnapshot.docs.forEach((result) async {
+            postCount++;
+            final ref =
+                FirebaseStorage.instance.ref().child(result.data()['imageid']);
+            url = await ref.getDownloadURL();
+            usernames.add(querySnapshot.docs[index].data()['username']);
+            images.add(url);
+            setState(() {
+              _getPost();
+            });
+          });
+        });
+      });
+    });
+  }
+
+    
+
+     _getPost() {
+    
     Size size = MediaQuery.of(context).size;
+    if (url!= null) {
     return new ListView.builder(
-        itemCount: userPosts.length,
+        itemCount: images.length,
         itemBuilder: (BuildContext context, int userIndex) {
+          
           return Container(
               child: Column(
             children: <Widget>[
@@ -49,21 +110,26 @@ class _PostsState extends State<Posts> {
                             margin: EdgeInsets.only(right: 8),
                             child: GestureDetector(
                                 onTap: () {
-                                  print('Will take to profile of user');
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(
+                                    builder: (context) => UserProfile(posterName)
+                                    ),
+                                  );
                                 },
                                 child: CircleAvatar(
-                                  backgroundImage: displayPic[userIndex],
+                                  backgroundImage: displayPic[1],
                                 ))),
                         RichText(
                           text: TextSpan(children: <TextSpan>[
                             TextSpan(
-                                text: userPosts[userIndex],
+                                text: usernames[userIndex],
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15.0),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     print(
-                                        'This will take to profile of that person');
+                                        usernames);
                                   })
                           ]),
                         )
@@ -93,6 +159,7 @@ class _PostsState extends State<Posts> {
                           setState(() {
                             isVisible = false;
                           });
+                          
                       },
                     ),
                     height: size.height * 0.5,
@@ -103,10 +170,15 @@ class _PostsState extends State<Posts> {
                     bottom: 24,
                   ),
                     // constraints: BoxConstraints(maxHeight: 50),
+                   
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          fit: BoxFit.fill, image: userPostImage[userIndex]),
-                    )),
+                         
+
+                          fit: BoxFit.fill, image: NetworkImage(images[userIndex])),
+                    )
+                    
+                    ),
                 Positioned(
                     top: 25,
                     left: 50,
@@ -197,7 +269,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: userPosts[userIndex] + ': ',
+                              text: usernames[userIndex] + ': ',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -217,7 +289,7 @@ class _PostsState extends State<Posts> {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: postUpvotes[userIndex] + ' upvotes',
+                              text: postUpvotes[1] + ' upvotes',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -299,6 +371,7 @@ class _PostsState extends State<Posts> {
             ],
           ));
         });
+    }
   }
 
   @override

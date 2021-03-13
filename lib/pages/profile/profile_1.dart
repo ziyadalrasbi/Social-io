@@ -11,7 +11,8 @@ class Profile extends StatefulWidget {
 }
 
 class _Profile1State extends State<Profile> {
-  int imageCount = 0;
+  
+  int postTime = 0;
   int listCount = 0;
   bool listWanted = false;
   List<String> images = [];
@@ -45,21 +46,25 @@ class _Profile1State extends State<Profile> {
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {
-            imageCount++;
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
-            url = await ref.getDownloadURL();
-            setState(() {
-              printImages();
-            });
+              url = await ref.getDownloadURL();
+              images.add(url);
+              setState(() {
+          printImages();
+          });
           });
         });
       });
+      
     });
+    
   }
 
+  
+
   printImages() {
-    return List.generate(imageCount, (index) {
+    return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
           print( "hello");
@@ -71,7 +76,7 @@ class _Profile1State extends State<Profile> {
             ),
           ),
           child: Image.network(
-            url.toString(),
+            images[index],
             fit: BoxFit.cover,
           ),
         ),
@@ -139,7 +144,7 @@ class _Profile1State extends State<Profile> {
                         height: 36,
                       ),
                       GestureDetector(
-                        onTap: checkImages,
+                        onTap: () { print(images);},
                         child: CircleAvatar(
                           radius: 48,
                           backgroundImage:

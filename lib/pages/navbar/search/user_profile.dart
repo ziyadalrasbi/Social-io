@@ -48,21 +48,24 @@ class _UserProfile1State extends State<UserProfile> {
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {
-            imageCount++;
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
-            url = await ref.getDownloadURL();
-            setState(() {
-              printImages();
-            });
+              url = await ref.getDownloadURL();
+              images.add(url);
+              setState(() {
+                printImages();
+              });
           });
         });
       });
+      
     });
   }
 
+
+
   printImages() {
-    return List.generate(imageCount, (index) {
+    return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
           print( "hello");
@@ -74,7 +77,7 @@ class _UserProfile1State extends State<UserProfile> {
             ),
           ),
           child: Image.network(
-            url.toString(),
+            images[index],
             fit: BoxFit.cover,
           ),
         ),
