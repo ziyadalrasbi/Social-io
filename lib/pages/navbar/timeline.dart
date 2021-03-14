@@ -86,9 +86,8 @@ class _PostsState extends State<Posts> {
     });
   }
 
- 
 
-  returnWidth() {
+returnWidth() {
     Size size = MediaQuery.of(context).size;
     if (kIsWeb) {
       return 600;
@@ -97,9 +96,63 @@ class _PostsState extends State<Posts> {
     }
   }
 
-    
+  returnAlignment() {
+    if (kIsWeb) {
+      return MainAxisAlignment.center;
+    } else {
+      return MainAxisAlignment.start;
+    }
+  }
 
-     _getPost() {
+  returnCommentAlignment() {
+    if (kIsWeb) {
+      return Alignment.center;
+    } else {
+      return Alignment.topLeft;
+    }
+  }
+   
+
+  returnReportAlignment() {
+    if (kIsWeb) {
+      return MainAxisAlignment.center;
+    } else {
+      return MainAxisAlignment.spaceBetween;
+    }
+  }
+
+  returnReportButtonAtTop() {
+    if (kIsWeb) {
+      return Container();
+      } else {
+      return IconButton(
+        icon: Image.asset('assets/pictures/ICON_flag.png'),
+        iconSize: 25,
+        onPressed: () {
+          print('This will function as a report button');
+        },
+      );
+    }
+  }
+
+  returnReportButtonAtBottom() {
+    if (kIsWeb) {
+      return Container(
+      margin: EdgeInsets.only(right: 8),
+      child: IconButton(
+        icon: Image.asset('assets/pictures/ICON_flag.png'),
+        iconSize: 25,
+        onPressed: () {
+          print('This will function as a report button');
+        },
+      ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+    _getPost() {
     
     Size size = MediaQuery.of(context).size;
     if (url!= null) {
@@ -108,14 +161,17 @@ class _PostsState extends State<Posts> {
         itemBuilder: (BuildContext context, int userIndex) {
           
           return Container(
-              child: Column(
+            child: Column(
+              
             children: <Widget>[
               Container(
+                
                 //Includes dp + username + report flag
                 margin: EdgeInsets.all(10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: returnReportAlignment(),
                   children: <Widget>[
+                   
                     Row(
                       children: <Widget>[
                         Container(
@@ -125,7 +181,7 @@ class _PostsState extends State<Posts> {
                                 Navigator.push(
                                   context, 
                                   MaterialPageRoute(
-                                    builder: (context) => UserProfile(posterName)
+                                    builder: (context) => UserProfile(usernames[userIndex])
                                     ),
                                   );
                                 },
@@ -140,25 +196,25 @@ class _PostsState extends State<Posts> {
                                     color: Colors.black, fontSize: 15.0),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    print(
-                                        usernames);
+                                    Navigator.push(
+                                      context, 
+                                      MaterialPageRoute(
+                                        builder: (context) => UserProfile(usernames[userIndex])
+                                      ),
+                                    );
                                   })
                           ]),
                         )
                       ],
                     ),
-                    IconButton(
-                      icon: Image.asset('assets/pictures/ICON_flag.png'),
-                      iconSize: 25,
-                      onPressed: () {
-                        print('This will function as a report button');
-                      },
-                    )
+                    
+                   returnReportButtonAtTop(),
                   ],
                 ),
               ),
               Stack(children: <Widget>[
                 Container(
+                  
                     //the post picture
                     child: GestureDetector(
                       //This is to handle the tagged users raised button
@@ -174,8 +230,8 @@ class _PostsState extends State<Posts> {
                           
                       },
                     ),
-                    width: returnWidth(),
                     height: size.height * 0.5,
+                    width: returnWidth(),
                   padding: EdgeInsets.only(
                     left: 16,
                     right: 16,
@@ -206,6 +262,7 @@ class _PostsState extends State<Posts> {
                     ))
               ]),
               Row(
+                mainAxisAlignment: returnAlignment(),
                 // upvote + downvote + comment + send + save icons
                 children: <Widget>[
                   Container(
@@ -267,14 +324,17 @@ class _PostsState extends State<Posts> {
                               'This will let a user save the post so that they can easily find it again');
                         },
                       )),
+                       returnReportButtonAtBottom(),
                 ],
               ),
               Column(
+                mainAxisAlignment: returnAlignment(),
                 //This column contains username, upload description and total upvotes
                 children: <Widget>[
                   Container(
+                    
                     //The person who posted along with photo description
-                    alignment: Alignment.topLeft,
+                    alignment: returnCommentAlignment(),
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: RichText(
                         text: TextSpan(
@@ -286,15 +346,19 @@ class _PostsState extends State<Posts> {
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  print(
-                                      'This will take to profile of that person');
+                                  Navigator.push(
+                                      context, 
+                                      MaterialPageRoute(
+                                        builder: (context) => UserProfile(usernames[userIndex])
+                                      ),
+                                    );
                                 }),
                           TextSpan(text: 'This will be a photo description'),
                         ])),
                   ),
                   Container(
                     //The total upvotes of post
-                    alignment: Alignment.topLeft,
+                    alignment: returnCommentAlignment(),
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: RichText(
                         text: TextSpan(
@@ -314,11 +378,12 @@ class _PostsState extends State<Posts> {
                 ],
               ),
               Column(
+                mainAxisAlignment: returnAlignment(),
                 //This column contains username and comment of commenters
                 children: <Widget>[
                   Container(
                     //First comment
-                    alignment: Alignment.topLeft,
+                    alignment: returnCommentAlignment(),
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: RichText(
                         text: TextSpan(
@@ -339,7 +404,7 @@ class _PostsState extends State<Posts> {
                   ),
                   Container(
                     //Second comment
-                    alignment: Alignment.topLeft,
+                    alignment: returnCommentAlignment(),
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: RichText(
                         text: TextSpan(
@@ -362,7 +427,7 @@ class _PostsState extends State<Posts> {
                   ),
                   Container(
                     //view more comments
-                    alignment: Alignment.topLeft,
+                    alignment: returnCommentAlignment(),
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: RichText(
                         text: TextSpan(
