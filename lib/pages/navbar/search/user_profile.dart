@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/parts/button.dart';
 
 class UserProfile extends StatefulWidget {
   final String userName;
@@ -15,14 +16,21 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfile1State extends State<UserProfile> {
+
   int imageCount = 0;
   int listCount = 0;
+  int followers = 0;
+  int following = 0;
+  bool followed = false;
   bool listWanted = false;
   List<String> images = [];
   var url;
+
   @override
   void initState() {
     getUserInfo();
+    getUserFollowers();
+    updateFollowers();
     checkUser();
     printImages();
     displayPics();
@@ -33,6 +41,8 @@ class _UserProfile1State extends State<UserProfile> {
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
+    followers = await HelperFunction.getUserFollowersSharedPref();
     setState(() {});
   }
 
@@ -64,6 +74,68 @@ class _UserProfile1State extends State<UserProfile> {
     });
   }
 
+  
+
+  void getUserFollowers() async {
+    FirebaseFirestore.instance
+    .collection("users")
+    .where("username", isEqualTo: widget.userName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+            
+          
+        
+        setState(() {
+          followers = querySnapshot.docs[0].data()['followers'];  
+          following = querySnapshot.docs[0].data()['following'];
+                  updateFollowers();
+                });
+      });
+    });
+  }
+
+void updateFollowers() async {
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: widget.userName)
+    .get()
+    .then((querySnapshot) {
+      if (followed == true) {
+      querySnapshot.docs.forEach((result) async {     
+
+          FirebaseFirestore.instance
+          .collection('users')
+          .doc(result.id)
+          .update({'followers': followers++,});  
+          setState(() { 
+          });
+      HelperFunction.saveUserFollowersSharedPref(followers);     
+      });
+      }
+    });
+  } 
+
+  void updateFollowing() async {
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      if (followed == true) {
+      querySnapshot.docs.forEach((result) async {      
+          FirebaseFirestore.instance
+          .collection('users')
+          .doc(result.id)
+          .update({'following': Constants.myFollowing++,});   
+          setState(() {
+            
+          }); 
+          HelperFunction.saveUserFollowingSharedPref(Constants.myFollowing);
+      });
+      }
+    });
+  }
 
 
   printImages() {
@@ -170,7 +242,7 @@ class _UserProfile1State extends State<UserProfile> {
                         height: 4,
                       ),
                       Text(
-                        "Flutter " + Constants.accType,
+                        "SocialIO " + Constants.accType,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -180,6 +252,30 @@ class _UserProfile1State extends State<UserProfile> {
                         child: Container(),
                       ),
                       Container(
+                        color: Colors.blue,
+                      child: FlatButton(
+                        height: 60,
+                        minWidth: 200,
+                        color: Colors.blue,
+                        child: Text("Follow"),
+                        onPressed: () async {
+                          setState(() {
+                             updateFollowers();                         
+                           });
+                           setState(() {
+                              updateFollowing();                           
+                            });
+                           
+                          setState(() {
+                            followed = true;
+                                                     
+                           });
+                           
+                        },  
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
                         height: 64,
                         color: Colors.black.withOpacity(0.4),
                         child: Row(
@@ -187,32 +283,6 @@ class _UserProfile1State extends State<UserProfile> {
                           children: <Widget>[
                             Expanded(
                               child: Container(),
-                            ),
-                            Container(
-                              width: 110,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "FOLLOWING",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    "364",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
                             Container(
                               width: 110,
@@ -230,7 +300,33 @@ class _UserProfile1State extends State<UserProfile> {
                                     height: 4,
                                   ),
                                   Text(
-                                    "175",
+                                    followers.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 110,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "FOLLOWING",
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    following.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,

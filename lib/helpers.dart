@@ -8,6 +8,9 @@ class HelperFunction {
   static String sharedPrefUserNameKey = "USERNAMEKEY";
   static String sharedPrefUserEmailKey = "USEREMAILKEY";
   static String sharedPrefUserTypeKey = "USERTYPEKEY";
+  static String sharedPrefFollowersKey = "USERFOLLOWERSKEY";
+  static String sharedPrefFollowingKey = "USERFOLLOWINGKEY";
+  static String sharedPostUpvotesKey = "POSTUPVOTESKEY";
 
   // save data
   static Future<bool> saveLoggedInSharedPref(bool isLogged) async {
@@ -30,6 +33,21 @@ class HelperFunction {
     return await preferences.setString(sharedPrefUserTypeKey, accType);
   }
 
+  static Future<bool> saveUserFollowersSharedPref(int followers) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setInt(sharedPrefFollowersKey, followers);
+  }
+
+  static Future<bool> saveUserFollowingSharedPref(int following) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setInt(sharedPrefFollowingKey, following);
+  }
+
+  static Future<bool> savePostUpvotesSharedPref(int upvotes) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setInt(sharedPostUpvotesKey, upvotes);
+  }
+
   // load data
   static Future<bool> getLoggedInSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -49,5 +67,20 @@ class HelperFunction {
   static Future<String> getUserTypeSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPrefUserTypeKey);
+  }
+
+  static Future<int> getUserFollowersSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getInt(sharedPrefFollowersKey);
+  }
+
+  static Future<int> getUserFollowingSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getInt(sharedPrefFollowingKey);
+  }
+
+  static Future<int> getPostUpvotesSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getInt(sharedPostUpvotesKey);
   }
 }

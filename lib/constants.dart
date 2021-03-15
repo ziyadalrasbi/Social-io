@@ -12,6 +12,8 @@ class Constants {
   static String myName = "";
   static String accType = "";
   static List<String> files;
+  static int myFollowers = 0;
+  static int myFollowing = 0;
 }
 
 class ThemeChange with ChangeNotifier {

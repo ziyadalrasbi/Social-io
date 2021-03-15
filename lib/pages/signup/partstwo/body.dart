@@ -34,7 +34,8 @@ class _BodyState extends State<Body> {
   final TextEditingController accTypeController = TextEditingController();
   bool isLoading = false;
   DatabaseMethods databaseMethods = new DatabaseMethods();
- 
+  int userfollowers = 0;
+  int userfollowing = 0;
 
   printEmailError() {
     print("This email is already in use");
@@ -152,7 +153,8 @@ class _BodyState extends State<Body> {
                 ),
               ),
 
-              MainButton( // final sign up button
+              MainButton( 
+                // final sign up button
                 text: "Sign up",
                 textColor: Colors.white,
                 color: Colors.indigo[500],
@@ -163,6 +165,8 @@ class _BodyState extends State<Body> {
                   HelperFunction.saveUserEmailSharedPref(emailController.text);
                   HelperFunction.saveUserNameSharedPref(usernameController.text);
                   HelperFunction.saveUserTypeSharedPref(dropdownValue);
+                  HelperFunction.saveUserFollowersSharedPref(userfollowers);
+                  HelperFunction.saveUserFollowingSharedPref(userfollowing);
                   if (_formKey.currentState.validate()) {
                     setState(() {
                       isLoading = true;              
@@ -170,6 +174,7 @@ class _BodyState extends State<Body> {
                   }
                   
                   try {
+                   
                     
                     UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: emailController.text,
@@ -182,7 +187,9 @@ class _BodyState extends State<Body> {
                     signUp(
                       usernameController.text,
                       emailController.text,
-                      dropdownValue.toString()
+                      dropdownValue.toString(),
+                      userfollowers,
+                      userfollowing,
                       );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {

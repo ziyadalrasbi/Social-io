@@ -9,6 +9,9 @@ import 'package:socialio/pages/navbar/fake_profile.dart';
 import 'package:socialio/pages/profile/profile_1.dart';
 import 'package:socialio/pages/camera/camera.dart';
 
+import '../../constants.dart';
+import '../../helpers.dart';
+
 void main() {
   runApp(MaterialApp(
     title: 'Navigation Basics',
@@ -21,6 +24,8 @@ class BottomBar extends StatefulWidget {
   _BottomBar createState() => _BottomBar();
 }
 
+
+
 class _BottomBar extends State<BottomBar> {
   int _currentIndex = 0;
 
@@ -30,6 +35,8 @@ class _BottomBar extends State<BottomBar> {
     Profile(), //class name of profile
     Setup_page(), //class name of setting
   ];
+
+
 
   @override
   Widget build(BuildContext context) {

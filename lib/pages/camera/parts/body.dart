@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,9 +12,13 @@ import 'package:socialio/pages/navbar/bottombar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:socialio/parts/input_field_box.dart';
 
 //import 'package:permission_handler/permission_handler.dart';
 
+TextEditingController captionController = TextEditingController();
+TextEditingController searchController = TextEditingController();
+List<String> taggedUsers = [];
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -65,6 +70,59 @@ class _ImageCaptureState extends State<ImageCapture> {
     });
   }
 
+  QuerySnapshot searchshot;
+DatabaseMethods databaseMethods = new DatabaseMethods();
+
+Widget listSearch() {
+    return searchshot != null ? ListView.builder(
+      itemCount: searchshot.docs.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return SearchTile(
+          userName: searchshot.docs[index].data()["username"],
+          userEmail: searchshot.docs[index].data()["email"],
+        );
+      }) : Container();
+  }
+
+  initSearch() {
+    databaseMethods.getUsername(searchController.text)
+    .then((val){
+      setState(() {
+        searchshot = val;
+      });
+    });
+  }
+
+  Widget SearchTile({String userName, String userEmail}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(userName),
+            ],
+          ),
+          Spacer(),
+          GestureDetector(
+            onTap: () {
+              taggedUsers.add(searchController.text);
+              print(taggedUsers);
+              searchController.clear();
+            },
+            child: Container(
+              color: primaryDarkColour,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Text("Tag"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +140,9 @@ class _ImageCaptureState extends State<ImageCapture> {
             FlatButton(
               child: Text('Cancel'),
               onPressed: () {
+                searchController.clear();
+                captionController.clear();
+                taggedUsers = [];
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BottomBar()),
@@ -95,6 +156,36 @@ class _ImageCaptureState extends State<ImageCapture> {
         children: <Widget>[
           if (_imageFile != null) ...[
             Image.file(_imageFile),
+            InputField(
+              hint: "Enter a caption (optional)",
+              control: captionController,
+              changes: (value) {},
+            ),
+            Row(
+                children: [
+                  Expanded(
+                    child: InputField(
+                      color: Colors.blueGrey[200],
+                      control: searchController,
+                      hint: "Search for users",
+                      changes: (val) {
+                      },
+                    ),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () { 
+                      initSearch();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      padding: EdgeInsets.all(12),
+                      child: Image.asset("assets/icons/ICON_search.png")),
+                  ),
+                ],
+                
+              ),
+              listSearch(),
             Row(
               children: <Widget>[
                 FlatButton(
@@ -105,20 +196,24 @@ class _ImageCaptureState extends State<ImageCapture> {
                   child: Icon(Icons.refresh),
                   onPressed: _clear,
                 ),
-                Uploader(file: _imageFile)
+                Uploader(file: _imageFile,)
               ],
             ),
           ]
         ],
       ),
+      
     );
   }
 }
 
+
+
 class Uploader extends StatefulWidget {
   final File file;
   
-  Uploader({Key key, this.file}) : super(key: key);
+  
+  Uploader({Key key, this.file,}) : super(key: key);
 
   createState() => _UploaderState();
 }
@@ -159,10 +254,14 @@ class _UploaderState extends State<Uploader> {
       "username": Constants.myName,
       "imageid": filePath,
       "time": DateTime.now().millisecondsSinceEpoch,
+      "upvotes": 0,
+      "caption": captionController.text,
+      "tagged": taggedUsers,
     };
     databaseMethods.addImage(Constants.myName, imageMap);
 
     setState(() {
+      captionController.clear();
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
       _uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) { 
         print('Snapshot state: ${snapshot.state}');
@@ -175,19 +274,12 @@ class _UploaderState extends State<Uploader> {
 
   @override
   Widget build(BuildContext context) {
-      
-      
         return FlatButton.icon(
         label: Text('Upload to Firebase'),
         icon: Icon(Icons.cloud_upload),
-        onPressed:
+        onPressed: 
            _startUpload,
       );
-
-
-
-      
-    
   }
  
 }

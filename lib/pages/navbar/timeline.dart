@@ -42,10 +42,12 @@ class _PostsState extends State<Posts> {
 
   List<String> images = [];
   List<String> usernames = [];
+  List<int> upvotes = [];
+  List<String> captions = [];
+  List taggedUsers = [];
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
-
     setState(() {});
   }
 @override
@@ -55,7 +57,7 @@ class _PostsState extends State<Posts> {
   }
 
   void checkImages() async {
-    int index = 0;
+    
     FirebaseFirestore.instance
         .collection("uploads")
         .get()
@@ -65,19 +67,26 @@ class _PostsState extends State<Posts> {
         
         FirebaseFirestore.instance
             .collection("uploads")
+            
             .doc(result.id)
-            .collection("images")
+            .collection("images").orderBy('time')
             .get()
             .then((querySnapshot) {
               
           querySnapshot.docs.forEach((result) async {
+            
             postCount++;
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
             url = await ref.getDownloadURL();
-            usernames.add(querySnapshot.docs[index].data()['username']);
-            images.add(url);
+            
+            
             setState(() {
+              images.add(url);
+            captions.add(result.data()['caption']);
+            usernames.add(result.data()['username']);
+            upvotes.add(result.data()['upvotes']);
+            taggedUsers.add(result.data()['tagged']);
               _getPost();
             });
           });
@@ -87,10 +96,11 @@ class _PostsState extends State<Posts> {
   }
 
 
+
 returnWidth() {
     Size size = MediaQuery.of(context).size;
     if (kIsWeb) {
-      return 600;
+      return 700;
     } else {
       return size.width; 
     }
@@ -113,44 +123,31 @@ returnWidth() {
   }
    
 
-  returnReportAlignment() {
-    if (kIsWeb) {
-      return MainAxisAlignment.center;
-    } else {
-      return MainAxisAlignment.spaceBetween;
-    }
-  }
-
-  returnReportButtonAtTop() {
-    if (kIsWeb) {
-      return Container();
-      } else {
-      return IconButton(
-        icon: Image.asset('assets/pictures/ICON_flag.png'),
-        iconSize: 25,
+  returnTaggedUsers(int index) {
+    if (taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1).length > 1) {
+    return Visibility(
+      //Raised button that comes into view when you tap the image, tap again to get rid of it
+      visible: isVisible,
+      child: RaisedButton(
         onPressed: () {
-          print('This will function as a report button');
+          Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => UserProfile(taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1))
+                      ),
+                    );
         },
-      );
-    }
-  }
-
-  returnReportButtonAtBottom() {
-    if (kIsWeb) {
-      return Container(
-      margin: EdgeInsets.only(right: 8),
-      child: IconButton(
-        icon: Image.asset('assets/pictures/ICON_flag.png'),
-        iconSize: 25,
-        onPressed: () {
-          print('This will function as a report button');
-        },
+        child: Text(taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1)),
+        color: Colors.blueGrey,
       ),
-      );
+    );
     } else {
       return Container();
     }
   }
+  
+
+  
 
     _getPost() {
     
@@ -162,16 +159,15 @@ returnWidth() {
           
           return Container(
             child: Column(
-              
+            
             children: <Widget>[
               Container(
-                
+                 
                 //Includes dp + username + report flag
                 margin: EdgeInsets.all(10),
                 child: Row(
-                  mainAxisAlignment: returnReportAlignment(),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                   
                     Row(
                       children: <Widget>[
                         Container(
@@ -208,7 +204,14 @@ returnWidth() {
                       ],
                     ),
                     
-                   returnReportButtonAtTop(),
+                   IconButton(
+                    icon: Image.asset('assets/pictures/ICON_flag.png'),
+                    iconSize: 25,
+                    onPressed: () {
+                      print(taggedUsers);
+                      
+                    },
+                  ),
                   ],
                 ),
               ),
@@ -251,15 +254,7 @@ returnWidth() {
                 Positioned(
                     top: 25,
                     left: 50,
-                    child: Visibility(
-                      //Raised button that comes into view when you tap the image, tap again to get rid of it
-                      visible: isVisible,
-                      child: RaisedButton(
-                        onPressed: () {},
-                        child: Text('User2563'),
-                        color: Colors.blueGrey,
-                      ),
-                    ))
+                    child: returnTaggedUsers(userIndex),)
               ]),
               Row(
                 mainAxisAlignment: returnAlignment(),
@@ -271,10 +266,11 @@ returnWidth() {
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_upvote.png'),
                         iconSize: 25,
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
                             upVoted = true; 
-                            downVoted = false;                        
+                            downVoted = false;    
+                                              
                           });
                         },
                       )
@@ -324,7 +320,7 @@ returnWidth() {
                               'This will let a user save the post so that they can easily find it again');
                         },
                       )),
-                       returnReportButtonAtBottom(),
+                      
                 ],
               ),
               Column(
@@ -353,7 +349,7 @@ returnWidth() {
                                       ),
                                     );
                                 }),
-                          TextSpan(text: 'This will be a photo description'),
+                          TextSpan(text: captions[userIndex]),
                         ])),
                   ),
                   Container(
@@ -366,7 +362,7 @@ returnWidth() {
                                 TextStyle(color: Colors.black, fontSize: 20.0),
                             children: <TextSpan>[
                           TextSpan(
-                              text: postUpvotes[1] + ' upvotes',
+                              text: upvotes[userIndex].toString() + ' upvotes',
                               style: TextStyle(color: Colors.blue),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {

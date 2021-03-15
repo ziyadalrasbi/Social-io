@@ -16,6 +16,12 @@ class DatabaseMethods {
         .get();
   }
 
+  getFollowers(int followers) async {
+      return await FirebaseFirestore.instance.collection('users')
+        .where('followers',isEqualTo: followers)
+        .get();
+  }
+
 
     uploadImage(String filePath, uploadMap) {
     FirebaseFirestore.instance.collection('uploads')
@@ -59,6 +65,8 @@ class DatabaseMethods {
     return await FirebaseFirestore.instance.collection('chatroom').where("users", arrayContains: userName)
     .snapshots();
   }
+
+  
 
   
   

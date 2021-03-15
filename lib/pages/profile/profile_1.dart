@@ -12,6 +12,8 @@ class Profile extends StatefulWidget {
 
 class _Profile1State extends State<Profile> {
   
+  int followers = 0;
+  int following = 0;
   int postTime = 0;
   int listCount = 0;
   bool listWanted = false;
@@ -20,17 +22,22 @@ class _Profile1State extends State<Profile> {
   @override
   void initState() {
     getUserInfo();
+    returnFollowers();
     checkImages();
     printImages();
+    displayPics();
+    displayPicsList();
     super.initState();
   }
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
-
+    Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
     setState(() {});
   }
+
+
 
   void checkImages() async {
     FirebaseFirestore.instance
@@ -55,10 +62,25 @@ class _Profile1State extends State<Profile> {
           });
           });
         });
-      });
-      
+      }); 
     });
-    
+  }
+
+  void returnFollowers() async {
+    FirebaseFirestore.instance
+    .collection("users")
+    .where("username", isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      setState(() {
+         followers = querySnapshot.docs[0].data()['followers'];
+      following = querySnapshot.docs[0].data()['following'];     
+            });
+      
+      setState(() {
+              
+            });
+    });
   }
 
   
@@ -166,7 +188,7 @@ class _Profile1State extends State<Profile> {
                         height: 4,
                       ),
                       Text(
-                        "Flutter " + Constants.accType,
+                        "SocialIO " + Constants.accType,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -190,7 +212,7 @@ class _Profile1State extends State<Profile> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                    "FOLLOWING",
+                                    "FOLLOWERS",
                                     style: TextStyle(
                                       color: Colors.white70,
                                       fontSize: 12,
@@ -200,7 +222,7 @@ class _Profile1State extends State<Profile> {
                                     height: 4,
                                   ),
                                   Text(
-                                    "364",
+                                   followers.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -216,7 +238,7 @@ class _Profile1State extends State<Profile> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                    "FOLLOWERS",
+                                    "FOLLOWING",
                                     style: TextStyle(
                                       color: Colors.white70,
                                       fontSize: 12,
@@ -226,7 +248,7 @@ class _Profile1State extends State<Profile> {
                                     height: 4,
                                   ),
                                   Text(
-                                    "175",
+                                    following.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
