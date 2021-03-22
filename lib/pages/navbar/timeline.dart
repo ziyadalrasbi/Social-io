@@ -58,7 +58,6 @@ class _PostsState extends State<Posts> {
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
-    upvotes[postCount] = await HelperFunction.getPostUpvotesSharedPref();
     setState(() {});
   }
 @override
@@ -66,9 +65,6 @@ class _PostsState extends State<Posts> {
     getUserInfo();
     checkImages();
     getLikedPosts();
-    setState(() {
-          
-        });
     super.initState();
     
   }
@@ -110,14 +106,20 @@ class _PostsState extends State<Posts> {
   }
 
   getUpvotes(int index) {
-    return TextSpan(
-      text: upvotes[index].toString() + ' upvotes',
-      style: TextStyle(color: Colors.blue),
-      recognizer: TapGestureRecognizer()
-        ..onTap = () {
-          print(
-              'This will take to upvoters of the photo');
-        });
+    return RichText(
+      text: TextSpan(
+          style:
+              TextStyle(color: Colors.black, fontSize: 20.0),
+          children: <TextSpan>[
+          TextSpan(
+          text: upvotes[index].toString() + ' upvotes',
+          style: TextStyle(color: Colors.blue),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              print(
+                  'This will take to upvoters of the photo');
+            }),
+      ]));
   }
   
   getLikedPosts() async {
@@ -146,8 +148,8 @@ class _PostsState extends State<Posts> {
         .collection('users')
         .doc(result.id)
         .update({'likedposts': likedposts});
-        setState(() {   
-          _getPost();       
+        setState(() {
+          _getPost();
         });
       });
     });
@@ -175,20 +177,12 @@ class _PostsState extends State<Posts> {
     });
   }
 
-  // addComment({int index}) {
-  //   String userName = usernames[index];
-  //   String imageId = posts[index];
-  //   Map<String, dynamic> commentMap = {
-  //     "commenter": Constants.myName,
-  //     "comment": commentText.text,
-  //   };
-  //   DatabaseMethods().addComment(userName, imageId,commentMap);
-  // }
+  
 
 void incrementFollowers(int index) async {
-  if (!likedposts.contains(posts[index])) {
-    likedposts.add(posts[index]);
-    addLikedPost();
+  if (!likedposts.contains(posts[index])) { 
+  likedposts.add(posts[index]);
+  addLikedPost();
   FirebaseFirestore.instance
     .collection('uploads')
     .doc(usernames[index])
@@ -196,22 +190,21 @@ void incrementFollowers(int index) async {
     .where('caption', isEqualTo: captions[index])
     .get()
     .then((querySnapshot) {
-      
       querySnapshot.docs.forEach((result) async { 
-        setState(() {     
           FirebaseFirestore.instance
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
           .doc(result.id)
           .update({'upvotes': upvotes[index]+1,});  
-          getUpvotes(index);
+          setState(() {
+            getUpvotes(index);
           });
-          HelperFunction.savePostUpvotesSharedPref(upvotes[index]);
       });
     });
+   }
   }
-  }
+
 
 returnWidth() {
     Size size = MediaQuery.of(context).size;
@@ -543,8 +536,10 @@ commentPopUp(int index, BuildContext context) {
                         iconSize: 25,
                         onPressed: () async {
                           setState(() {
-                            incrementFollowers(userIndex);         
-                          });
+                            incrementFollowers(userIndex); 
+                            
+                          }); 
+                          getUpvotes(userIndex);
                         },
                       )
 
@@ -633,13 +628,7 @@ commentPopUp(int index, BuildContext context) {
                     //The total upvotes of post
                     alignment: returnCommentAlignment(),
                     margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
-                            children: <TextSpan>[
-                          getUpvotes(userIndex),
-                        ])),
+                    child: getUpvotes(userIndex), 
                   )
                 ],
               ),
