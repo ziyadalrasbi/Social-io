@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/profile/post_page.dart';
+import 'package:socialio/pages/profile/reward.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -17,7 +19,8 @@ class _Profile1State extends State<Profile> {
   int postTime = 0;
   int listCount = 0;
   bool listWanted = false;
-  List<String> images = [];
+  List images = [];
+  List posts = [];
   var url;
   @override
   void initState() {
@@ -34,6 +37,7 @@ class _Profile1State extends State<Profile> {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
     Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
+    Constants.myProfilePic = await HelperFunction.getProfilePicSharedPref();
     setState(() {});
   }
 
@@ -57,7 +61,9 @@ class _Profile1State extends State<Profile> {
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
               url = await ref.getDownloadURL();
               images.add(url);
+              
               setState(() {
+                posts.add(result.data()['imageid']);
           printImages();
           });
           });
@@ -89,7 +95,12 @@ class _Profile1State extends State<Profile> {
     return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
-          print( "hello");
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => PostPage(Constants.myName, posts[index])
+            ),
+          );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -166,11 +177,20 @@ class _Profile1State extends State<Profile> {
                         height: 36,
                       ),
                       GestureDetector(
-                        onTap: () { print(images);},
+                        onTap: () { 
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Reward();
+                              }
+                            ),
+                          );
+                        },
                         child: CircleAvatar(
                           radius: 48,
                           backgroundImage:
-                              AssetImage("assets/images/wrestler.png"),
+                              AssetImage(Constants.myProfilePic.toString()),
                         ),
                       ),
                       SizedBox(

@@ -11,6 +11,7 @@ class HelperFunction {
   static String sharedPrefFollowersKey = "USERFOLLOWERSKEY";
   static String sharedPrefFollowingKey = "USERFOLLOWINGKEY";
   static String sharedPostUpvotesKey = "POSTUPVOTESKEY";
+  static String sharedPrefProfilePicKey = "PROFILEPICKEY";
 
   // save data
   static Future<bool> saveLoggedInSharedPref(bool isLogged) async {
@@ -48,6 +49,12 @@ class HelperFunction {
     return await preferences.setInt(sharedPostUpvotesKey, upvotes);
   }
 
+  static Future<bool> saveProfilePicSharedPref(String profilepic) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPrefProfilePicKey, profilepic);
+  }
+  
+
   // load data
   static Future<bool> getLoggedInSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -82,5 +89,10 @@ class HelperFunction {
   static Future<int> getPostUpvotesSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getInt(sharedPostUpvotesKey);
+  }
+
+  static Future<String> getProfilePicSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPrefProfilePicKey);
   }
 }

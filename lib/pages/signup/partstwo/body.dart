@@ -36,7 +36,10 @@ class _BodyState extends State<Body> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   int userfollowers = 0;
   int userfollowing = 0;
-
+  List followerslist = [];
+  List followinglist = [];
+  List likedposts = [];
+  String profilepic = "assets/images/wrestler.png";
   printEmailError() {
     print("This email is already in use");
   }
@@ -167,6 +170,7 @@ class _BodyState extends State<Body> {
                   HelperFunction.saveUserTypeSharedPref(dropdownValue);
                   HelperFunction.saveUserFollowersSharedPref(userfollowers);
                   HelperFunction.saveUserFollowingSharedPref(userfollowing);
+                  HelperFunction.saveProfilePicSharedPref(profilepic);
                   if (_formKey.currentState.validate()) {
                     setState(() {
                       isLoading = true;              
@@ -190,6 +194,10 @@ class _BodyState extends State<Body> {
                       dropdownValue.toString(),
                       userfollowers,
                       userfollowing,
+                      followerslist,
+                      followinglist,
+                      profilepic,
+                      likedposts
                       );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {

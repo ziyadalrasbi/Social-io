@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:socialio/extra/chatpage/chat_page.dart';
-import 'package:socialio/pages/navbar/comments.dart';
+import 'package:flutter/material.dart';
 import 'package:socialio/pages/navbar/report_panel.dart';
 import 'package:socialio/pages/navbar/search/user_profile.dart';
 import 'package:socialio/parts/input_field_box.dart';
@@ -13,13 +11,17 @@ import '../../constants.dart';
 import '../../database.dart';
 import '../../helpers.dart';
 
+class PostPage extends StatefulWidget {
+  final String userName;
+  final String imageId;
 
-class Posts extends StatefulWidget {
+  PostPage(this.userName, this.imageId);
+  
   @override
-  _PostsState createState() => _PostsState();
+  _PostPageState createState() => _PostPageState();
 }
 
-class _PostsState extends State<Posts> {
+class _PostPageState extends State<PostPage> {
   bool isVisible = true;
 
   //Assets used will be replaced with json
@@ -63,7 +65,6 @@ class _PostsState extends State<Posts> {
   }
 @override
   void initState() {
-    getUserInfo();
     checkImages();
     getLikedPosts();
     setState(() {
@@ -76,7 +77,7 @@ class _PostsState extends State<Posts> {
   void checkImages() async {
     
     FirebaseFirestore.instance
-        .collection("uploads")
+        .collection("uploads").where('username', isEqualTo: widget.userName)
         .get()
         
         .then((querySnapshot) {
@@ -86,7 +87,7 @@ class _PostsState extends State<Posts> {
             .collection("uploads")
             
             .doc(result.id)
-            .collection("images").orderBy('time')
+            .collection("images").where('imageid', isEqualTo: widget.imageId)
             .get()
             .then((querySnapshot) {
               
@@ -154,6 +155,7 @@ class _PostsState extends State<Posts> {
   }
 
   void addComment(int index) async {
+    comments[Constants.myName] = commentText.text;
     FirebaseFirestore.instance
     .collection('uploads')
     .doc(usernames[index])
@@ -168,22 +170,13 @@ class _PostsState extends State<Posts> {
           .doc(usernames[index])
           .collection('images')
           .doc(result.id)
-          .collection('comments')
-          .add({'commenter': Constants.myName, 'comment': commentText.text});
+          .update({'comments': 
+            comments,
+            });
         });
       });
     });
   }
-
-  // addComment({int index}) {
-  //   String userName = usernames[index];
-  //   String imageId = posts[index];
-  //   Map<String, dynamic> commentMap = {
-  //     "commenter": Constants.myName,
-  //     "comment": commentText.text,
-  //   };
-  //   DatabaseMethods().addComment(userName, imageId,commentMap);
-  // }
 
 void incrementFollowers(int index) async {
   if (!likedposts.contains(posts[index])) {
@@ -706,12 +699,7 @@ commentPopUp(int index, BuildContext context) {
                               style: TextStyle(color: Colors.grey),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.push(
-                                  context, 
-                                  MaterialPageRoute(
-                                    builder: (context) => CommentPage(posts[userIndex], usernames[userIndex])
-                                    ),
-                                  );
+                                  print('This will take to comments');
                                 }),
                         ])),
                   )
@@ -726,9 +714,7 @@ commentPopUp(int index, BuildContext context) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
-          automaticallyImplyLeading: false,
           backgroundColor: Colors.blue,
           centerTitle: true,
           title: Row(
@@ -741,24 +727,6 @@ commentPopUp(int index, BuildContext context) {
             ),
           ],
         ),
-        actions: <Widget>[
-          FlatButton(
-                child:
-                  Image.asset(
-                  'assets/icons/ICON_inbox.png',
-                  width: 45,
-                  height: 45,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(),
-                    ),
-                  );
-                },
-              ),
-        ],
       ),
       body: _getPost(),
     );

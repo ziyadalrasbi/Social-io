@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socialio/constants.dart';
@@ -15,7 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:socialio/parts/input_field_box.dart';
 
 //import 'package:permission_handler/permission_handler.dart';
-
+bool faceDetected;
 TextEditingController captionController = TextEditingController();
 TextEditingController searchController = TextEditingController();
 List<String> taggedUsers = [];
@@ -40,16 +42,43 @@ class ImageCapture extends StatefulWidget {
 class _ImageCaptureState extends State<ImageCapture> {
   //Active image file
   File _imageFile;
+  List<Face> _faces;
+  ui.Image _image;
+  final _picker = ImagePicker();
   
   Future<void> _pickImage(ImageSource source) async {
-    final _picker = ImagePicker();
-    PickedFile selected = await _picker.getImage(source: source);
     
-    setState(() {
-      _imageFile = File(selected.path);
-    });
+    final imageFile = await _picker.getImage(source: source);
+    
+    final image = FirebaseVisionImage.fromFile(File(imageFile.path));
+    final faceDetector = FirebaseVision.instance.faceDetector();
+    List<Face> faces = await faceDetector.processImage(image);
+    
+    
+      setState(() {
+        _imageFile = File(imageFile.path);
+        _faces = faces;
+        _loadImage(File(imageFile.path));
+        if (faces.length > 0) {
+          faceDetected = true;
+        } else {
+          faceDetected = false;
+        }
+      });
+
+      
+    
+
   }
 
+  _loadImage(File file) async {
+    final data = await file.readAsBytes();
+    await decodeImageFromList(data).then((value) => setState((){
+      _image = value;
+    }));
+  }
+
+  
   void _clear() {
     setState(() => _imageFile = null);
   }
@@ -137,6 +166,7 @@ Widget listSearch() {
               icon: Icon(Icons.photo_library),
               onPressed: () => _pickImage(ImageSource.gallery),
             ),
+            
             FlatButton(
               child: Text('Cancel'),
               onPressed: () {
@@ -151,11 +181,25 @@ Widget listSearch() {
             ),
           ],
         ),
+        
       ),
       body: ListView(
         children: <Widget>[
           if (_imageFile != null) ...[
-            Image.file(_imageFile),
+            GestureDetector(
+              onTap: () {
+                print(faceDetected);
+              },
+              child: FittedBox(
+                child: SizedBox(
+                  width: _image.width.toDouble(),
+                  height: _image.height.toDouble(),
+                  child: CustomPaint(
+                    painter: FacePainter(_image, _faces),
+                    ),
+                  ),
+                ),
+            ),
             InputField(
               hint: "Enter a caption (optional)",
               control: captionController,
@@ -167,7 +211,7 @@ Widget listSearch() {
                     child: InputField(
                       color: Colors.blueGrey[200],
                       control: searchController,
-                      hint: "Search for users",
+                      hint: "Search for users to tag (optional)",
                       changes: (val) {
                       },
                     ),
@@ -228,6 +272,7 @@ class _UploaderState extends State<Uploader> {
   UploadTask _uploadTask;
 @override
   void initState() {
+    
     getUserInfo();
     super.initState();
   }
@@ -245,6 +290,7 @@ class _UploaderState extends State<Uploader> {
   void _startUpload() {
     String uid = auth.currentUser.uid.toString();
     String filePath = 'images/${DateTime.now()}.png';
+    Map<String, String> comments = Map<String, String>();
     Map<String,dynamic> uploadMap = {
       "username": Constants.myName,
     };
@@ -257,6 +303,7 @@ class _UploaderState extends State<Uploader> {
       "upvotes": 0,
       "caption": captionController.text,
       "tagged": taggedUsers,
+      "comments" : comments,
     };
     databaseMethods.addImage(Constants.myName, imageMap);
 
@@ -274,12 +321,64 @@ class _UploaderState extends State<Uploader> {
 
   @override
   Widget build(BuildContext context) {
+    if ( faceDetected == false) {
         return FlatButton.icon(
         label: Text('Upload to Firebase'),
         icon: Icon(Icons.cloud_upload),
         onPressed: 
            _startUpload,
       );
+    } else {
+      return Container(
+        child: Expanded(
+          child: RichText(
+            overflow: TextOverflow.visible,
+              text: TextSpan(
+                
+                  style:
+                      TextStyle(color: Colors.black, fontSize: 12.0),
+                  children: <TextSpan>[
+                TextSpan(
+                    text:
+                        'Face detected. Please choose another picture.', //will be a username from firebase
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                   
+          )])),
+        ),
+      );
+    }
   }
  
+}
+
+class FacePainter extends CustomPainter {
+  final ui.Image image;
+  final List<Face> faces;
+  final List<Rect> rects = [];
+
+  FacePainter(this.image, this.faces) {
+    for (var i = 0; i < faces.length; i++) {
+      rects.add(faces[i].boundingBox);
+    }
+  }
+
+  @override
+  void paint(ui.Canvas canvas, ui.Size size) {
+    final Paint paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..color = Colors.yellow;
+
+    canvas.drawImage(image, Offset.zero, Paint());
+    for (var i = 0; i < faces.length; i++) {
+      canvas.drawRect(rects[i], paint);
+      
+      
+    }
+  }
+
+  @override
+  bool shouldRepaint(FacePainter old) {
+    return image != old.image || faces != old.faces;
+  }
 }

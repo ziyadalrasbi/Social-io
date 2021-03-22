@@ -14,6 +14,7 @@ class Constants {
   static List<String> files;
   static int myFollowers = 0;
   static int myFollowing = 0;
+  static String myProfilePic = "";
 }
 
 class ThemeChange with ChangeNotifier {

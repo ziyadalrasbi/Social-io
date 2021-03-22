@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/profile/post_page.dart';
 import 'package:socialio/parts/button.dart';
 
 class UserProfile extends StatefulWidget {
@@ -21,17 +22,21 @@ class _UserProfile1State extends State<UserProfile> {
   int listCount = 0;
   int followers = 0;
   int following = 0;
+  List followerslist = [];
+  List myfollowing = [];
   bool followed = false;
   bool listWanted = false;
   List<String> images = [];
+  List posts = [];
+  String accType = "";
   var url;
 
   @override
   void initState() {
     getUserInfo();
     getUserFollowers();
-    updateFollowers();
     checkUser();
+    getMyFollowing();
     printImages();
     displayPics();
     displayPicsList();
@@ -42,7 +47,6 @@ class _UserProfile1State extends State<UserProfile> {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
     Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
-    followers = await HelperFunction.getUserFollowersSharedPref();
     setState(() {});
   }
 
@@ -64,13 +68,13 @@ class _UserProfile1State extends State<UserProfile> {
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
               url = await ref.getDownloadURL();
               images.add(url);
+              posts.add(result.data()['imageid']);
               setState(() {
                 printImages();
               });
           });
         });
       });
-      
     });
   }
 
@@ -83,58 +87,77 @@ class _UserProfile1State extends State<UserProfile> {
     .get()
     .then((querySnapshot) {
       querySnapshot.docs.forEach((result) async { 
-            
-          
-        
+        accType = result.data()['accType'];
+        followers = result.data()['followers'];  
+        following = result.data()['following'];
+        followerslist = result.data()['followerslist'];
         setState(() {
-          followers = querySnapshot.docs[0].data()['followers'];  
-          following = querySnapshot.docs[0].data()['following'];
-                  updateFollowers();
-                });
+        });
+      });
+    });
+  }
+
+  void getMyFollowing() async {
+    FirebaseFirestore.instance
+    .collection("users")
+    .where("username", isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        myfollowing = result.data()['followinglist'];
+        setState(() {
+        });
       });
     });
   }
 
 void updateFollowers() async {
+  if (!followerslist.contains(Constants.myName)) {
+    followerslist.add(Constants.myName);
     FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: widget.userName)
     .get()
     .then((querySnapshot) {
-      if (followed == true) {
       querySnapshot.docs.forEach((result) async {     
-
+         
           FirebaseFirestore.instance
           .collection('users')
           .doc(result.id)
-          .update({'followers': followers++,});  
-          setState(() { 
+          .update({'followers': followers++, 'followerslist': followerslist});  
+          setState(() {
           });
-      HelperFunction.saveUserFollowersSharedPref(followers);     
+          
       });
-      }
     });
+  } else {
+    print("already following");
+  }
   } 
 
   void updateFollowing() async {
+    if (!myfollowing.contains(widget.userName)) {
+    myfollowing.add(widget.userName); 
     FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: Constants.myName)
     .get()
     .then((querySnapshot) {
-      if (followed == true) {
       querySnapshot.docs.forEach((result) async {      
-          FirebaseFirestore.instance
-          .collection('users')
-          .doc(result.id)
-          .update({'following': Constants.myFollowing++,});   
-          setState(() {
-            
-          }); 
-          HelperFunction.saveUserFollowingSharedPref(Constants.myFollowing);
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'following': Constants.myFollowing++,'followinglist': myfollowing}); 
+          
+        setState(() {
+        }); 
+        HelperFunction.saveUserFollowingSharedPref(Constants.myFollowing);
       });
-      }
+      
     });
+    } else {
+      print("already followed");
+    }
   }
 
 
@@ -142,7 +165,12 @@ void updateFollowers() async {
     return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
-          print( "hello");
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => PostPage(widget.userName, posts[index])
+            ),
+          );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -242,7 +270,7 @@ void updateFollowers() async {
                         height: 4,
                       ),
                       Text(
-                        "SocialIO " + Constants.accType,
+                        "SocialIO " + accType,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
@@ -254,22 +282,17 @@ void updateFollowers() async {
                       Container(
                         color: Colors.blue,
                       child: FlatButton(
-                        height: 60,
+                        height: size.height * 0.001,
                         minWidth: 200,
                         color: Colors.blue,
                         child: Text("Follow"),
                         onPressed: () async {
-                          setState(() {
-                             updateFollowers();                         
-                           });
+                          
                            setState(() {
-                              updateFollowing();                           
+                             updateFollowers();    
+                              updateFollowing();                 
                             });
-                           
-                          setState(() {
-                            followed = true;
-                                                     
-                           });
+                          
                            
                         },  
                         ),

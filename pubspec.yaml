@@ -40,12 +40,14 @@ dependencies:
   firebase_core_platform_interface: ^4.0.0
   stacked_themes: ^0.2.2+2
   plugin_platform_interface: ^1.0.1
+  firebase_ml_vision: ^0.9.10
 dev_dependencies:
   flutter_test:
     sdk: flutter
   
 
 dependency_overrides:
+  firebase_ml_vision: ^0.9.10
   bubble_bottom_bar: ^1.2.0
   cloud_firestore: ^0.14.0
   cupertino_icons: ^1.0.0

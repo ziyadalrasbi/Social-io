@@ -65,4 +65,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.2.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.android.gms:play-services-vision:20.1.2'
+    implementation "com.google.android.gms:play-services-vision-common:19.1.2"
+    implementation 'com.google.android.gms:play-services-vision-image-label:18.1.0'
 }

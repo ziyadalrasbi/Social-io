@@ -49,6 +49,23 @@ class DatabaseMethods {
   }
 
 
+  Future<void> createReport(String imageId, String reporter, String poster, String reason) async {
+    CollectionReference report = FirebaseFirestore.instance.collection('reports');
+    report.add({
+      'imageid': imageId,
+      'reporter': reporter,
+      'poster': poster,
+      'reason': reason,
+    });
+    return;
+  }
+
+  addComment(String userName, String imageId, commentMap) async {
+    return await FirebaseFirestore.instance.collection('uploads')
+    .doc(userName).collection('images').doc(imageId).collection('comments')
+    .add(commentMap).catchError((e){print(e.toString());});
+  }
+
 
   getConvoText(String roomId) async {
     return await FirebaseFirestore.instance.collection('chatroom')
