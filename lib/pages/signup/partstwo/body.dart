@@ -39,6 +39,9 @@ class _BodyState extends State<Body> {
   List followerslist = [];
   List followinglist = [];
   List likedposts = [];
+  String appbar = "assets/appbars/TOPBARNEW.png";
+  String banner = "assets/banners/nightsky/nightsky3.png";
+  String border = "";
   String profilepic = "assets/images/wrestler.png";
   printEmailError() {
     print("This email is already in use");
@@ -171,6 +174,9 @@ class _BodyState extends State<Body> {
                   HelperFunction.saveUserFollowersSharedPref(userfollowers);
                   HelperFunction.saveUserFollowingSharedPref(userfollowing);
                   HelperFunction.saveProfilePicSharedPref(profilepic);
+                  HelperFunction.saveProfileBarSharedPref(appbar);
+                  HelperFunction.saveProfileBannerSharedPref(banner);
+                  HelperFunction.saveProfileBorderSharedPref(border);
                   if (_formKey.currentState.validate()) {
                     setState(() {
                       isLoading = true;              
@@ -197,7 +203,10 @@ class _BodyState extends State<Body> {
                       followerslist,
                       followinglist,
                       profilepic,
-                      likedposts
+                      likedposts,
+                      appbar,
+                      banner,
+                      border,
                       );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {

@@ -13,16 +13,22 @@ class Reward extends StatefulWidget {
 }
 
 class _RewardState extends State<Reward> {
-List<String> images = [
-  "assets/images/wrestler.png",
-  "assets/images/beach.png",
-  "assets/images/bee.png",
-  "assets/images/dog.png",
-  "assets/images/glacier.png",
-  "assets/images/penguin.png",
-  "assets/images/rainbow.png",
-  "assets/images/sloth.png",
-  "assets/images/waterfall.png",
+List<String> animalprofilepics = [
+  "assets/profilepics/animals/animal1.png",
+  "assets/profilepics/animals/animal2.png",
+  "assets/profilepics/animals/animal3.png",
+  "assets/profilepics/animals/animal4.png",
+  "assets/profilepics/animals/animal5.png",
+  "assets/profilepics/animals/animal6.png",
+  "assets/profilepics/animals/animal7.png",
+  "assets/profilepics/animals/animal8.png",
+  "assets/profilepics/animals/animal9.png",
+  "assets/profilepics/animals/animal10.png",
+  "assets/profilepics/animals/animal11.png",
+];
+
+List<String> categories = [
+  "Animals"
 ];
 
 String chosen = "";
@@ -36,13 +42,12 @@ String chosen = "";
   }
 
 printImages() {
-    return List.generate(images.length, (index) {
+    return List.generate(animalprofilepics.length, (index) {
       return GestureDetector(
         onTap: () async {
-          chosen = images[index];
-          setState(() {
-                      
-                    });
+          chosen = animalprofilepics[index];
+          setState(() {          
+          });
         },
         child: Container(
           decoration: BoxDecoration(
@@ -51,7 +56,7 @@ printImages() {
             ),
           ),
           child: new Image.asset(
-            images[index],
+            animalprofilepics[index],
             ),
         ),
       );
@@ -71,7 +76,7 @@ printImages() {
 
 returnChosenImage() {
   if (chosen.length > 2) {
-    return chosen.substring(14, chosen.length-4);
+    return chosen.substring(27, chosen.length-4);
   } else {
     return "";
   }
@@ -91,8 +96,8 @@ updateProfilePic() async {
           setState(() {
           }); 
           HelperFunction.saveProfilePicSharedPref(chosen);
-      });
     });
+  });
 }
 
 
@@ -116,6 +121,14 @@ updateProfilePic() async {
       ),
       body: Column(
         children: <Widget>[
+          Text(
+            categories[0], 
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
           Expanded(
           child: displayPics(),
           ),

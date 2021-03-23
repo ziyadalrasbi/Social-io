@@ -24,7 +24,8 @@ class AuthService {
   
 }
 
-Future<void> signUp(String userName, String email, String accType, int followers, int following, List followerslist, List followinglist, String profilepic, List likedposts) async {
+Future<void> signUp(String userName, String email, String accType, int followers, int following, 
+List followerslist, List followinglist, String profilepic, List likedposts, String appbar, String banner, String border) async {
       CollectionReference users = FirebaseFirestore.instance.collection('users');
       FirebaseAuth auth = FirebaseAuth.instance;
       String uid = auth.currentUser.uid.toString();
@@ -39,6 +40,9 @@ Future<void> signUp(String userName, String email, String accType, int followers
         'followinglist': followinglist,
         'profilepic': profilepic,
         'likedposts': likedposts,
+        'appbar': appbar,
+        'banner': banner,
+        'border': border,
       });
       return;
 }

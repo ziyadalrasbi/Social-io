@@ -52,8 +52,8 @@ class _PostsState extends State<Posts> {
   List<int> upvotes = [];
   List<String> captions = [];
   List taggedUsers = [];
-  List likedposts = [];
-  List downvotedposts = [];
+  List likedposts = [""];
+  List downvotedposts = [""];
   List taggedbuttons = [];
   StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
@@ -146,9 +146,13 @@ class _PostsState extends State<Posts> {
     .get()
     .then((querySnapshot) {
       querySnapshot.docs.forEach((result) { 
-        setState(() {   
+        setState(() {  
+        if (result.data()['likedposts'] != null) {
         likedposts = result.data()['likedposts'];
-        downvotedposts = result.data()['downvotedposts'];      
+        }
+        if (result.data()['downvotedposts'] != null) {
+        downvotedposts = result.data()['downvotedposts'];
+        }      
         });
       });
     });
@@ -244,6 +248,8 @@ void incrementUpvotes(int index) async {
           
       });
     });
+   } else {
+     print("nothing");
    }
   }
 
@@ -276,20 +282,30 @@ void incrementUpvotes(int index) async {
           .update({'upvotes': upvotes[index],});  
       });
     });
+    } else {
+      print("nothing");
     }
   }
 
   returnUpvoteColor(int index) {
-    if (likedposts.contains(posts[index])) {
-      return Colors.blue;
+    if (likedposts != null) {
+      if (likedposts.contains(posts[index])) {
+        return Colors.blue;
+      } else {
+        return Colors.white;
+      }
     } else {
       return Colors.white;
     }
   }
 
   returnDownvoteColor(int index) {
-    if (downvotedposts.contains(posts[index])) {
-      return Colors.blue;
+    if (downvotedposts != null) {
+      if (downvotedposts.contains(posts[index])) {
+        return Colors.blue;
+      } else {
+        return Colors.white;
+      }
     } else {
       return Colors.white;
     }
@@ -815,7 +831,7 @@ commentPopUp(int index, BuildContext context) {
             decoration: 
               BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/icons/TOPBAR_v2.png"),
+                  image: AssetImage("assets/appbars/TOPBARNEW.png"),
                   fit: BoxFit.fill,
                 ),
               ),

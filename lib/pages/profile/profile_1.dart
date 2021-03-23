@@ -38,6 +38,9 @@ class _Profile1State extends State<Profile> {
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
     Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
     Constants.myProfilePic = await HelperFunction.getProfilePicSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
+    Constants.myAppBanner = await HelperFunction.getProfileBannerSharedPref();
+    Constants.myAppBorder = await HelperFunction.getProfileBorderSharedPref();
     setState(() {});
   }
 
@@ -92,6 +95,7 @@ class _Profile1State extends State<Profile> {
   
 
   printImages() {
+    
     return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
@@ -144,17 +148,18 @@ class _Profile1State extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              "assets/icons/LOGONEW.png",
-              height: 50,
-              alignment: Alignment.center,
-            ),
-          ],
-        ),
+        centerTitle: true,
+          flexibleSpace: Container(
+            width: size.width*0.5,
+            decoration: 
+              BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Constants.myAppBar.toString()),
+                  fit: BoxFit.fill,
+                ),
+              ),
+          ),
+        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Stack(
@@ -165,32 +170,39 @@ class _Profile1State extends State<Profile> {
               children: <Widget>[
                 Container(
                   height: size.height * 0.40,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/background.jpg"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 36,
-                      ),
-                      GestureDetector(
-                        onTap: () { 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Reward();
-                              }
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(Constants.myAppBanner.toString()),
+                              fit: BoxFit.cover,
                             ),
-                          );
-                        },
-                        child: CircleAvatar(
-                          radius: 70,
-                          backgroundImage: AssetImage("assets/icons/fire.png"),
-                          backgroundColor: Colors.transparent,
+                         ),
+                  child: Container(
+                    height: size.height * 0.40,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(Constants.myAppBorder.toString()),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: size.height*0.035,
+                        ),
+                  
+                          
+                        
+                        GestureDetector(
+                          onTap: () { 
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Reward();
+                                }
+                              ),
+                            );
+                          },
                           child: CircleAvatar(
                             radius: 48,
                             backgroundImage:
@@ -198,99 +210,99 @@ class _Profile1State extends State<Profile> {
                                 backgroundColor: Colors.transparent,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        Constants.myName,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
+                        SizedBox(
+                          height: size.height*0.07,
                         ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        "SocialIO " + Constants.accType,
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
+                        Text(
+                          Constants.myName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Container(
-                        height: 64,
-                        color: Colors.black.withOpacity(0.4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Expanded(
-                              child: Container(),
-                            ),
-                            Container(
-                              width: 110,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "FOLLOWERS",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                   followers.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          "SocialIO " + Constants.accType,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Container(
+                          height: 64,
+                          color: Colors.black.withOpacity(0.4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Expanded(
+                                child: Container(),
                               ),
-                            ),
-                            Container(
-                              width: 110,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "FOLLOWING",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
+                              Container(
+                                width: 110,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "FOLLOWERS",
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    following.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                    SizedBox(
+                                      height: 4,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                     followers.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Container(),
-                            ),
-                          ],
+                              Container(
+                                width: 110,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "FOLLOWING",
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      following.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Material(

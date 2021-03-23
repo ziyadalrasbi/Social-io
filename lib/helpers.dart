@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
+
 
 class HelperFunction {
   static String sharedPrefUserLoggedInKey = "ISLOGGEDIN";
@@ -12,6 +10,9 @@ class HelperFunction {
   static String sharedPrefFollowingKey = "USERFOLLOWINGKEY";
   static String sharedPostUpvotesKey = "POSTUPVOTESKEY";
   static String sharedPrefProfilePicKey = "PROFILEPICKEY";
+  static String sharedPrefProfileBannerKey = "PROFILEBANNERKEY";
+  static String sharedPrefProfileBarKey = "PROFILEBARKEY";
+  static String sharedPrefProfileBorderKey = "PROFILEBORDERKEY";
 
   // save data
   static Future<bool> saveLoggedInSharedPref(bool isLogged) async {
@@ -53,7 +54,21 @@ class HelperFunction {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPrefProfilePicKey, profilepic);
   }
-  
+
+  static Future<bool> saveProfileBarSharedPref(String appbar) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPrefProfileBarKey, appbar);
+  }
+
+  static Future<bool> saveProfileBannerSharedPref(String banner) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPrefProfileBannerKey, banner);
+  }
+  static Future<bool> saveProfileBorderSharedPref(String border) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPrefProfileBorderKey, border);
+  }
+
 
   // load data
   static Future<bool> getLoggedInSharedPref() async {
@@ -94,5 +109,20 @@ class HelperFunction {
   static Future<String> getProfilePicSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPrefProfilePicKey);
+  }
+
+  static Future<String> getProfileBarSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPrefProfileBarKey);
+  }
+
+  static Future<String> getProfileBannerSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPrefProfileBannerKey);
+  }
+
+  static Future<String> getProfileBorderSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPrefProfileBorderKey);
   }
 }

@@ -157,8 +157,35 @@ void updateFollowers() async {
         HelperFunction.saveUserFollowingSharedPref(Constants.myFollowing);
       });
     });
-    } else {
-      Constants.myFollowing--;
+    } 
+  }
+
+  void decrementFollowers() async {
+    followerslist.remove(Constants.myName);
+    if (followerslist.contains(Constants.myName)) {
+       followers--;
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: widget.userName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {     
+         
+          FirebaseFirestore.instance
+          .collection('users')
+          .doc(result.id)
+          .update({'followers': followers, 'followerslist': followerslist});  
+          setState(() {
+          });
+          
+      });
+    });
+    }
+  }
+
+  void decrementFollowing() async {
+    myfollowing.remove(widget.userName);
+     Constants.myFollowing--;
     FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: Constants.myName)
@@ -169,14 +196,12 @@ void updateFollowers() async {
         .collection('users')
         .doc(result.id)
         .update({'following':Constants.myFollowing,'followinglist': myfollowing}); 
-          
         setState(() {
         }); 
         HelperFunction.saveUserFollowingSharedPref(Constants.myFollowing);
       });
-      
     });
-    }
+    
   }
 
   returnFollowButton() {
@@ -202,8 +227,9 @@ void updateFollowers() async {
         child: Text("Unfollow"),
         onPressed: () async {
             setState(() {
-              updateFollowers();    
-              updateFollowing();                 
+              decrementFollowers();    
+              decrementFollowing();    
+              returnFollowButton();             
             });
         },  
         );

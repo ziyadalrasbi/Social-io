@@ -15,6 +15,9 @@ class Constants {
   static int myFollowers = 0;
   static int myFollowing = 0;
   static String myProfilePic = "";
+  static String myAppBar = "";
+  static String myAppBanner = "";
+  static String myAppBorder = "";
 }
 
 class ThemeChange with ChangeNotifier {
