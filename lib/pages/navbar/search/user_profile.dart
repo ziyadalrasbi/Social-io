@@ -47,6 +47,7 @@ class _UserProfile1State extends State<UserProfile> {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
     Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     setState(() {});
   }
 
@@ -208,7 +209,7 @@ void updateFollowers() async {
     Size size = MediaQuery.of(context).size;
     if (!myfollowing.contains(widget.userName)) {
       return FlatButton(
-        height: size.height * 0.001,
+        height: size.height * 0.01,
         minWidth: 200,
         color: Colors.blue,
         child: Text("Follow"),
@@ -290,18 +291,16 @@ void updateFollowers() async {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Image.asset(
-              "assets/icons/LOGONEW.png",
-              height: 50,
-              
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
             ),
-          ],
+          ),
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Stack(
@@ -321,8 +320,8 @@ void updateFollowers() async {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 36,
-                      ),
+                          height: size.height*0.015,
+                        ),
                       GestureDetector(
                         onTap: checkUser,
                         child: CircleAvatar(

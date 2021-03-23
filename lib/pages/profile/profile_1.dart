@@ -14,7 +14,7 @@ class Profile extends StatefulWidget {
 
 class _Profile1State extends State<Profile> {
   
-  int follow  int followers = 0;
+  int followers = 0;
   int following = 0;
   int postTime = 0;
   int listCount = 0;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
+import 'package:socialio/helpers.dart';
 import 'package:socialio/parts/input_field_box.dart';
 import 'package:flutter/widgets.dart';
 
@@ -58,24 +59,29 @@ class _ConversationRoomState extends State<ConversationRoom> {
           textStream = val;        
         });
       });
+      getUserInfo();
       super.initState();
     }
 
+  getUserInfo() async {
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
+  }
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          Image.asset(
-            "assets/icons/LOGONEW.png", 
-            height: 50, 
-            alignment: Alignment.center,
+        centerTitle: true,
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
+            ),
           ),
-          ],
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: Container(
         

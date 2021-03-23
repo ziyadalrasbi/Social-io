@@ -43,6 +43,7 @@ class _BodyState extends State<Body> {
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     databaseMethods.getRooms(Constants.myName).then((val){
       setState(() {
         roomStream = val;        
@@ -54,28 +55,27 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: new Container(
-        child: ListView(
-      children:[
-         AppBar(
-           
-           backgroundColor: Colors.blue,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              Image.asset(
-                "assets/icons/LOGONEW.png", 
-                height: 50, 
-                alignment: Alignment.center,
-              ),
-              ],
+      appBar:AppBar(
+        centerTitle: true,
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
             ),
-            actions: <Widget>[
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+      actions: <Widget>[
               FloatingActionButton(
+                backgroundColor: Colors.transparent,
                 child:
                   Image.asset(
                   'assets/icons/ICON_search.png',
+                  
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -87,8 +87,9 @@ class _BodyState extends State<Body> {
                 },
               ),
             ],
-          ), 
-        Background(
+        ),
+            
+        body: Background(
           
           body: roomList(),
           child: Column(
@@ -97,10 +98,9 @@ class _BodyState extends State<Body> {
             ],
           ),
         ),
-      ],
-      ),
-      ),
-    );
+    
+      );
+     
   }
 }
 

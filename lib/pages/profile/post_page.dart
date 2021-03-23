@@ -53,6 +53,7 @@ class _PostPageState extends State<PostPage> {
   List<String> captions = [];
   List taggedUsers = [];
   List likedposts = [];
+  List downvotedposts = [];
   List taggedbuttons = [];
   TextEditingController commentText = TextEditingController();
   Map<String,String> comments = Map<String, String>();
@@ -128,8 +129,13 @@ class _PostPageState extends State<PostPage> {
     .get()
     .then((querySnapshot) {
       querySnapshot.docs.forEach((result) { 
-        setState(() {   
-        likedposts = result.data()['likedposts'];
+        setState(() {
+        if (result.data()['likedposts'] != null) {   
+          likedposts = result.data()['likedposts'];
+        }
+        if (result.data()['downvotedposts'] != null) {   
+          downvotedposts = result.data()['downvotedposts'];
+        }
                
         });
       });
@@ -155,55 +161,138 @@ class _PostPageState extends State<PostPage> {
   }
 
   void addComment(int index) async {
-    comments[Constants.myName] = commentText.text;
     FirebaseFirestore.instance
-    .collection('uploads')
-    .doc(usernames[index])
-    .collection('images')
-    .where('imageid', isEqualTo: posts[index])
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
+        .collection('uploads')
+        .doc(usernames[index])
+        .collection('images')
+        .where('imageid', isEqualTo: posts[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
         setState(() {
           FirebaseFirestore.instance
-          .collection('uploads')
-          .doc(usernames[index])
-          .collection('images')
-          .doc(result.id)
-          .update({'comments': 
-            comments,
-            });
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .collection('comments')
+              .add(
+                  {'commenter': Constants.myName, 'comment': commentText.text});
         });
       });
     });
   }
 
-void incrementFollowers(int index) async {
-  if (!likedposts.contains(posts[index])) {
-    likedposts.add(posts[index]);
-    addLikedPost();
-  FirebaseFirestore.instance
-    .collection('uploads')
-    .doc(usernames[index])
-    .collection('images')
-    .where('caption', isEqualTo: captions[index])
-    .get()
-    .then((querySnapshot) {
-      
-      querySnapshot.docs.forEach((result) async { 
-        setState(() {     
-          FirebaseFirestore.instance
+void incrementUpvotes(int index) async {
+    if (!likedposts.contains(posts[index])) {
+      if (downvotedposts.contains(posts[index])) {
+        downvotedposts.remove(posts[index]);
+        addDownvotedPost();
+        upvotes[index] = upvotes[index] + 2;
+      } else {
+        upvotes[index]++;
+      }
+      likedposts.add(posts[index]);
+      addLikedPost();
+      upVoted = true;
+      downVoted = false;
+      FirebaseFirestore.instance
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .doc(result.id)
-          .update({'upvotes': upvotes[index]+1,});  
-          getUpvotes(index);
+          .where('caption', isEqualTo: captions[index])
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) async {
+          FirebaseFirestore.instance
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .update({
+            'upvotes': upvotes[index],
           });
-          HelperFunction.savePostUpvotesSharedPref(upvotes[index]);
+        });
+      });
+    }
+  }
+
+  void decrementUpvotes(int index) async {
+    if (!downvotedposts.contains(posts[index])) {
+      if (likedposts.contains(posts[index])) {
+        likedposts.remove(posts[index]);
+        addLikedPost();
+        upvotes[index] = upvotes[index] - 2;
+      } else {
+        upvotes[index]--;
+      }
+      downvotedposts.add(posts[index]);
+      addDownvotedPost();
+      downVoted = true;
+      upVoted = false;
+      FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .where('caption', isEqualTo: captions[index])
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) async {
+          FirebaseFirestore.instance
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .update({
+            'upvotes': upvotes[index],
+          });
+        });
+      });
+    }
+  }
+
+  returnUpvoteColor(int index) {
+    if (likedposts != null) {
+      if (likedposts.contains(posts[index])) {
+        return Colors.blue;
+      } else {
+        return Colors.white;
+      }
+    } else {
+      return Colors.white;
+    }
+  }
+
+  returnDownvoteColor(int index) {
+    if (downvotedposts != null) {
+      if (downvotedposts.contains(posts[index])) {
+        return Colors.blue;
+      } else {
+        return Colors.white;
+      }
+    } else {
+      return Colors.white;
+    }
+  }
+
+  
+
+  void addDownvotedPost() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'downvotedposts': downvotedposts});
+        setState(() {
+          _getPost();
+        });
       });
     });
-  }
   }
 
 returnWidth() {
@@ -529,30 +618,28 @@ commentPopUp(int index, BuildContext context) {
                 // upvote + downvote + comment + send + save icons
                 children: <Widget>[
                   Container(
-                    color: upVoted ? Colors.blue : Colors.white,
+                    color: returnUpvoteColor(userIndex),
                       margin: EdgeInsets.only(right: 8),
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_upvote.png'),
                         iconSize: 25,
                         onPressed: () async {
                           setState(() {
-                            incrementFollowers(userIndex);         
+                            incrementUpvotes(userIndex);         
                           });
                         },
                       )
 
                   ),
                   Container(
-                      color: downVoted ? Colors.blue : Colors.white,
+                      color: returnDownvoteColor(userIndex),
                       margin: EdgeInsets.only(right: 8),
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_downvote.png'),
                         iconSize: 25,
                         onPressed: () {
                           setState(() {
-                            
-                            downVoted = true;
-                            upVoted = false;                         
+                            decrementUpvotes(userIndex);                        
                           });
                         },
 

@@ -61,6 +61,7 @@ class _PostsState extends State<Posts> {
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     setState(() {});
   }
 
@@ -790,11 +791,12 @@ class _PostsState extends State<Posts> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: size.width * 0.5,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/icons/TOPBARNEW.png"),
+              image: AssetImage(Constants.myAppBar.toString()),
               fit: BoxFit.fill,
             ),
           ),

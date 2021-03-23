@@ -1,4 +1,6 @@
+import 'package:socialio/constants.dart';
 import 'package:socialio/form_authentication.dart';
+import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/home/home_page.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
@@ -15,23 +17,30 @@ class _Setup_pageState extends State<Setup_page> {
   int _currentIndex = 4;
 
   @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+  getUserInfo() async {
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
+  }
+  @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
     return Scaffold(
       
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          Image.asset(
-            "assets/icons/LOGONEW.png", 
-            height: 50, 
-            alignment: Alignment.center,
+        centerTitle: true,
+        flexibleSpace: Container(
+          width: dimensions.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
+            ),
           ),
-          ],
         ),
+        backgroundColor: Colors.transparent,
       ),
 
       // 6 navigate botton

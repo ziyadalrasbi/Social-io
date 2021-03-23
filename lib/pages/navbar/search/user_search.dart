@@ -28,9 +28,13 @@ class _UserSearchState extends State<UserSearch> {
   
   @override
   void initState() {
+    getUserInfo();
     super.initState();
   }
 
+  getUserInfo() async {
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
+  }
 
   Widget listSearch() {
     return searchshot != null ? ListView.builder(
@@ -100,20 +104,21 @@ class _UserSearchState extends State<UserSearch> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          Image.asset(
-            "assets/icons/LOGONEW.png", 
-            height: 50, 
-            alignment: Alignment.center,
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
+            ),
           ),
-          ],
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: Container(
         child: Column(
