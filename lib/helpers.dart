@@ -13,6 +13,7 @@ class HelperFunction {
   static String sharedPrefProfileBannerKey = "PROFILEBANNERKEY";
   static String sharedPrefProfileBarKey = "PROFILEBARKEY";
   static String sharedPrefProfileBorderKey = "PROFILEBORDERKEY";
+  static String sharedPrefTotalLikesKey = "TOTALLIKESKEY";
 
   // save data
   static Future<bool> saveLoggedInSharedPref(bool isLogged) async {
@@ -67,6 +68,11 @@ class HelperFunction {
   static Future<bool> saveProfileBorderSharedPref(String border) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPrefProfileBorderKey, border);
+  }
+
+  static Future<bool> saveTotalLikesSharedPref(int totallikes) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setInt(sharedPrefTotalLikesKey, totallikes);
   }
 
 
@@ -124,5 +130,10 @@ class HelperFunction {
   static Future<String> getProfileBorderSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPrefProfileBorderKey);
+  }
+
+  static Future<int> getTotalLikesSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getInt(sharedPrefTotalLikesKey);
   }
 }

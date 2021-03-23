@@ -39,6 +39,7 @@ class _BodyState extends State<Body> {
   List followerslist = [];
   List followinglist = [];
   List likedposts = [];
+  int totallikes = 0;
   String appbar = "assets/appbars/TOPBARNEW.png";
   String banner = "assets/banners/nightsky/nightsky3.png";
   String border = "";
@@ -177,6 +178,7 @@ class _BodyState extends State<Body> {
                   HelperFunction.saveProfileBarSharedPref(appbar);
                   HelperFunction.saveProfileBannerSharedPref(banner);
                   HelperFunction.saveProfileBorderSharedPref(border);
+                  HelperFunction.saveTotalLikesSharedPref(totallikes);
                   if (_formKey.currentState.validate()) {
                     setState(() {
                       isLoading = true;              
@@ -207,6 +209,7 @@ class _BodyState extends State<Body> {
                       appbar,
                       banner,
                       border,
+                      totallikes,
                       );
                   } on FirebaseAuthException catch (e) {
                       if (e.code == 'email-already-in-use') {

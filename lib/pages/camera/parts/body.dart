@@ -290,7 +290,7 @@ class _UploaderState extends State<Uploader> {
   void _startUpload() {
     String uid = auth.currentUser.uid.toString();
     String filePath = 'images/${DateTime.now()}.png';
-    Map<String, String> comments = Map<String, String>();
+    String profilepic;
     Map<String,dynamic> uploadMap = {
       "username": Constants.myName,
     };
@@ -303,7 +303,7 @@ class _UploaderState extends State<Uploader> {
       "upvotes": 0,
       "caption": captionController.text,
       "tagged": taggedUsers,
-      "comments" : comments,
+      "profilepic": Constants.myProfilePic,
     };
     databaseMethods.addImage(Constants.myName, imageMap);
 

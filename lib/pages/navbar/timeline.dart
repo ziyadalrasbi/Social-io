@@ -51,9 +51,10 @@ class _PostsState extends State<Posts> {
   List<int> upvotes = [];
   List<String> captions = [];
   List taggedUsers = [];
-  List likedposts = [""];
-  List downvotedposts = [""];
+  List likedposts = [];
+  List downvotedposts = [];
   List taggedbuttons = [];
+  List profilepics = [];
   StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
   Map<String, String> comments = Map<String, String>();
@@ -97,7 +98,9 @@ class _PostsState extends State<Posts> {
               usernames.add(result.data()['username']);
               upvotes.add(result.data()['upvotes']);
               taggedUsers.add(result.data()['tagged']);
-
+              if (result.data()['profilepic'] != null) {
+              profilepics.add(result.data()['profilepic']);
+              }
               _getPost();
             });
           });
@@ -152,6 +155,8 @@ class _PostsState extends State<Posts> {
       });
     });
   }
+
+ 
 
   void addLikedPost() async {
     FirebaseFirestore.instance
@@ -535,7 +540,7 @@ class _PostsState extends State<Posts> {
                                     );
                                   },
                                   child: CircleAvatar(
-                                    backgroundImage: displayPic[1],
+                                    backgroundImage: AssetImage(profilepics[userIndex].toString()),
                                   ))),
                           RichText(
                             text: TextSpan(children: <TextSpan>[

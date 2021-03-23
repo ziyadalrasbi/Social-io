@@ -100,6 +100,25 @@ updateProfilePic() async {
   });
 }
 
+updateUploadProfilePics() async {
+  FirebaseFirestore.instance
+        .collection("uploads")
+        .doc(Constants.myName)
+        .collection('images')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(Constants.myName)
+            .collection("images")
+            .doc(result.id)
+            .update({'profilepic': chosen,});
+
+      });
+    });
+}
+
 
 
   @override
@@ -140,6 +159,7 @@ updateProfilePic() async {
               textColor: Colors.white,
               pressed: () {
                 updateProfilePic();
+                updateUploadProfilePics();
                 Navigator.pop(context);
               },
             ),

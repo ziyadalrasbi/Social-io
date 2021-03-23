@@ -162,7 +162,7 @@ class _Profile1State extends State<Profile> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: size.height * 0.40,
+                  height: size.height * 0.50,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(Constants.myAppBanner.toString()),
@@ -300,6 +300,7 @@ class _Profile1State extends State<Profile> {
                     ),
                   ),
                 ),
+                
                 Material(
                   elevation: 1,
                   child: Container(

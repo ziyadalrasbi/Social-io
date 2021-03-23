@@ -275,7 +275,27 @@ void incrementUpvotes(int index) async {
     }
   }
 
-  
+  returnReportButton(int index) {
+    if (widget.userName != Constants.myName) {
+      return IconButton(
+        icon: Image.asset('assets/pictures/ICON_flag.png'),
+        iconSize: 25,
+        onPressed: () {
+          reportUser(index, context);
+    
+        },
+      );
+    } else {
+      return IconButton(
+        icon: Icon(Icons.edit),
+        iconSize: 25,
+        onPressed: () {
+          editPost(index, context);
+    
+        },
+      );
+    }
+  }
 
   void addDownvotedPost() async {
     FirebaseFirestore.instance
@@ -404,6 +424,104 @@ returnWidth() {
     },
   );
 }
+
+editPost(int index, BuildContext context) {
+    String rep1 = "Edit caption";
+    String rep2 = "Delete post";
+  // set up the buttons
+  Widget editButton = FlatButton(
+    child: Text(rep1),
+    onPressed:  () {
+      Navigator.pop(context);
+    },
+  );
+  Widget deleteButton = FlatButton(
+    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+    onPressed:  () {
+      Navigator.pop(context);
+      confirmDelete(index, context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Edit Post"),
+    content: Text("Select an option to edit this post."),
+    actions: [
+      editButton,
+      deleteButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+confirmDelete(int index, BuildContext context) {
+    String rep1 = "Cancel";
+    String rep2 = "Confirm";
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text(rep1),
+    onPressed:  () {
+      Navigator.pop(context);
+    },
+  );
+  Widget deleteButton = FlatButton(
+    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+    onPressed:  () {
+      deletePost(index);
+      Navigator.pop(context);
+      
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete Post"),
+    content: Text("Are you sure you want to delete this post? This action cannot be undone."),
+    actions: [
+      cancelButton,
+      deleteButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+void deletePost(int index) async {
+  FirebaseFirestore.instance
+    .collection('uploads')
+    .doc(Constants.myName)
+    .collection('images')
+    .where('imageid', isEqualTo: posts[index])
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        setState(() {     
+          FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(Constants.myName)
+          .collection('images')
+          .doc(result.id)
+          .delete();  
+          });
+      });
+    });
+  }
+
+
 
 confirmReport(BuildContext context) {
   // set up the buttons
@@ -560,14 +678,7 @@ commentPopUp(int index, BuildContext context) {
                       ],
                     ),
                     
-                   IconButton(
-                    icon: Image.asset('assets/pictures/ICON_flag.png'),
-                    iconSize: 25,
-                    onPressed: () {
-                      reportUser(userIndex, context);
-                
-                    },
-                  ),
+                  returnReportButton(userIndex),
                   ],
                 ),
               ),

@@ -28,12 +28,14 @@ class _UserProfile1State extends State<UserProfile> {
   bool listWanted = false;
   List<String> images = [];
   List posts = [];
+  String profilepic = "";
   String accType = "";
   var url;
 
   @override
   void initState() {
     getUserInfo();
+    getProfilePic();
     getUserFollowers();
     checkUser();
     getMyFollowing();
@@ -70,11 +72,24 @@ class _UserProfile1State extends State<UserProfile> {
               url = await ref.getDownloadURL();
               images.add(url);
               posts.add(result.data()['imageid']);
+              
               setState(() {
                 printImages();
               });
           });
         });
+      });
+    });
+  }
+
+  getProfilePic() async {
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: widget.userName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) { 
+        profilepic = result.data()['profilepic'].toString();
       });
     });
   }
@@ -310,7 +325,7 @@ void updateFollowers() async {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: size.height * 0.40,
+                  height: size.height * 0.55,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/images/background.jpg"),
@@ -327,7 +342,7 @@ void updateFollowers() async {
                         child: CircleAvatar(
                           radius: 48,
                           backgroundImage:
-                              AssetImage("assets/images/wrestler.png"),
+                              AssetImage(profilepic),
                         ),
                       ),
                       SizedBox(
