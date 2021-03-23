@@ -1,6 +1,7 @@
 // import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
+import 'package:socialio/extra/chatpage/chat_page.dart';
 import 'package:socialio/pages/navbar/timeline.dart';
 import 'package:socialio/pages/navbar/setting.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
@@ -24,19 +25,62 @@ class BottomBar extends StatefulWidget {
   _BottomBar createState() => _BottomBar();
 }
 
-
-
 class _BottomBar extends State<BottomBar> {
   int _currentIndex = 0;
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async {
+    Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    setState(() {});
+  }
 
   List _pageList = [
     Posts(), //class name of timeline
     UserSearch(), //class name of search
     Profile(), //class name of profile
+    (Constants.accType == "Student") ? Profile() : ChatPage(),
     Setup_page(), //class name of setting
   ];
 
-
+  returnStudentButton() {
+    if (Constants.accType == "Student") {
+      return BubbleBottomBarItem(
+        backgroundColor: Colors.blue,
+        icon: Image.asset(
+          "assets/icons/StudentICON.png",
+          color: Colors.black,
+          width: 20,
+          height: 20,
+        ),
+        activeIcon: Image.asset(
+          "assets/icons/StudentICON.png",
+          color: Colors.blue,
+          width: 20,
+          height: 20,
+        ),
+        title: Text('Classroom'),
+      );
+    } else {
+      return BubbleBottomBarItem(
+        backgroundColor: Colors.blue,
+        icon: Image.asset(
+          "assets/icons/ICON_inbox.png",
+          width: 20,
+          height: 20,
+        ),
+        activeIcon: Image.asset(
+          "assets/icons/ICON_inbox.png",
+          width: 20,
+          height: 20,
+        ),
+        title: Text('Messages'),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +165,7 @@ class _BottomBar extends State<BottomBar> {
             ),
             title: Text('Profile'),
           ),
+          returnStudentButton(),
           BubbleBottomBarItem(
             backgroundColor: Colors.blue,
             icon: Image.asset(

@@ -14,7 +14,7 @@ class Profile extends StatefulWidget {
 
 class _Profile1State extends State<Profile> {
   
-  int followers = 0;
+  int follow  int followers = 0;
   int following = 0;
   int postTime = 0;
   int listCount = 0;
@@ -44,8 +44,6 @@ class _Profile1State extends State<Profile> {
     setState(() {});
   }
 
-
-
   void checkImages() async {
     FirebaseFirestore.instance
         .collection("uploads")
@@ -62,37 +60,33 @@ class _Profile1State extends State<Profile> {
           querySnapshot.docs.forEach((result) async {
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
-              url = await ref.getDownloadURL();
-              images.add(url);
-              
-              setState(() {
-                posts.add(result.data()['imageid']);
-          printImages();
-          });
+            url = await ref.getDownloadURL();
+            images.add(url);
+
+            setState(() {
+              posts.add(result.data()['imageid']);
+              printImages();
+            });
           });
         });
-      }); 
+      });
     });
   }
 
   void returnFollowers() async {
     FirebaseFirestore.instance
-    .collection("users")
-    .where("username", isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
+        .collection("users")
+        .where("username", isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
       setState(() {
-         followers = querySnapshot.docs[0].data()['followers'];
-      following = querySnapshot.docs[0].data()['following'];     
-            });
-      
-      setState(() {
-              
-            });
+        followers = querySnapshot.docs[0].data()['followers'];
+        following = querySnapshot.docs[0].data()['following'];
+      });
+
+      setState(() {});
     });
   }
-
-  
 
   printImages() {
     
@@ -100,10 +94,9 @@ class _Profile1State extends State<Profile> {
       return GestureDetector(
         onTap: () {
           Navigator.push(
-            context, 
+            context,
             MaterialPageRoute(
-              builder: (context) => PostPage(Constants.myName, posts[index])
-            ),
+                builder: (context) => PostPage(Constants.myName, posts[index])),
           );
         },
         child: Container(
@@ -207,63 +200,65 @@ class _Profile1State extends State<Profile> {
                             radius: 48,
                             backgroundImage:
                                 AssetImage(Constants.myProfilePic.toString()),
-                                backgroundColor: Colors.transparent,
+                            backgroundColor: Colors.transparent,
                           ),
                         ),
-                        SizedBox(
-                          height: size.height*0.07,
+                      
+                      SizedBox(
+                        height: size.height * 0.00925,
+                      ),
+                      Text(
+                        Constants.myName,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
                         ),
-                        Text(
-                          Constants.myName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.00625,
+                      ),
+                      Text(
+                        "SocialIO " + Constants.accType,
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
                         ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          "SocialIO " + Constants.accType,
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        Container(
-                          height: 64,
-                          color: Colors.black.withOpacity(0.4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Expanded(
-                                child: Container(),
-                              ),
-                              Container(
-                                width: 110,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      "FOLLOWERS",
-                                      style: TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 12,
-                                      ),
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Container(
+                        height: size.height * 0.075,
+                        color: Colors.black.withOpacity(0.4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Expanded(
+                              child: Container(),
+                            ),
+                            Container(
+                              width: 110,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "FOLLOWERS",
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 12,
                                     ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                     followers.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    followers.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      
                                       ),
                                     ),
                                   ],

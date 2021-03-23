@@ -15,7 +15,6 @@ import '../../constants.dart';
 import '../../database.dart';
 import '../../helpers.dart';
 
-
 class Posts extends StatefulWidget {
   @override
   _PostsState createState() => _PostsState();
@@ -37,14 +36,14 @@ class _PostsState extends State<Posts> {
     ExactAssetImage('assets/pictures/edinburgh.jpg'),
     ExactAssetImage('assets/pictures/water.jpeg')
   ];
-  
+
   List<String> test;
   var url;
   int postCount = 0;
   List<String> postUpvotes = ['76,263', '243,503', '54'];
   String posterName;
-  bool upVoted = false; 
-  bool downVoted = false; 
+  bool upVoted = false;
+  bool downVoted = false;
 
   List<String> posts = [];
   List<String> images = [];
@@ -57,14 +56,15 @@ class _PostsState extends State<Posts> {
   List taggedbuttons = [];
   StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
-  Map<String,String> comments = Map<String, String>();
-  
+  Map<String, String> comments = Map<String, String>();
+
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
     setState(() {});
   }
-@override
+
+  @override
   void initState() {
     getUserInfo();
     checkImages();
@@ -72,73 +72,67 @@ class _PostsState extends State<Posts> {
     super.initState();
   }
 
-   checkImages() async {
-    
+  checkImages() async {
     FirebaseFirestore.instance
         .collection("uploads")
         .get()
-        
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-        
         FirebaseFirestore.instance
             .collection("uploads")
-            
             .doc(result.id)
-            .collection("images").orderBy('time')
+            .collection("images")
+            .orderBy('time')
             .get()
             .then((querySnapshot) {
-              
           querySnapshot.docs.forEach((result) async {
-            
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
             url = await ref.getDownloadURL();
             setState(() {
-            images.add(url);
-            posts.add(result.data()['imageid']);
-            captions.add(result.data()['caption']);
-            usernames.add(result.data()['username']);
-            upvotes.add(result.data()['upvotes']);
-            taggedUsers.add(result.data()['tagged']);
-            
-            _getPost();
+              images.add(url);
+              posts.add(result.data()['imageid']);
+              captions.add(result.data()['caption']);
+              usernames.add(result.data()['username']);
+              upvotes.add(result.data()['upvotes']);
+              taggedUsers.add(result.data()['tagged']);
+
+              _getPost();
             });
           });
-          
         });
       });
     });
   }
 
-  getUpvotes(int index)  {
-    
+  getUpvotes(int index) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('uploads')
-    .doc(usernames[index]).collection('images').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .snapshots(),
       builder: (context, AsyncSnapshot snapshot) {
-      if (snapshot.hasData) {
-      return RichText(
-        text: TextSpan(
-            style:
-                TextStyle(color: Colors.black, fontSize: 20.0),
-            children: <TextSpan>[
-            TextSpan(
-            text: upvotes[index].toString() + ' upvotes',
-            style: TextStyle(color: Colors.blue),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                print(
-                    'This will take to upvoters of the photo');
-              }),
-        ]));
-      } else {
-       return CircularProgressIndicator();
-      }
+        if (snapshot.hasData) {
+          return RichText(
+              text: TextSpan(
+                  style: TextStyle(color: Colors.black, fontSize: 20.0),
+                  children: <TextSpan>[
+                TextSpan(
+                    text: upvotes[index].toString() + ' upvotes',
+                    style: TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        print('This will take to upvoters of the photo');
+                      }),
+              ]));
+        } else {
+          return CircularProgressIndicator();
+        }
       },
     );
   }
-  
+
   getLikedPosts() async {
     FirebaseFirestore.instance
     .collection('users')
@@ -160,15 +154,15 @@ class _PostsState extends State<Posts> {
 
   void addLikedPost() async {
     FirebaseFirestore.instance
-    .collection('users')
-    .where('username', isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) { 
-        FirebaseFirestore.instance
         .collection('users')
-        .doc(result.id)
-        .update({'likedposts': likedposts});
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'likedposts': likedposts});
         setState(() {
           _getPost();
         });
@@ -178,15 +172,15 @@ class _PostsState extends State<Posts> {
 
   void addDownvotedPost() async {
     FirebaseFirestore.instance
-    .collection('users')
-    .where('username', isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) { 
-        FirebaseFirestore.instance
         .collection('users')
-        .doc(result.id)
-        .update({'downvotedposts': downvotedposts});
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'downvotedposts': downvotedposts});
         setState(() {
           _getPost();
         });
@@ -196,94 +190,92 @@ class _PostsState extends State<Posts> {
 
   void addComment(int index) async {
     FirebaseFirestore.instance
-    .collection('uploads')
-    .doc(usernames[index])
-    .collection('images')
-    .where('imageid', isEqualTo: posts[index])
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
+        .collection('uploads')
+        .doc(usernames[index])
+        .collection('images')
+        .where('imageid', isEqualTo: posts[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
         setState(() {
           FirebaseFirestore.instance
-          .collection('uploads')
-          .doc(usernames[index])
-          .collection('images')
-          .doc(result.id)
-          .collection('comments')
-          .add({'commenter': Constants.myName, 'comment': commentText.text});
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .collection('comments')
+              .add(
+                  {'commenter': Constants.myName, 'comment': commentText.text});
         });
       });
     });
   }
 
-  
-
-void incrementUpvotes(int index) async {
-  if (!likedposts.contains(posts[index])) { 
-    if (downvotedposts.contains(posts[index])) {
+  void incrementUpvotes(int index) async {
+    if (!likedposts.contains(posts[index])) {
+      if (downvotedposts.contains(posts[index])) {
         downvotedposts.remove(posts[index]);
         addDownvotedPost();
-        upvotes[index] = upvotes[index]+2;
+        upvotes[index] = upvotes[index] + 2;
       } else {
         upvotes[index]++;
       }
-  likedposts.add(posts[index]);
-  addLikedPost();
-  upVoted = true;
-  downVoted = false;
-  FirebaseFirestore.instance
-    .collection('uploads')
-    .doc(usernames[index])
-    .collection('images')
-    .where('caption', isEqualTo: captions[index])
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
-          FirebaseFirestore.instance
+      likedposts.add(posts[index]);
+      addLikedPost();
+      upVoted = true;
+      downVoted = false;
+      FirebaseFirestore.instance
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .doc(result.id)
-          .update({'upvotes': upvotes[index],});  
-          
+          .where('caption', isEqualTo: captions[index])
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) async {
+          FirebaseFirestore.instance
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .update({
+            'upvotes': upvotes[index],
+          });
+        });
       });
-    });
-   } else {
-     print("nothing");
-   }
+    }
   }
 
   void decrementUpvotes(int index) async {
-    if(!downvotedposts.contains(posts[index])) {
+    if (!downvotedposts.contains(posts[index])) {
       if (likedposts.contains(posts[index])) {
         likedposts.remove(posts[index]);
         addLikedPost();
-        upvotes[index] = upvotes[index]-2;
+        upvotes[index] = upvotes[index] - 2;
       } else {
         upvotes[index]--;
       }
-    downvotedposts.add(posts[index]);
-    addDownvotedPost();
-  downVoted = true;
-  upVoted = false;
-  FirebaseFirestore.instance
-    .collection('uploads')
-    .doc(usernames[index])
-    .collection('images')
-    .where('caption', isEqualTo: captions[index])
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
-          FirebaseFirestore.instance
+      downvotedposts.add(posts[index]);
+      addDownvotedPost();
+      downVoted = true;
+      upVoted = false;
+      FirebaseFirestore.instance
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .doc(result.id)
-          .update({'upvotes': upvotes[index],});  
+          .where('caption', isEqualTo: captions[index])
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) async {
+          FirebaseFirestore.instance
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .update({
+            'upvotes': upvotes[index],
+          });
+        });
       });
-    });
-    } else {
-      print("nothing");
     }
   }
 
@@ -311,13 +303,12 @@ void incrementUpvotes(int index) async {
     }
   }
 
-
-returnWidth() {
+  returnWidth() {
     Size size = MediaQuery.of(context).size;
     if (kIsWeb) {
       return 700;
     } else {
-      return size.width; 
+      return size.width;
     }
   }
 
@@ -343,149 +334,129 @@ returnWidth() {
     String rep3 = "Spam content";
     String rep4 = "Bullying/harassment";
     String rep5 = "Inappropriate caption/comments";
-  // set up the buttons
-  Widget firstButton = FlatButton(
-    child: Text(rep1),
-    onPressed:  () {
-      createReport(
-        index:index,
-        reason:rep1
-      );
-      Navigator.pop(context);
-      confirmReport(context);
-    },
-  );
-  Widget secondButton = FlatButton(
-    child: Text(rep2),
-    onPressed:  () {
-      createReport(
-        index:index,
-        reason:rep2
-      );
-      Navigator.pop(context);
-      confirmReport(context);
-    },
-  );
-  Widget thirdButton = FlatButton(
-    child: Text(rep3),
-    onPressed:  () {
-      createReport(
-        index:index,
-        reason:rep3
-      );
-      Navigator.pop(context);
-      confirmReport(context);
-    },
-  );
-  Widget fourthButton = FlatButton(
-    child: Text(rep4),
-    onPressed:  () {
-      createReport(
-        index:index,
-        reason:rep4
-      );
-      Navigator.pop(context);
-      confirmReport(context);
-    },
-  );
-  Widget fifthButton = FlatButton(
-    child: Text(rep5),
-    onPressed:  () {
-      createReport(
-        index:index,
-        reason:rep5
-      );
-      Navigator.pop(context);
-      confirmReport(context);
-    },
-  );
+    // set up the buttons
+    Widget firstButton = FlatButton(
+      child: Text(rep1),
+      onPressed: () {
+        createReport(index: index, reason: rep1);
+        Navigator.pop(context);
+        confirmReport(context);
+      },
+    );
+    Widget secondButton = FlatButton(
+      child: Text(rep2),
+      onPressed: () {
+        createReport(index: index, reason: rep2);
+        Navigator.pop(context);
+        confirmReport(context);
+      },
+    );
+    Widget thirdButton = FlatButton(
+      child: Text(rep3),
+      onPressed: () {
+        createReport(index: index, reason: rep3);
+        Navigator.pop(context);
+        confirmReport(context);
+      },
+    );
+    Widget fourthButton = FlatButton(
+      child: Text(rep4),
+      onPressed: () {
+        createReport(index: index, reason: rep4);
+        Navigator.pop(context);
+        confirmReport(context);
+      },
+    );
+    Widget fifthButton = FlatButton(
+      child: Text(rep5),
+      onPressed: () {
+        createReport(index: index, reason: rep5);
+        Navigator.pop(context);
+        confirmReport(context);
+      },
+    );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Send Report"),
-    content: Text("What would you like to report this post for?"),
-    actions: [
-      firstButton,
-      secondButton,
-      thirdButton,
-      fourthButton,
-      fifthButton,
-    ],
-  );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Send Report"),
+      content: Text("What would you like to report this post for?"),
+      actions: [
+        firstButton,
+        secondButton,
+        thirdButton,
+        fourthButton,
+        fifthButton,
+      ],
+    );
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
-confirmReport(BuildContext context) {
-  // set up the buttons
-  Widget confirmButton = FlatButton(
-    child: Text("OK"),
-    onPressed:  () {
-      Navigator.pop(context);
-    },
-  );
+  confirmReport(BuildContext context) {
+    // set up the buttons
+    Widget confirmButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
 
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Report Sent"),
+      content:
+          Text("Your report has been sent and will be reviewed in due time."),
+      actions: [
+        confirmButton,
+      ],
+    );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Report Sent"),
-    content: Text("Your report has been sent and will be reviewed in due time."),
-    actions: [
-      confirmButton,
-     
-    ],
-  );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
+  commentPopUp(int index, BuildContext context) {
+    // set up the buttons
+    Widget commentButton = InputField(
+      hint: "Add comment",
+      control: commentText,
+    );
 
-commentPopUp(int index, BuildContext context) {
-  // set up the buttons
-  Widget commentButton = InputField(
-    hint: "Add comment",
-    control: commentText,
-  );
+    Widget confirmButton = FlatButton(
+        child: Text("Comment"),
+        onPressed: () {
+          addComment(index);
+          Navigator.pop(context);
+        });
 
-  Widget confirmButton = FlatButton(
-    child: Text("Comment"),
-    onPressed: (){
-      addComment(index);
-      Navigator.pop(context);
-    } 
-  );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Add Comment"),
+      actions: [
+        commentButton,
+        confirmButton,
+      ],
+    );
 
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Add Comment"),
-    actions: [
-      commentButton,
-      confirmButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   createReport({int index, String reason}) {
     String imageId = posts[index];
@@ -493,329 +464,323 @@ commentPopUp(int index, BuildContext context) {
     String poster = usernames[index];
     DatabaseMethods().createReport(imageId, reporter, poster, reason);
   }
-   
 
   returnTaggedUsers(int index) {
     for (String post in posts) {
-    if (taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1).length > 1 ) {
-    return Visibility(
-      //Raised button that comes into view when you tap the image, tap again to get rid of it
-      visible: isVisible,
-      child: RaisedButton(
-        onPressed: () {
-          if (taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1) != Constants.myName) {
-          Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => UserProfile(taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1))
-                      ),
-                    );
-          } else {
-            print(likedposts);
-          }
-        },
-        child: Text(taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1)),
-        color: Colors.blueGrey,
-      ),
-    );
-    } else {
-      return Container();
-    }
+      if (taggedUsers[index]
+              .toString()
+              .substring(1, taggedUsers[index].toString().length - 1)
+              .length >
+          1) {
+        return Visibility(
+          //Raised button that comes into view when you tap the image, tap again to get rid of it
+          visible: isVisible,
+          child: RaisedButton(
+            onPressed: () {
+              if (taggedUsers[index]
+                      .toString()
+                      .substring(1, taggedUsers[index].toString().length - 1) !=
+                  Constants.myName) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfile(taggedUsers[index]
+                          .toString()
+                          .substring(
+                              1, taggedUsers[index].toString().length - 1))),
+                );
+              } else {
+                print(likedposts);
+              }
+            },
+            child: Text(taggedUsers[index]
+                .toString()
+                .substring(1, taggedUsers[index].toString().length - 1)),
+            color: Colors.blueGrey,
+          ),
+        );
+      } else {
+        return Container();
+      }
     }
   }
-  
-    Widget _getPost() {
-    
+
+  Widget _getPost() {
     Size size = MediaQuery.of(context).size;
-    if (url!= null) {
-    return new ListView.builder(
-        itemCount: images.length,
-        itemBuilder: (BuildContext context, int userIndex) {
-          
-          return Container(
-            child: Column(
-            
-            children: <Widget>[
-              Container(
-                 
-                //Includes dp + username + report flag
-                margin: EdgeInsets.all(10),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if (url != null) {
+      return new ListView.builder(
+          itemCount: images.length,
+          itemBuilder: (BuildContext context, int userIndex) {
+            return Container(
+                child: Column(
+              children: <Widget>[
+                Container(
+                  //Includes dp + username + report flag
+                  margin: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(right: 8),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UserProfile(
+                                              usernames[userIndex])),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: displayPic[1],
+                                  ))),
+                          RichText(
+                            text: TextSpan(children: <TextSpan>[
+                              TextSpan(
+                                  text: usernames[userIndex],
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15.0),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => UserProfile(
+                                                usernames[userIndex])),
+                                      );
+                                    })
+                            ]),
+                          )
+                        ],
+                      ),
+                      IconButton(
+                        icon: Image.asset('assets/pictures/ICON_flag.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          reportUser(userIndex, context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Stack(children: <Widget>[
+                  Container(
+                      //the post picture
+                      child: GestureDetector(
+                        //This is to handle the tagged users raised button
+                        onTap: () {
+                          if (isVisible == false)
+                            setState(() {
+                              isVisible = true;
+                            });
+                          else
+                            setState(() {
+                              isVisible = false;
+                            });
+                        },
+                      ),
+                      height: size.height * 0.5,
+                      width: returnWidth(),
+                      padding: EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 0,
+                        bottom: 24,
+                      ),
+                      // constraints: BoxConstraints(maxHeight: 50),
+
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(images[userIndex])),
+                      )),
+                  Positioned(
+                    top: 25,
+                    left: 50,
+                    child: returnTaggedUsers(userIndex),
+                  )
+                ]),
+                Row(
+                  mainAxisAlignment: returnAlignment(),
+                  // upvote + downvote + comment + send + save icons
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(right: 8),
-                            child: GestureDetector(
-                                onTap: () {
-                                Navigator.push(
-                                  context, 
-                                  MaterialPageRoute(
-                                    builder: (context) => UserProfile(usernames[userIndex])
-                                    ),
-                                  );
-                                },
-                                child: CircleAvatar(
-                                  backgroundImage: displayPic[1],
-                                ))),
-                        RichText(
-                          text: TextSpan(children: <TextSpan>[
+                    Container(
+                        color: returnUpvoteColor(userIndex),
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/pictures/ICON_upvote.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            incrementUpvotes(userIndex);
+
+                            setState(() {
+                              getUpvotes(userIndex);
+                            });
+                          },
+                        )),
+                    Container(
+                        color: returnDownvoteColor(userIndex),
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon:
+                              Image.asset('assets/pictures/ICON_downvote.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            setState(() {
+                              decrementUpvotes(userIndex);
+                            });
+                          },
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/pictures/ICON_comment.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            commentPopUp(userIndex, context);
+                          },
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/pictures/ICON-send.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            print(
+                                'This will let a user send the post to another user');
+                          },
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/pictures/ICON_save.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReportPanel()),
+                            );
+                          },
+                        )),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: returnAlignment(),
+                  //This column contains username, upload description and total upvotes
+                  children: <Widget>[
+                    Container(
+                      //The person who posted along with photo description
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0),
+                              children: <TextSpan>[
                             TextSpan(
-                                text: usernames[userIndex],
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 15.0),
+                                text: usernames[userIndex] + ': ',
+                                style: TextStyle(color: Colors.blue),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.push(
-                                      context, 
+                                      context,
                                       MaterialPageRoute(
-                                        builder: (context) => UserProfile(usernames[userIndex])
-                                      ),
+                                          builder: (context) => UserProfile(
+                                              usernames[userIndex])),
                                     );
-                                  })
-                          ]),
-                        )
-                      ],
+                                  }),
+                            TextSpan(text: captions[userIndex]),
+                          ])),
                     ),
-                    
-                   IconButton(
-                    icon: Image.asset('assets/pictures/ICON_flag.png'),
-                    iconSize: 25,
-                    onPressed: () {
-                      reportUser(userIndex, context);
-                
-                    },
-                  ),
+                    Container(
+                      //The total upvotes of post
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: getUpvotes(userIndex),
+                    )
                   ],
                 ),
-              ),
-              Stack(children: <Widget>[
-                Container(
-                    //the post picture
-                    child: GestureDetector(
-                      
-                      //This is to handle the tagged users raised button
-                      onTap: () {
-                        if (isVisible == false)
-                          setState(() {
-                            isVisible = true;
-                          });
-                        else
-                          setState(() {
-                            isVisible = false;
-                          });
-                          
-                      },
+                Column(
+                  mainAxisAlignment: returnAlignment(),
+                  //This column contains username and comment of commenters
+                  children: <Widget>[
+                    Container(
+                      //First comment
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0),
+                              children: <TextSpan>[
+                            TextSpan(
+                                text:
+                                    'HarperEvans1: ', //will be a username from firebase
+                                style: TextStyle(color: Colors.blue),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print(
+                                        'This will take to profile of that person');
+                                  }),
+                            TextSpan(text: 'Nice photo!'),
+                          ])),
                     ),
-                    height: size.height * 0.5,
-                    width: returnWidth(),
-                  padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 0,
-                    bottom: 24,
-                  ),
-                    // constraints: BoxConstraints(maxHeight: 50),
-                   
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                         
-
-                          fit: BoxFit.fill, image: NetworkImage(images[userIndex])),
-                    )
-                    
+                    Container(
+                      //Second comment
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0),
+                              children: <TextSpan>[
+                            TextSpan(
+                                text:
+                                    'trevorwilkinson: ', //will be a username from firebase
+                                style: TextStyle(color: Colors.blue),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print(
+                                        'This will take to profile of that person');
+                                  }),
+                            TextSpan(
+                                text:
+                                    'Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda'),
+                          ])),
                     ),
-                Positioned(
-                  
-                    top: 25,
-                    left: 50,
-                    child: returnTaggedUsers(userIndex),)
-              ]),
-              Row(
-                mainAxisAlignment: returnAlignment(),
-                // upvote + downvote + comment + send + save icons
-                children: <Widget>[
-                  Container(
-                    color: returnUpvoteColor(userIndex),
-                      margin: EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: Image.asset('assets/pictures/ICON_upvote.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          incrementUpvotes(userIndex); 
-                            
-                          setState(() {
-                            getUpvotes(userIndex);
-                          }); 
-                          
-                        },
-                      )
-
-                  ),
-                  Container(
-                      color:  returnDownvoteColor(userIndex),
-                      margin: EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: Image.asset('assets/pictures/ICON_downvote.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          setState(() {
-                            decrementUpvotes(userIndex);                      
-                          });
-                        },
-
-                      )),
-                  Container(
-                      margin: EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: Image.asset('assets/pictures/ICON_comment.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                         commentPopUp(userIndex, context);
-                        },
-                      )),
-                  Container(
-                      margin: EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: Image.asset('assets/pictures/ICON-send.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          print(
-                              'This will let a user send the post to another user');
-                        },
-                      )),
-                  Container(
-                      margin: EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: Image.asset('assets/pictures/ICON_save.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          Navigator.push(
-                            context, 
-                            MaterialPageRoute(
-                              builder: (context) => ReportPanel()
-                              ),
-                            );
-                        },
-                      )),
-                      
-                ],
-              ),
-              Column(
-                mainAxisAlignment: returnAlignment(),
-                //This column contains username, upload description and total upvotes
-                children: <Widget>[
-                  Container(
-                    
-                    //The person who posted along with photo description
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text: usernames[userIndex] + ': ',
-                              style: TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                      context, 
+                    Container(
+                      //view more comments
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 20.0),
+                              children: <TextSpan>[
+                            TextSpan(
+                                text:
+                                    'view more comments', //will take to the comments
+                                style: TextStyle(color: Colors.grey),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
+                                      context,
                                       MaterialPageRoute(
-                                        builder: (context) => UserProfile(usernames[userIndex])
-                                      ),
+                                          builder: (context) => CommentPage(
+                                              posts[userIndex],
+                                              usernames[userIndex])),
                                     );
-                                }),
-                          TextSpan(text: captions[userIndex]),
-                        ])),
-                  ),
-                  Container(
-                    //The total upvotes of post
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: getUpvotes(userIndex), 
-                  )
-                ],
-              ),
-              Column(
-                mainAxisAlignment: returnAlignment(),
-                //This column contains username and comment of commenters
-                children: <Widget>[
-                  Container(
-                    //First comment
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text:
-                                  'HarperEvans1: ', //will be a username from firebase
-                              style: TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  print(
-                                      'This will take to profile of that person');
-                                }),
-                          TextSpan(text: 'Nice photo!'),
-                        ])),
-                  ),
-                  Container(
-                    //Second comment
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text:
-                                  'trevorwilkinson: ', //will be a username from firebase
-                              style: TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  print(
-                                      'This will take to profile of that person');
-                                }),
-                          TextSpan(
-                              text:
-                                  'Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda'),
-                        ])),
-                  ),
-                  Container(
-                    //view more comments
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text:
-                                  'view more comments', //will take to the comments
-                              style: TextStyle(color: Colors.grey),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                  context, 
-                                  MaterialPageRoute(
-                                    builder: (context) => CommentPage(posts[userIndex], usernames[userIndex])
-                                    ),
-                                  );
-                                }),
-                        ])),
-                  )
-                ],
-              )
-            ],
-          ));
-        });
+                                  }),
+                          ])),
+                    )
+                  ],
+                )
+              ],
+            ));
+          });
     }
   }
 
@@ -823,37 +788,34 @@ commentPopUp(int index, BuildContext context) {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
-          flexibleSpace: Container(
-            width: size.width*0.5,
-            decoration: 
-              BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/appbars/TOPBARNEW.png"),
-                  fit: BoxFit.fill,
-                ),
-              ),
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/icons/TOPBARNEW.png"),
+              fit: BoxFit.fill,
+            ),
           ),
-  backgroundColor: Colors.transparent,
+        ),
+        backgroundColor: Colors.transparent,
         actions: <Widget>[
           FlatButton(
-                child:
-                  Image.asset(
-                  'assets/icons/ICON_inbox.png',
-                  width: 45,
-                  height: 45,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(),
-                    ),
-                  );
-                },
-              ),
+            child: Image.asset(
+              'assets/icons/ICON_inbox.png',
+              width: 45,
+              height: 45,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatPage(),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: _getPost(),
