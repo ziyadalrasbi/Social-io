@@ -58,6 +58,7 @@ returnAlignment() {
         .collection('images')
         .doc(result.id)
         .collection('comments')
+        .doc(result.id)
         .get()
         .then((result) { 
           querySnapshot.docs.forEach((result) async { 

@@ -188,9 +188,15 @@ class _Profile1State extends State<Profile> {
                           );
                         },
                         child: CircleAvatar(
-                          radius: 48,
-                          backgroundImage:
-                              AssetImage(Constants.myProfilePic.toString()),
+                          radius: 70,
+                          backgroundImage: AssetImage("assets/icons/fire.png"),
+                          backgroundColor: Colors.transparent,
+                          child: CircleAvatar(
+                            radius: 48,
+                            backgroundImage:
+                                AssetImage(Constants.myProfilePic.toString()),
+                                backgroundColor: Colors.transparent,
+                          ),
                         ),
                       ),
                       SizedBox(

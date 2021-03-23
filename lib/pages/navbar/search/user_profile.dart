@@ -114,6 +114,7 @@ class _UserProfile1State extends State<UserProfile> {
 void updateFollowers() async {
   if (!followerslist.contains(Constants.myName)) {
     followerslist.add(Constants.myName);
+     followers++;
     FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: widget.userName)
@@ -124,7 +125,7 @@ void updateFollowers() async {
           FirebaseFirestore.instance
           .collection('users')
           .doc(result.id)
-          .update({'followers': followers++, 'followerslist': followerslist});  
+          .update({'followers': followers, 'followerslist': followerslist});  
           setState(() {
           });
           
@@ -135,9 +136,12 @@ void updateFollowers() async {
   }
   } 
 
+  
+
   void updateFollowing() async {
     if (!myfollowing.contains(widget.userName)) {
     myfollowing.add(widget.userName); 
+     Constants.myFollowing++;
     FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: Constants.myName)
@@ -147,7 +151,24 @@ void updateFollowers() async {
         FirebaseFirestore.instance
         .collection('users')
         .doc(result.id)
-        .update({'following': Constants.myFollowing++,'followinglist': myfollowing}); 
+        .update({'following':Constants.myFollowing,'followinglist': myfollowing}); 
+        setState(() {
+        }); 
+        HelperFunction.saveUserFollowingSharedPref(Constants.myFollowing);
+      });
+    });
+    } else {
+      Constants.myFollowing--;
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {      
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'following':Constants.myFollowing,'followinglist': myfollowing}); 
           
         setState(() {
         }); 
@@ -155,8 +176,37 @@ void updateFollowers() async {
       });
       
     });
+    }
+  }
+
+  returnFollowButton() {
+    Size size = MediaQuery.of(context).size;
+    if (!myfollowing.contains(widget.userName)) {
+      return FlatButton(
+        height: size.height * 0.001,
+        minWidth: 200,
+        color: Colors.blue,
+        child: Text("Follow"),
+        onPressed: () async {
+            setState(() {
+              updateFollowers();    
+              updateFollowing();                 
+            });
+        },  
+        );
     } else {
-      print("already followed");
+      return FlatButton(
+        height: size.height * 0.001,
+        minWidth: 200,
+        color: Colors.green,
+        child: Text("Unfollow"),
+        onPressed: () async {
+            setState(() {
+              updateFollowers();    
+              updateFollowing();                 
+            });
+        },  
+        );
     }
   }
 
@@ -281,21 +331,7 @@ void updateFollowers() async {
                       ),
                       Container(
                         color: Colors.blue,
-                      child: FlatButton(
-                        height: size.height * 0.001,
-                        minWidth: 200,
-                        color: Colors.blue,
-                        child: Text("Follow"),
-                        onPressed: () async {
-                          
-                           setState(() {
-                             updateFollowers();    
-                              updateFollowing();                 
-                            });
-                          
-                           
-                        },  
-                        ),
+                      child:  returnFollowButton(),
                       ),
                       SizedBox(height: 20),
                       Container(

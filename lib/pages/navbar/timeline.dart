@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -51,7 +53,9 @@ class _PostsState extends State<Posts> {
   List<String> captions = [];
   List taggedUsers = [];
   List likedposts = [];
+  List downvotedposts = [];
   List taggedbuttons = [];
+  StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
   Map<String,String> comments = Map<String, String>();
   
@@ -66,10 +70,9 @@ class _PostsState extends State<Posts> {
     checkImages();
     getLikedPosts();
     super.initState();
-    
   }
 
-  void checkImages() async {
+   checkImages() async {
     
     FirebaseFirestore.instance
         .collection("uploads")
@@ -87,6 +90,7 @@ class _PostsState extends State<Posts> {
             .then((querySnapshot) {
               
           querySnapshot.docs.forEach((result) async {
+            
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
             url = await ref.getDownloadURL();
@@ -97,29 +101,42 @@ class _PostsState extends State<Posts> {
             usernames.add(result.data()['username']);
             upvotes.add(result.data()['upvotes']);
             taggedUsers.add(result.data()['tagged']);
+            
             _getPost();
             });
           });
+          
         });
       });
     });
   }
 
-  getUpvotes(int index) {
-    return RichText(
-      text: TextSpan(
-          style:
-              TextStyle(color: Colors.black, fontSize: 20.0),
-          children: <TextSpan>[
-          TextSpan(
-          text: upvotes[index].toString() + ' upvotes',
-          style: TextStyle(color: Colors.blue),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              print(
-                  'This will take to upvoters of the photo');
-            }),
-      ]));
+  getUpvotes(int index)  {
+    
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('uploads')
+    .doc(usernames[index]).collection('images').snapshots(),
+      builder: (context, AsyncSnapshot snapshot) {
+      if (snapshot.hasData) {
+      return RichText(
+        text: TextSpan(
+            style:
+                TextStyle(color: Colors.black, fontSize: 20.0),
+            children: <TextSpan>[
+            TextSpan(
+            text: upvotes[index].toString() + ' upvotes',
+            style: TextStyle(color: Colors.blue),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                print(
+                    'This will take to upvoters of the photo');
+              }),
+        ]));
+      } else {
+       return CircularProgressIndicator();
+      }
+      },
+    );
   }
   
   getLikedPosts() async {
@@ -131,7 +148,7 @@ class _PostsState extends State<Posts> {
       querySnapshot.docs.forEach((result) { 
         setState(() {   
         likedposts = result.data()['likedposts'];
-               
+        downvotedposts = result.data()['downvotedposts'];      
         });
       });
     });
@@ -148,6 +165,24 @@ class _PostsState extends State<Posts> {
         .collection('users')
         .doc(result.id)
         .update({'likedposts': likedposts});
+        setState(() {
+          _getPost();
+        });
+      });
+    });
+  }
+
+  void addDownvotedPost() async {
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) { 
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'downvotedposts': downvotedposts});
         setState(() {
           _getPost();
         });
@@ -179,10 +214,19 @@ class _PostsState extends State<Posts> {
 
   
 
-void incrementFollowers(int index) async {
+void incrementUpvotes(int index) async {
   if (!likedposts.contains(posts[index])) { 
+    if (downvotedposts.contains(posts[index])) {
+        downvotedposts.remove(posts[index]);
+        addDownvotedPost();
+        upvotes[index] = upvotes[index]+2;
+      } else {
+        upvotes[index]++;
+      }
   likedposts.add(posts[index]);
   addLikedPost();
+  upVoted = true;
+  downVoted = false;
   FirebaseFirestore.instance
     .collection('uploads')
     .doc(usernames[index])
@@ -196,13 +240,59 @@ void incrementFollowers(int index) async {
           .doc(usernames[index])
           .collection('images')
           .doc(result.id)
-          .update({'upvotes': upvotes[index]+1,});  
-          setState(() {
-            getUpvotes(index);
-          });
+          .update({'upvotes': upvotes[index],});  
+          
       });
     });
    }
+  }
+
+  void decrementUpvotes(int index) async {
+    if(!downvotedposts.contains(posts[index])) {
+      if (likedposts.contains(posts[index])) {
+        likedposts.remove(posts[index]);
+        addLikedPost();
+        upvotes[index] = upvotes[index]-2;
+      } else {
+        upvotes[index]--;
+      }
+    downvotedposts.add(posts[index]);
+    addDownvotedPost();
+  downVoted = true;
+  upVoted = false;
+  FirebaseFirestore.instance
+    .collection('uploads')
+    .doc(usernames[index])
+    .collection('images')
+    .where('caption', isEqualTo: captions[index])
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+          FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .doc(result.id)
+          .update({'upvotes': upvotes[index],});  
+      });
+    });
+    }
+  }
+
+  returnUpvoteColor(int index) {
+    if (likedposts.contains(posts[index])) {
+      return Colors.blue;
+    } else {
+      return Colors.white;
+    }
+  }
+
+  returnDownvoteColor(int index) {
+    if (downvotedposts.contains(posts[index])) {
+      return Colors.blue;
+    } else {
+      return Colors.white;
+    }
   }
 
 
@@ -390,6 +480,7 @@ commentPopUp(int index, BuildContext context) {
    
 
   returnTaggedUsers(int index) {
+    for (String post in posts) {
     if (taggedUsers[index].toString().substring(1,taggedUsers[index].toString().length-1).length > 1 ) {
     return Visibility(
       //Raised button that comes into view when you tap the image, tap again to get rid of it
@@ -413,6 +504,7 @@ commentPopUp(int index, BuildContext context) {
     );
     } else {
       return Container();
+    }
     }
   }
   
@@ -529,32 +621,31 @@ commentPopUp(int index, BuildContext context) {
                 // upvote + downvote + comment + send + save icons
                 children: <Widget>[
                   Container(
-                    color: upVoted ? Colors.blue : Colors.white,
+                    color: returnUpvoteColor(userIndex),
                       margin: EdgeInsets.only(right: 8),
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_upvote.png'),
                         iconSize: 25,
-                        onPressed: () async {
-                          setState(() {
-                            incrementFollowers(userIndex); 
+                        onPressed: () {
+                          incrementUpvotes(userIndex); 
                             
+                          setState(() {
+                            getUpvotes(userIndex);
                           }); 
-                          getUpvotes(userIndex);
+                          
                         },
                       )
 
                   ),
                   Container(
-                      color: downVoted ? Colors.blue : Colors.white,
+                      color:  returnDownvoteColor(userIndex),
                       margin: EdgeInsets.only(right: 8),
                       child: IconButton(
                         icon: Image.asset('assets/pictures/ICON_downvote.png'),
                         iconSize: 25,
                         onPressed: () {
                           setState(() {
-                            
-                            downVoted = true;
-                            upVoted = false;                         
+                            decrementUpvotes(userIndex);                      
                           });
                         },
 
@@ -714,22 +805,22 @@ commentPopUp(int index, BuildContext context) {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.blue,
-          centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-            Image.asset(
-              "assets/icons/LOGONEW.png", 
-              height: 50, 
-              alignment: Alignment.center,
-            ),
-          ],
-        ),
+        centerTitle: true,
+          flexibleSpace: Container(
+            width: size.width*0.5,
+            decoration: 
+              BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/icons/TOPBAR_v2.png"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+          ),
+  backgroundColor: Colors.transparent,
         actions: <Widget>[
           FlatButton(
                 child:
