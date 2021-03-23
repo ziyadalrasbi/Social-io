@@ -13,7 +13,6 @@ class Profile extends StatefulWidget {
 }
 
 class _Profile1State extends State<Profile> {
-  
   int followers = 0;
   int following = 0;
   int postTime = 0;
@@ -41,8 +40,6 @@ class _Profile1State extends State<Profile> {
     setState(() {});
   }
 
-
-
   void checkImages() async {
     FirebaseFirestore.instance
         .collection("uploads")
@@ -59,47 +56,42 @@ class _Profile1State extends State<Profile> {
           querySnapshot.docs.forEach((result) async {
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
-              url = await ref.getDownloadURL();
-              images.add(url);
-              
-              setState(() {
-                posts.add(result.data()['imageid']);
-          printImages();
-          });
+            url = await ref.getDownloadURL();
+            images.add(url);
+
+            setState(() {
+              posts.add(result.data()['imageid']);
+              printImages();
+            });
           });
         });
-      }); 
+      });
     });
   }
 
   void returnFollowers() async {
     FirebaseFirestore.instance
-    .collection("users")
-    .where("username", isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
+        .collection("users")
+        .where("username", isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
       setState(() {
-         followers = querySnapshot.docs[0].data()['followers'];
-      following = querySnapshot.docs[0].data()['following'];     
-            });
-      
-      setState(() {
-              
-            });
+        followers = querySnapshot.docs[0].data()['followers'];
+        following = querySnapshot.docs[0].data()['following'];
+      });
+
+      setState(() {});
     });
   }
-
-  
 
   printImages() {
     return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
           Navigator.push(
-            context, 
+            context,
             MaterialPageRoute(
-              builder: (context) => PostPage(Constants.myName, posts[index])
-            ),
+                builder: (context) => PostPage(Constants.myName, posts[index])),
           );
         },
         child: Container(
@@ -174,17 +166,15 @@ class _Profile1State extends State<Profile> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 36,
+                        height: size.height * 0.05,
                       ),
                       GestureDetector(
-                        onTap: () { 
+                        onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Reward();
-                              }
-                            ),
+                            MaterialPageRoute(builder: (context) {
+                              return Reward();
+                            }),
                           );
                         },
                         child: CircleAvatar(
@@ -195,12 +185,12 @@ class _Profile1State extends State<Profile> {
                             radius: 48,
                             backgroundImage:
                                 AssetImage(Constants.myProfilePic.toString()),
-                                backgroundColor: Colors.transparent,
+                            backgroundColor: Colors.transparent,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 16,
+                        height: size.height * 0.00925,
                       ),
                       Text(
                         Constants.myName,
@@ -211,7 +201,7 @@ class _Profile1State extends State<Profile> {
                         ),
                       ),
                       SizedBox(
-                        height: 4,
+                        height: size.height * 0.00625,
                       ),
                       Text(
                         "SocialIO " + Constants.accType,
@@ -224,7 +214,7 @@ class _Profile1State extends State<Profile> {
                         child: Container(),
                       ),
                       Container(
-                        height: 64,
+                        height: size.height * 0.075,
                         color: Colors.black.withOpacity(0.4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -248,7 +238,7 @@ class _Profile1State extends State<Profile> {
                                     height: 4,
                                   ),
                                   Text(
-                                   followers.toString(),
+                                    followers.toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
