@@ -162,8 +162,8 @@ void updateFollowers() async {
   }
 
   void decrementFollowers() async {
-    followerslist.remove(Constants.myName);
     if (followerslist.contains(Constants.myName)) {
+      followerslist.remove(Constants.myName);
        followers--;
     FirebaseFirestore.instance
     .collection('users')
