@@ -694,6 +694,12 @@ class _PostsState extends State<Posts> {
                   //This column contains username, upload description and total upvotes
                   children: <Widget>[
                     Container(
+                      //The total upvotes of post
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: getUpvotes(userIndex),
+                    ),
+                    Container(
                       //The person who posted along with photo description
                       alignment: returnCommentAlignment(),
                       margin: EdgeInsets.only(left: 10, right: 10),
@@ -717,12 +723,7 @@ class _PostsState extends State<Posts> {
                             TextSpan(text: captions[userIndex]),
                           ])),
                     ),
-                    Container(
-                      //The total upvotes of post
-                      alignment: returnCommentAlignment(),
-                      margin: EdgeInsets.only(left: 10, right: 10),
-                      child: getUpvotes(userIndex),
-                    )
+                    
                   ],
                 ),
                 Column(
