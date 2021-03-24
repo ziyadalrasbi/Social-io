@@ -29,6 +29,7 @@ class _UserProfile1State extends State<UserProfile> {
   List<String> images = [];
   List posts = [];
   String profilepic = "";
+  String profilebanner = "";
   String accType = "";
   var url;
 
@@ -90,6 +91,7 @@ class _UserProfile1State extends State<UserProfile> {
     .then((querySnapshot) {
       querySnapshot.docs.forEach((result) { 
         profilepic = result.data()['profilepic'].toString();
+        profilebanner = result.data()['banner'].toString();
       });
     });
   }
@@ -328,7 +330,7 @@ void updateFollowers() async {
                   height: size.height * 0.55,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/background.jpg"),
+                      image: AssetImage(profilebanner),
                       fit: BoxFit.cover,
                     ),
                   ),

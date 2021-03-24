@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/profile/profile_appbar.dart';
+import 'package:socialio/pages/profile/profile_banner.dart';
 import 'package:socialio/pages/profile/profile_pic.dart';
 
 
@@ -88,6 +90,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           ),
           GestureDetector(
             onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => ProfileBanner()
+                  ),
+                );
             },
             child: Container(
               color: Colors.white,
@@ -127,7 +135,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
-                    
                     Text(
                       "Edit Profile Border", 
                       style: TextStyle(
@@ -154,6 +161,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
           
           GestureDetector(
             onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => ProfileAppBar()
+                  ),
+                );
             },
             child: Container(
               color: Colors.white,

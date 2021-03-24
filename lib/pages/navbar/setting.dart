@@ -272,7 +272,7 @@ cancelSignOut(BuildContext context) {
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
     onPressed:  () {
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
   Widget continueButton = FlatButton(

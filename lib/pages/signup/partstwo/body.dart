@@ -40,7 +40,7 @@ class _BodyState extends State<Body> {
   List followinglist = [];
   List likedposts = [];
   int totallikes = 0;
-  String appbar = "assets/appbars/TOPBARNEW.png";
+  String appbar = "assets/appbars/Original.png";
   String banner = "assets/banners/nightsky/nightsky3.png";
   String border = "";
   String profilepic = "assets/images/wrestler.png";
