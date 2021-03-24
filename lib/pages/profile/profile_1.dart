@@ -5,7 +5,7 @@ import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/profile/post_page.dart';
-import 'package:socialio/pages/profile/reward.dart';
+import 'package:socialio/pages/profile/profile_pic.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -187,14 +187,6 @@ class _Profile1State extends State<Profile> {
                         
                         GestureDetector(
                           onTap: () { 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Reward();
-                                }
-                              ),
-                            );
                           },
                           child: CircleAvatar(
                             radius: 48,

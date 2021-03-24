@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/parts/button.dart';
@@ -7,12 +5,12 @@ import 'package:socialio/parts/button.dart';
 import '../../constants.dart';
 import '../../helpers.dart';
 
-class Reward extends StatefulWidget {
+class ProfilePicPage extends StatefulWidget {
   @override
-  _RewardState createState() => _RewardState();
+  _ProfilePicPageState createState() => _ProfilePicPageState();
 }
 
-class _RewardState extends State<Reward> {
+class _ProfilePicPageState extends State<ProfilePicPage> {
 List<String> animalprofilepics = [
   "assets/profilepics/animals/animal1.png",
   "assets/profilepics/animals/animal2.png",
@@ -36,9 +34,14 @@ String chosen = "";
 
 @override
   void initState() {
+    getUserInfo();
     printImages();
     displayPics();
     super.initState();
+  }
+
+  getUserInfo() async {
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
   }
 
 printImages() {
@@ -123,20 +126,20 @@ updateUploadProfilePics() async {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-          backgroundColor: Colors.blue,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-            Image.asset(
-              "assets/icons/LOGONEW.png", 
-              height: 50, 
-              alignment: Alignment.center,
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
             ),
-          ],
+          ),
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: Column(
         children: <Widget>[

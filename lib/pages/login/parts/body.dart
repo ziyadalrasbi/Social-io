@@ -90,6 +90,9 @@ class _BodyState extends State<Body> {
                 HelperFunction.saveUserFollowersSharedPref(querySnapshot.docs[0].data()['followers']);
                 HelperFunction.saveUserFollowingSharedPref(querySnapshot.docs[0].data()['following']);
                 HelperFunction.saveProfilePicSharedPref(querySnapshot.docs[0].data()['profilepic']);
+                HelperFunction.saveProfileBarSharedPref(querySnapshot.docs[0].data()['appbar']);
+                HelperFunction.saveProfileBorderSharedPref(querySnapshot.docs[0].data()['border']);
+                HelperFunction.saveProfileBannerSharedPref(querySnapshot.docs[0].data()['banner']);
               }); 
               try {
                 UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(

@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:socialio/pages/navbar/comments.dart';
 import 'package:socialio/pages/navbar/report_panel.dart';
 import 'package:socialio/pages/navbar/search/user_profile.dart';
 import 'package:socialio/parts/input_field_box.dart';
@@ -61,6 +62,7 @@ class _PostPageState extends State<PostPage> {
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     upvotes[postCount] = await HelperFunction.getPostUpvotesSharedPref();
     setState(() {});
   }
@@ -160,7 +162,7 @@ class _PostPageState extends State<PostPage> {
     });
   }
 
-  void addComment(int index) async {
+   void addComment(int index) async {
     FirebaseFirestore.instance
         .collection('uploads')
         .doc(usernames[index])
@@ -177,7 +179,7 @@ class _PostPageState extends State<PostPage> {
               .doc(result.id)
               .collection('comments')
               .add(
-                  {'commenter': Constants.myName, 'comment': commentText.text});
+                  {'commenter': Constants.myName, 'comment': commentText.text, 'imageid': posts[index], 'time': DateTime.now().millisecondsSinceEpoch});
         });
       });
     });
@@ -354,7 +356,7 @@ returnWidth() {
         index:index,
         reason:rep1
       );
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       confirmReport(context);
     },
   );
@@ -365,7 +367,7 @@ returnWidth() {
         index:index,
         reason:rep2
       );
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       confirmReport(context);
     },
   );
@@ -376,7 +378,7 @@ returnWidth() {
         index:index,
         reason:rep3
       );
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       confirmReport(context);
     },
   );
@@ -387,7 +389,7 @@ returnWidth() {
         index:index,
         reason:rep4
       );
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       confirmReport(context);
     },
   );
@@ -398,7 +400,7 @@ returnWidth() {
         index:index,
         reason:rep5
       );
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       confirmReport(context);
     },
   );
@@ -428,17 +430,25 @@ returnWidth() {
 editPost(int index, BuildContext context) {
     String rep1 = "Edit caption";
     String rep2 = "Delete post";
+    String cancel = "Cancel";
   // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text(cancel),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
   Widget editButton = FlatButton(
     child: Text(rep1),
     onPressed:  () {
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
   Widget deleteButton = FlatButton(
     child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
     onPressed:  () {
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       confirmDelete(index, context);
     },
   );
@@ -448,6 +458,7 @@ editPost(int index, BuildContext context) {
     title: Text("Edit Post"),
     content: Text("Select an option to edit this post."),
     actions: [
+      cancelButton,
       editButton,
       deleteButton,
     ],
@@ -469,14 +480,14 @@ confirmDelete(int index, BuildContext context) {
   Widget cancelButton = FlatButton(
     child: Text(rep1),
     onPressed:  () {
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
   Widget deleteButton = FlatButton(
     child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
     onPressed:  () {
       deletePost(index);
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
       
     },
   );
@@ -528,7 +539,7 @@ confirmReport(BuildContext context) {
   Widget confirmButton = FlatButton(
     child: Text("OK"),
     onPressed:  () {
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
 
@@ -563,7 +574,7 @@ commentPopUp(int index, BuildContext context) {
     child: Text("Comment"),
     onPressed: (){
       addComment(index);
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     } 
   );
 
@@ -839,68 +850,30 @@ commentPopUp(int index, BuildContext context) {
                 //This column contains username and comment of commenters
                 children: <Widget>[
                   Container(
-                    //First comment
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text:
-                                  'HarperEvans1: ', //will be a username from firebase
-                              style: TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  print(
-                                      'This will take to profile of that person');
-                                }),
-                          TextSpan(text: 'Nice photo!'),
-                        ])),
-                  ),
-                  Container(
-                    //Second comment
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text:
-                                  'trevorwilkinson: ', //will be a username from firebase
-                              style: TextStyle(color: Colors.blue),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  print(
-                                      'This will take to profile of that person');
-                                }),
-                          TextSpan(
-                              text:
-                                  'Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda Panda'),
-                        ])),
-                  ),
-                  Container(
-                    //view more comments
-                    alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: RichText(
-                        text: TextSpan(
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 20.0),
-                            children: <TextSpan>[
-                          TextSpan(
-                              text:
-                                  'view more comments', //will take to the comments
-                              style: TextStyle(color: Colors.grey),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  print('This will take to comments');
-                                }),
-                        ])),
-                  )
+                      //view more comments
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style:
+                                  TextStyle(color: Colors.blue[900], fontSize: 20.0),
+                              children: <TextSpan>[
+                            TextSpan(
+                                text:
+                                    'view comments', //will take to the comments
+                                style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CommentPage(
+                                              posts[userIndex],
+                                              usernames[userIndex])),
+                                    );
+                                  }),
+                          ])),
+                    ),
                 ],
               )
             ],
@@ -911,20 +884,20 @@ commentPopUp(int index, BuildContext context) {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.blue,
-          centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-            Image.asset(
-              "assets/icons/LOGONEW.png", 
-              height: 50, 
-              alignment: Alignment.center,
+        centerTitle: true,
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
             ),
-          ],
+          ),
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: _getPost(),
     );

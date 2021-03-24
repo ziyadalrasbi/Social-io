@@ -1,23 +1,16 @@
-import 'package:socialio/constants.dart';
-import 'package:socialio/form_authentication.dart';
-import 'package:socialio/helpers.dart';
-import 'package:socialio/pages/home/home_page.dart';
-import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:socialio/pages/navbar/bottombar.dart';
-import 'package:socialio/pages/navbar/profile_settings.dart';
-import 'package:socialio/parts/button.dart';
+import 'package:socialio/constants.dart';
+import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/profile/profile_pic.dart';
 
-class Setup_page extends StatefulWidget {
+
+
+class ProfileSettings extends StatefulWidget {
   @override
-  _Setup_pageState createState() => _Setup_pageState();
+  _ProfileSettingsState createState() => _ProfileSettingsState();
 }
 
-class _Setup_pageState extends State<Setup_page> {
-  final _bottomNavigationColor = Colors.blue;
-
-  int _currentIndex = 4;
-
+class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   void initState() {
     getUserInfo();
@@ -33,7 +26,6 @@ class _Setup_pageState extends State<Setup_page> {
       
       appBar: AppBar(
         centerTitle: true,
-        automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: dimensions.width * 0.5,
           decoration: BoxDecoration(
@@ -58,42 +50,10 @@ class _Setup_pageState extends State<Setup_page> {
           ),
           GestureDetector(
             onTap: (){
-            },
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                    
-                    Text(
-                      "Account Information", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: (){
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => ProfileSettings()
+                  builder: (context) => ProfilePicPage()
                   ),
                 );
             },
@@ -104,7 +64,39 @@ class _Setup_pageState extends State<Setup_page> {
                 children: [
                     
                     Text(
-                      "Profile Settings", 
+                      "Edit Profile Picture", 
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      
+                      alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                    
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
+            onTap: (){
+            },
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                    
+                    Text(
+                      "Edit Profile Banner", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -137,7 +129,7 @@ class _Setup_pageState extends State<Setup_page> {
                 children: [
                     
                     Text(
-                      "Preferences", 
+                      "Edit Profile Border", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -170,74 +162,7 @@ class _Setup_pageState extends State<Setup_page> {
                 children: [
                     
                     Text(
-                      "Help", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          
-          GestureDetector(
-            onTap: (){
-            },
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                    
-                    Text(
-                      "About Us", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          
-          GestureDetector(
-            onTap: (){
-              cancelSignOut(context);
-            },
-            child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                    
-                    Text(
-                      "Sign Out", 
+                      "Edit Appbar", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -263,46 +188,4 @@ class _Setup_pageState extends State<Setup_page> {
       )),
     );
   }
-}
-
-
-cancelSignOut(BuildContext context) {
-
-  // set up the buttons
-  Widget cancelButton = FlatButton(
-    child: Text("Cancel"),
-    onPressed:  () {
-      Navigator.of(context).pop();
-    },
-  );
-  Widget continueButton = FlatButton(
-    child: Text("Sign Out"),
-    onPressed:  () {
-      signOut();
-      Navigator.pushReplacement(
-        context, 
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Sign Out"),
-    content: Text("Are you sure you want to sign out?"),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }
