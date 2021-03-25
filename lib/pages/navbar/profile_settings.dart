@@ -60,7 +60,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 );
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -98,7 +98,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 );
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -131,7 +131,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             onTap: (){
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -169,7 +169,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 );
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [

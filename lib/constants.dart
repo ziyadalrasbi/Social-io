@@ -19,8 +19,9 @@ class Constants {
   static String myAppBar = "";
   static String myAppBanner = "";
   static String myAppBorder = "";
-}
+  static bool DarkModeBool = false;
 
+}
 class ThemeChange with ChangeNotifier {
   ThemeData _themeData;
 

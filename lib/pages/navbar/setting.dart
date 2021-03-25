@@ -1,7 +1,9 @@
 import 'package:socialio/constants.dart';
 import 'package:socialio/form_authentication.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/darkmode/darkmode.dart';
 import 'package:socialio/pages/home/home_page.dart';
+import 'package:socialio/pages/lightmode/lightmode.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/pages/navbar/bottombar.dart';
@@ -60,7 +62,7 @@ class _Setup_pageState extends State<Setup_page> {
             onTap: (){
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -98,7 +100,7 @@ class _Setup_pageState extends State<Setup_page> {
                 );
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -129,9 +131,20 @@ class _Setup_pageState extends State<Setup_page> {
           
           GestureDetector(
             onTap: (){
+              if (Constants.DarkModeBool == true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DarkMode()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LightMode()),
+                );
+              }
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -164,7 +177,7 @@ class _Setup_pageState extends State<Setup_page> {
             onTap: (){
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -197,7 +210,7 @@ class _Setup_pageState extends State<Setup_page> {
             onTap: (){
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
@@ -231,7 +244,7 @@ class _Setup_pageState extends State<Setup_page> {
               cancelSignOut(context);
             },
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [

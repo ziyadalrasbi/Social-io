@@ -24,10 +24,17 @@ List<String> taggedUsers = [];
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(brightness: Brightness.light),
-      home: ImageCapture(),
-    );
+    if (Constants.DarkModeBool == true) {
+      return MaterialApp(
+        theme: ThemeData(brightness: Brightness.dark),
+        home: ImageCapture(),
+      );
+    } else {
+      return MaterialApp(
+        theme: ThemeData(brightness: Brightness.light),
+        home: ImageCapture(),
+      );
+    }
   }
 }
 
