@@ -9,6 +9,10 @@ class AuthService {
   Stream<User> get authStateChanges => _firebaseAuth.idTokenChanges();
 
   
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+  }
+
 
   Future<String> logIn({String email, String pass}) async {
     try {
@@ -50,13 +54,5 @@ String banner, String border, int totallikes, List savedposts) async {
       return;
 }
 
-  Future signOut() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    try {
-      return await auth.signOut();
-    } catch(e) {
-
-    }
-  }
-
+  
   

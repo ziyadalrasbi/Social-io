@@ -1170,7 +1170,7 @@ class _SavedPostsState extends State<SavedPosts> {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          automaticallyImplyLeading: false,
+          
           flexibleSpace: Container(
             width: size.width * 0.5,
             decoration: BoxDecoration(
@@ -1188,7 +1188,7 @@ class _SavedPostsState extends State<SavedPosts> {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          automaticallyImplyLeading: false,
+          
           flexibleSpace: Container(
             width: size.width * 0.5,
             decoration: BoxDecoration(

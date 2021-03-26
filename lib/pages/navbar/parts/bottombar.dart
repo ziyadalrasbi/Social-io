@@ -150,6 +150,7 @@ class _BottomBar extends State<BottomBar> {
   Widget build(BuildContext context) {
     if (Constants.DarkModeBool == false) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: this._pageList[this._currentIndex],
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -252,6 +253,7 @@ class _BottomBar extends State<BottomBar> {
       );
     } else {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: this._pageList[this._currentIndex],
         floatingActionButton: FloatingActionButton(
           onPressed: () {

@@ -146,6 +146,7 @@ Widget listSearch() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[

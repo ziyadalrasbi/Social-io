@@ -113,6 +113,7 @@ class _ChatSearchState extends State<ChatSearch> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         flexibleSpace: Container(

@@ -26,16 +26,19 @@ class _ConversationRoomState extends State<ConversationRoom> {
 
 
   Widget MessageList() {
-    return StreamBuilder(
-      stream: textStream,
-      builder: (context, snapshot) {
-        return snapshot.hasData ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
-          itemBuilder: (context, index){
-            return TextTile(snapshot.data.docs[index].data()["message"],
-            snapshot.data.docs[index].data()["sentBy"] == Constants.myName);          
-            }) : Container();
-      },
+    return Container(
+      margin: EdgeInsets.only(bottom: 80),
+      child: StreamBuilder(
+        stream: textStream,
+        builder: (context, snapshot) {
+          return snapshot.hasData ? ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (context, index){
+              return TextTile(snapshot.data.docs[index].data()["message"],
+              snapshot.data.docs[index].data()["sentBy"] == Constants.myName);          
+              }) : Container();
+        },
+      ),
     );
   }
 
@@ -70,6 +73,7 @@ class _ConversationRoomState extends State<ConversationRoom> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         flexibleSpace: Container(
@@ -88,17 +92,23 @@ class _ConversationRoomState extends State<ConversationRoom> {
         child: Stack(
           children: [
             MessageList(),
+            
             Container(
               alignment: Alignment.bottomCenter,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Row(
                   children: [
+                    
                     Expanded(
-                      child: InputField(
-                        color: Colors.blueGrey[200],
-                        control: messageController,
-                        hint: "Message...",
+                      child: TextField(
+                        controller: messageController,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: "Message...",
+                          hintStyle: TextStyle(color: Colors.white54),
+                          border: InputBorder.none
+                        ),
                       ),
                     ),
                     GestureDetector(
@@ -116,6 +126,7 @@ class _ConversationRoomState extends State<ConversationRoom> {
                 ),
               ),
             ),
+            
           ],
         ),
       ),
@@ -133,21 +144,27 @@ class TextTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: sentByMe ? 0: 24, right: sentByMe ? 24 : 0),
+      padding: EdgeInsets.only(left: sentByMe ? 0: 16, right: sentByMe ? 16 : 0),
       margin: EdgeInsets.symmetric(vertical: 8),
       width: MediaQuery.of(context).size.width,
       alignment: sentByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 13),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: sentByMe ? [
-              primaryDarkColour,
+            colors: Constants.DarkModeBool == false ? (sentByMe ? [
+              Colors.indigo[600],
+              Colors.indigo[600],
+            ] :
+            [ Colors.indigo[300],
+              Colors.indigo[300],
+            ]) : (sentByMe ? [
+              Colors.white,
               Colors.white,
             ] :
-            [ primaryDarkColour,
-              Colors.white,
-            ],
+            [ Colors.black54,
+              Colors.black54,
+            ]), 
           ),
           borderRadius: sentByMe ?
           BorderRadius.only(
@@ -164,6 +181,7 @@ class TextTile extends StatelessWidget {
       child: Text(
         message, 
         style: TextStyle(
+          color: sentByMe ? Colors.black : Colors.white,
           fontSize: 16
           ),
       ),

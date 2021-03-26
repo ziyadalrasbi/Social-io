@@ -45,6 +45,7 @@ class _PostsState extends State<Posts> {
   List comments = [];
   List commenters = [];
   List savedposts = [];
+  List myfollowing = [];
   StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
 
@@ -58,6 +59,7 @@ class _PostsState extends State<Posts> {
   @override
   void initState() {
     getUserInfo();
+    getMyFollowing();
     getSavedPosts();
     checkImages();
     getLikedPosts();
@@ -73,12 +75,11 @@ class _PostsState extends State<Posts> {
         FirebaseFirestore.instance
             .collection("uploads")
             .doc(result.id)
-            .collection("images")
-            .where('imageid', isNotEqualTo: null)
-            .orderBy('time', descending: true)
+            .collection("images").orderBy('time', descending: true)
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {
+            if (myfollowing.contains(result.data()['username']) || result.data()['username'] == Constants.myName) {
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
             url = await ref.getDownloadURL();
@@ -94,7 +95,22 @@ class _PostsState extends State<Posts> {
               }
               _getPost();
             });
+            }
           });
+        });
+      });
+    });
+  }
+
+  void getMyFollowing() async {
+    FirebaseFirestore.instance
+    .collection("users")
+    .where("username", isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        myfollowing = result.data()['followinglist'];
+        setState(() {
         });
       });
     });
@@ -532,6 +548,7 @@ class _PostsState extends State<Posts> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      
       title: Text("Send Report"),
       content: Text("What would you like to report this post for?"),
       actions: [
@@ -584,7 +601,7 @@ class _PostsState extends State<Posts> {
   commentPopUp(int index, BuildContext context) {
     // set up the buttons
     Widget commentButton = InputField(
-      hint: "Add comment",
+      hint: "Comment...",
       control: commentText,
     );
 
@@ -1170,6 +1187,7 @@ class _PostsState extends State<Posts> {
     Size size = MediaQuery.of(context).size;
     if (Constants.DarkModeBool == false) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
           automaticallyImplyLeading: false,

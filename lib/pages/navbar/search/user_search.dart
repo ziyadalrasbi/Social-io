@@ -106,6 +106,7 @@ class _UserSearchState extends State<UserSearch> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,

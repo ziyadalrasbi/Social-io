@@ -224,13 +224,14 @@ void updateFollowers() async {
 
   returnFollowButton() {
     Size size = MediaQuery.of(context).size;
+    if (widget.userName != Constants.myName) {
     if (!myfollowing.contains(widget.userName)) {
       return Container(
-        color: Colors.blue,
+        color: Colors.indigo[600],
         child: FlatButton(
           height: size.height * 0.01,
           minWidth: 200,
-          color: Colors.blue,
+          color: Colors.indigo[600],
           child: Text("Follow"),
           onPressed: () async {
               setState(() {
@@ -257,6 +258,9 @@ void updateFollowers() async {
           },  
           ),
       );
+    }
+    } else {
+      return Container();
     }
   }
 
@@ -346,13 +350,15 @@ void updateFollowers() async {
                           height: size.height*0.015,
                         ),
                       GestureDetector(
-                        onTap: checkUser,
-                        child: CircleAvatar(
-                          radius: 48,
-                          backgroundImage:
-                              AssetImage(profilepic),
+                          onTap: () { 
+                          },
+                          child: CircleAvatar(
+                            radius: 48,
+                            backgroundImage:
+                                AssetImage(profilepic),
+                            backgroundColor: Colors.transparent,
+                          ),
                         ),
-                      ),
                       SizedBox(
                         height: 16,
                       ),
@@ -374,9 +380,11 @@ void updateFollowers() async {
                           fontSize: 14,
                         ),
                       ),
+                      
                       Expanded(
                         child: Container(),
                       ),
+                      
                       returnFollowButton(),
                       
                       SizedBox(height: 20),

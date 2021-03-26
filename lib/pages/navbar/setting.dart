@@ -10,7 +10,9 @@ import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/pages/navbar/parts/bottombar.dart';
 import 'package:socialio/pages/navbar/profile_settings.dart';
+import 'package:socialio/pages/navbar/saved_posts.dart';
 import 'package:socialio/parts/button.dart';
+import 'package:provider/provider.dart';
 
 class Setup_page extends StatefulWidget {
   @override
@@ -175,6 +177,39 @@ class _Setup_pageState extends State<Setup_page> {
             height: 2,
           ),
           GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SavedPosts()),
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                  Text(
+                    "Saved Images",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
             onTap: () {},
             child: Container(
               color: Colors.transparent,
@@ -282,13 +317,9 @@ cancelSignOut(BuildContext context) {
   Widget continueButton = FlatButton(
     child: Text("Sign Out"),
     onPressed: () {
-      signOut();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
+      Navigator.of(context, rootNavigator: true).pop();
+      context.read<AuthService>().signOut();
+      
     },
   );
 
