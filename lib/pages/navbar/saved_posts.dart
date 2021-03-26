@@ -5,26 +5,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:socialio/database.dart';
+import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/navbar/comments.dart';
-import 'package:socialio/pages/navbar/report_panel.dart';
 import 'package:socialio/pages/navbar/search/user_profile.dart';
 import 'package:socialio/parts/input_field_box.dart';
 
 import '../../constants.dart';
-import '../../database.dart';
-import '../../helpers.dart';
 
-class PostPage extends StatefulWidget {
-  final String userName;
-  final String imageId;
 
-  PostPage(this.userName, this.imageId);
-  
+class SavedPosts extends StatefulWidget {
   @override
-  _PostPageState createState() => _PostPageState();
+  _SavedPostsState createState() => _SavedPostsState();
 }
 
-class _PostPageState extends State<PostPage> {
+class _SavedPostsState extends State<SavedPosts> {
   bool isVisible = true;
 
   //Assets used will be replaced with json
@@ -69,7 +64,7 @@ class _PostPageState extends State<PostPage> {
 
   checkImages() async {
     FirebaseFirestore.instance
-        .collection("uploads").where('username', isEqualTo: widget.userName)
+        .collection("uploads")
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
@@ -77,11 +72,12 @@ class _PostPageState extends State<PostPage> {
             .collection("uploads")
             .doc(result.id)
             .collection("images")
-            .where('imageid', isEqualTo: widget.imageId)
-            
+            .where('imageid', isNotEqualTo: null)
+            .orderBy('time', descending: true)
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {
+            if (savedposts.contains(result.data()['imageid'])) {
             final ref =
                 FirebaseStorage.instance.ref().child(result.data()['imageid']);
             url = await ref.getDownloadURL();
@@ -97,10 +93,82 @@ class _PostPageState extends State<PostPage> {
               }
               _getPost();
             });
+            }
           });
         });
       });
     });
+  }
+
+  returnSaveColor(int index) {
+    if (savedposts != null) {
+      if (savedposts.contains(posts[index])) {
+        return Colors.blue;
+      } else {
+        return Colors.transparent;
+      }
+    } else {
+      return Colors.transparent;
+    }
+  }
+
+  getSavedPosts() async {
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        setState(() {
+          if (result.data()['savedposts'] != null) {
+            savedposts = result.data()['savedposts'];
+          }
+        });
+      });
+    });
+  }
+  addSavedPost(int index) async {
+    if (!savedposts.contains(posts[index])) {
+      savedposts.add(posts[index]);
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'savedposts': savedposts});
+        setState(() {
+          _getPost();
+        });
+      });
+    });
+    } else {
+      removeSavedPost(index);
+    }
+  }
+
+  removeSavedPost(int index) async {
+    if (savedposts.contains(posts[index])) {
+      savedposts.remove(posts[index]);
+      FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'savedposts': savedposts});
+        setState(() {
+          _getPost();
+        });
+      });
+    });
+    }
   }
 
   getUpvotes(int index) {
@@ -338,22 +406,9 @@ class _PostPageState extends State<PostPage> {
       });
     }
   }
-
   returnUpvoteColor(int index) {
     if (likedposts != null) {
       if (likedposts.contains(posts[index])) {
-        return Colors.blue;
-      } else {
-        return Colors.transparent;
-      }
-    } else {
-      return Colors.transparent;
-    }
-  }
-
-  returnSaveColor(int index) {
-    if (savedposts != null) {
-      if (savedposts.contains(posts[index])) {
         return Colors.blue;
       } else {
         return Colors.transparent;
@@ -372,65 +427,6 @@ class _PostPageState extends State<PostPage> {
       }
     } else {
       return Colors.transparent;
-    }
-  }
-
-  getSavedPosts() async {
-    FirebaseFirestore.instance
-    .collection('users')
-    .where('username', isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
-        setState(() {
-          if (result.data()['savedposts'] != null) {
-            savedposts = result.data()['savedposts'];
-          }
-        });
-      });
-    });
-  }
-  addSavedPost(int index) async {
-    if (!savedposts.contains(posts[index])) {
-      savedposts.add(posts[index]);
-    FirebaseFirestore.instance
-    .collection('users')
-    .where('username', isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
-        FirebaseFirestore.instance
-        .collection('users')
-        .doc(result.id)
-        .update({'savedposts': savedposts});
-        setState(() {
-          _getPost();
-        });
-      });
-    });
-    } else {
-      removeSavedPost(index);
-    }
-  }
-
-  removeSavedPost(int index) async {
-    if (savedposts.contains(posts[index])) {
-      savedposts.remove(posts[index]);
-      FirebaseFirestore.instance
-    .collection('users')
-    .where('username', isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
-        FirebaseFirestore.instance
-        .collection('users')
-        .doc(result.id)
-        .update({'savedposts': savedposts});
-        setState(() {
-          _getPost();
-        });
-      });
-    });
     }
   }
 
@@ -457,141 +453,6 @@ class _PostPageState extends State<PostPage> {
     } else {
       return Alignment.topLeft;
     }
-  }
-
-  editPost(int index, BuildContext context) {
-    String rep1 = "Edit caption";
-    String rep2 = "Delete post";
-    String cancel = "Cancel";
-  // set up the buttons
-  Widget cancelButton = FlatButton(
-    child: Text(cancel),
-    onPressed:  () {
-      Navigator.of(context, rootNavigator: true).pop();
-    },
-  );
-
-  Widget editButton = FlatButton(
-    child: Text(rep1),
-    onPressed:  () {
-      Navigator.of(context, rootNavigator: true).pop();
-    },
-  );
-  Widget deleteButton = FlatButton(
-    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
-    onPressed:  () {
-      Navigator.of(context, rootNavigator: true).pop();
-      confirmDelete(index, context);
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Edit Post"),
-    content: Text("Select an option to edit this post."),
-    actions: [
-      cancelButton,
-      editButton,
-      deleteButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-confirmDelete(int index, BuildContext context) {
-    String rep1 = "Cancel";
-    String rep2 = "Confirm";
-  // set up the buttons
-  Widget cancelButton = FlatButton(
-    child: Text(rep1),
-    onPressed:  () {
-      Navigator.of(context, rootNavigator: true).pop();
-    },
-  );
-  Widget deleteButton = FlatButton(
-    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
-    onPressed:  () {
-      deletePost(index);
-      Navigator.of(context, rootNavigator: true).pop();
-      
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Delete Post"),
-    content: Text("Are you sure you want to delete this post? This action cannot be undone."),
-    actions: [
-      cancelButton,
-      deleteButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-returnReportColor() {
-  if (Constants.DarkModeBool == false) {
-    return Image.asset('assets/pictures/ICON_flag.png');
-  } else {
-    return Image.asset('assets/pictures/DARKICON_flag.png');
-  }
-}
-
-returnReportButton(int index) {
-    if (widget.userName != Constants.myName) {
-      return IconButton(
-        icon: returnReportColor(),
-        iconSize: 25,
-        onPressed: () {
-          reportUser(index, context);
-    
-        },
-      );
-    } else {
-      return IconButton(
-        icon: Icon(Icons.edit),
-        iconSize: 25,
-        onPressed: () {
-          editPost(index, context);
-    
-        },
-      );
-    }
-  }
-
-void deletePost(int index) async {
-  FirebaseFirestore.instance
-    .collection('uploads')
-    .doc(Constants.myName)
-    .collection('images')
-    .where('imageid', isEqualTo: posts[index])
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async { 
-        setState(() {     
-          FirebaseFirestore.instance
-          .collection('uploads')
-          .doc(Constants.myName)
-          .collection('images')
-          .doc(result.id)
-          .delete();  
-          });
-      });
-    });
   }
 
   reportUser(int index, BuildContext context) {
@@ -861,7 +722,13 @@ void deletePost(int index) async {
                           )
                         ],
                       ),
-                      returnReportButton(userIndex),
+                      IconButton(
+                        icon: Image.asset('assets/pictures/ICON_flag.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          reportUser(userIndex, context);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -873,7 +740,6 @@ void deletePost(int index) async {
                         onTap: () {
                           if (isVisible == false)
                             setState(() {
-                              
                               isVisible = true;
                             });
                           else
@@ -953,7 +819,7 @@ void deletePost(int index) async {
                                 'This will let a user send the post to another user');
                           },
                         )),
-                    Container(
+                        Container(
                       color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
                         child: IconButton(
@@ -1104,7 +970,13 @@ void deletePost(int index) async {
                           )
                         ],
                       ),
-                      returnReportButton(userIndex),
+                      IconButton(
+                        icon: Image.asset('assets/icons/DARKICON_flag.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          reportUser(userIndex, context);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -1196,11 +1068,11 @@ void deletePost(int index) async {
                                 'This will let a user send the post to another user');
                           },
                         )),
-                    Container(
+                        Container(
                       color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
                         child: IconButton(
-                          icon: Image.asset('assets/icons/DARKICON_save.png'),
+                          icon: Image.asset('assets/pictures/ICON_save.png'),
                           iconSize: 25,
                           onPressed: () {
                             setState(() {
@@ -1298,6 +1170,7 @@ void deletePost(int index) async {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             width: size.width * 0.5,
             decoration: BoxDecoration(
@@ -1308,7 +1181,6 @@ void deletePost(int index) async {
             ),
           ),
           backgroundColor: Colors.transparent,
-          
         ),
         body: _getPost(),
       );
@@ -1316,6 +1188,7 @@ void deletePost(int index) async {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             width: size.width * 0.5,
             decoration: BoxDecoration(

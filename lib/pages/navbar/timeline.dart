@@ -26,22 +26,8 @@ class _PostsState extends State<Posts> {
 
   //Assets used will be replaced with json
 
-  List<ExactAssetImage> displayPic = [
-    ExactAssetImage('assets/pictures/giraffepic.jpg'),
-    ExactAssetImage('assets/pictures/boat.jpg'),
-    ExactAssetImage('assets/pictures/city.jpg')
-  ];
-  List<String> userPosts = ['Daniel', 'Hollie', 'Giraffe'];
-  List<ExactAssetImage> userPostImage = [
-    ExactAssetImage('assets/pictures/panda.jpg'),
-    ExactAssetImage('assets/pictures/edinburgh.jpg'),
-    ExactAssetImage('assets/pictures/water.jpeg')
-  ];
-
-  List<String> test;
   var url;
-  int postCount = 0;
-  List<String> postUpvotes = ['76,263', '243,503', '54'];
+  
   String posterName;
   bool upVoted = false;
   bool downVoted = false;
@@ -58,6 +44,7 @@ class _PostsState extends State<Posts> {
   List profilepics = [];
   List comments = [];
   List commenters = [];
+  List savedposts = [];
   StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
 
@@ -71,6 +58,7 @@ class _PostsState extends State<Posts> {
   @override
   void initState() {
     getUserInfo();
+    getSavedPosts();
     checkImages();
     getLikedPosts();
     super.initState();
@@ -254,6 +242,35 @@ class _PostsState extends State<Posts> {
           });
         });
       });
+    } else {
+      unIncrementUpvotes(index);
+    }
+  }
+
+  void unIncrementUpvotes(int index) async {
+    if (likedposts.contains(posts[index]) && !downvotedposts.contains(posts[index])) {
+      upvotes[index]--;
+      likedposts.remove(posts[index]);
+      addLikedPost();
+      upVoted = false;
+       FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .where('caption', isEqualTo: captions[index])
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) async {
+          FirebaseFirestore.instance
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .update({
+            'upvotes': upvotes[index],
+          });
+        });
+      });
     }
   }
 
@@ -288,12 +305,53 @@ class _PostsState extends State<Posts> {
           });
         });
       });
+    } else {
+      unDecrementUpvotes(index);
+    }
+  }
+
+  void unDecrementUpvotes(int index) async {
+    if (downvotedposts.contains(posts[index]) && !likedposts.contains(posts[index])) {
+      upvotes[index]++;
+      downvotedposts.remove(posts[index]);
+      addDownvotedPost();
+      downVoted = false;
+       FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .where('caption', isEqualTo: captions[index])
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) async {
+          FirebaseFirestore.instance
+              .collection('uploads')
+              .doc(usernames[index])
+              .collection('images')
+              .doc(result.id)
+              .update({
+            'upvotes': upvotes[index],
+          });
+        });
+      });
     }
   }
 
   returnUpvoteColor(int index) {
     if (likedposts != null) {
       if (likedposts.contains(posts[index])) {
+        return Colors.blue;
+      } else {
+        return Colors.transparent;
+      }
+    } else {
+      return Colors.transparent;
+    }
+  }
+
+  returnSaveColor(int index) {
+    if (savedposts != null) {
+      if (savedposts.contains(posts[index])) {
         return Colors.blue;
       } else {
         return Colors.transparent;
@@ -312,6 +370,65 @@ class _PostsState extends State<Posts> {
       }
     } else {
       return Colors.transparent;
+    }
+  }
+
+  getSavedPosts() async {
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        setState(() {
+          if (result.data()['savedposts'] != null) {
+            savedposts = result.data()['savedposts'];
+          }
+        });
+      });
+    });
+  }
+  addSavedPost(int index) async {
+    if (!savedposts.contains(posts[index])) {
+      savedposts.add(posts[index]);
+    FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'savedposts': savedposts});
+        setState(() {
+          _getPost();
+        });
+      });
+    });
+    } else {
+      removeSavedPost(index);
+    }
+  }
+
+  removeSavedPost(int index) async {
+    if (savedposts.contains(posts[index])) {
+      savedposts.remove(posts[index]);
+      FirebaseFirestore.instance
+    .collection('users')
+    .where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(result.id)
+        .update({'savedposts': savedposts});
+        setState(() {
+          _getPost();
+        });
+      });
+    });
     }
   }
 
@@ -705,16 +822,16 @@ class _PostsState extends State<Posts> {
                           },
                         )),
                     Container(
+                      color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
                         child: IconButton(
                           icon: Image.asset('assets/pictures/ICON_save.png'),
                           iconSize: 25,
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ReportPanel()),
-                            );
+                            setState(() {
+                              addSavedPost(userIndex);
+                            });
+                            
                           },
                         )),
                   ],
@@ -954,16 +1071,16 @@ class _PostsState extends State<Posts> {
                           },
                         )),
                     Container(
+                      color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
                         child: IconButton(
                           icon: Image.asset('assets/icons/DARKICON_save.png'),
                           iconSize: 25,
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ReportPanel()),
-                            );
+                            setState(() {
+                              addSavedPost(userIndex);
+                            });
+                            
                           },
                         )),
                   ],

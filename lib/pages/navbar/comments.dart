@@ -94,6 +94,7 @@ returnAlignment() {
   Widget _getPost() {
     Size size = MediaQuery.of(context).size;
     return new ListView.builder(
+      
         itemCount: comments.length,
         itemBuilder: (BuildContext context, int userIndex) {
           
@@ -127,8 +128,11 @@ returnAlignment() {
                                           builder: (context) => UserProfile(
                                               commenters[userIndex])),
                                     );
+                                    
                                 }),
-                          TextSpan(text: comments[userIndex]),
+                          TextSpan(
+                            style: TextStyle(color: Colors.black, fontSize: 20.0),
+                            text: comments[userIndex]),
                         ])),
                   ),
                   Container(

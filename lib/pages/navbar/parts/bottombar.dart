@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
 import 'package:socialio/pages/camera/camera.dart';
+import 'package:socialio/pages/navbar/saved_posts.dart';
 import 'package:socialio/pages/navbar/timeline.dart';
 import 'package:socialio/pages/navbar/setting.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
@@ -69,7 +70,7 @@ class _BottomBar extends State<BottomBar> {
     Posts(), //class name of timeline
     UserSearch(), //class name of search
     Profile(), //class name of profile
-    (Constants.accType == "Student") ? Profile() : ChatPage(),
+    (Constants.accType == "Student") ? Profile() : SavedPosts(),
     Setup_page(), //class name of setting
   ];
 

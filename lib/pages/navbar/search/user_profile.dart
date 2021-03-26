@@ -225,32 +225,38 @@ void updateFollowers() async {
   returnFollowButton() {
     Size size = MediaQuery.of(context).size;
     if (!myfollowing.contains(widget.userName)) {
-      return FlatButton(
-        height: size.height * 0.01,
-        minWidth: 200,
+      return Container(
         color: Colors.blue,
-        child: Text("Follow"),
-        onPressed: () async {
-            setState(() {
-              updateFollowers();    
-              updateFollowing();                 
-            });
-        },  
-        );
+        child: FlatButton(
+          height: size.height * 0.01,
+          minWidth: 200,
+          color: Colors.blue,
+          child: Text("Follow"),
+          onPressed: () async {
+              setState(() {
+                updateFollowers();    
+                updateFollowing();                 
+              });
+          },  
+          ),
+      );
     } else {
-      return FlatButton(
-        height: size.height * 0.001,
-        minWidth: 200,
+      return Container(
         color: Colors.green,
-        child: Text("Unfollow"),
-        onPressed: () async {
-            setState(() {
-              decrementFollowers();    
-              decrementFollowing();    
-              returnFollowButton();             
-            });
-        },  
-        );
+        child: FlatButton(
+          height: size.height * 0.001,
+          minWidth: 200,
+          color: Colors.green,
+          child: Text("Unfollow"),
+          onPressed: () async {
+              setState(() {
+                decrementFollowers();    
+                decrementFollowing();    
+                returnFollowButton();             
+              });
+          },  
+          ),
+      );
     }
   }
 
@@ -371,10 +377,8 @@ void updateFollowers() async {
                       Expanded(
                         child: Container(),
                       ),
-                      Container(
-                        color: Colors.blue,
-                      child:  returnFollowButton(),
-                      ),
+                      returnFollowButton(),
+                      
                       SizedBox(height: 20),
                       Container(
                         height: 64,

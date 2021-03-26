@@ -4,20 +4,18 @@ import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/darkmode/darkmode.dart';
 import 'package:socialio/pages/home/home_page.dart';
 import 'package:socialio/pages/lightmode/lightmode.dart';
-import 'package:socialio/pages/navbar/about_us.dart';
-import 'package:socialio/pages/navbar/account_info.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/pages/navbar/parts/bottombar.dart';
 import 'package:socialio/pages/navbar/profile_settings.dart';
 import 'package:socialio/parts/button.dart';
 
-class Setup_page extends StatefulWidget {
+class AccountInfo extends StatefulWidget {
   @override
-  _Setup_pageState createState() => _Setup_pageState();
+  AccountInfoState createState() => AccountInfoState();
 }
 
-class _Setup_pageState extends State<Setup_page> {
+class AccountInfoState extends State<AccountInfo> {
   final _bottomNavigationColor = Colors.blue;
 
   int _currentIndex = 4;
@@ -42,7 +40,6 @@ class _Setup_pageState extends State<Setup_page> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        automaticallyImplyLeading: false,
         flexibleSpace: Container(
           width: dimensions.width * 0.5,
           decoration: BoxDecoration(
@@ -64,20 +61,14 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AccountInfo()),
-                );
-            },
+          Container(
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
                   Text(
-                    "Account Information",
+                    "Username:",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -85,9 +76,18 @@ class _Setup_pageState extends State<Setup_page> {
                   ),
                   Spacer(),
                   Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          Text(
+                            Constants.myName,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -97,20 +97,14 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileSettings()),
-              );
-            },
+          Container(
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
                   Text(
-                    "Profile Settings",
+                    "Account Type:",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -118,9 +112,18 @@ class _Setup_pageState extends State<Setup_page> {
                   ),
                   Spacer(),
                   Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          Text(
+                            Constants.accType,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -130,31 +133,14 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          GestureDetector(
-            onTap: () {
-              if (Constants.DarkModeBool == true) {
-                print("Preferences true");
-                print(Constants.DarkModeBool);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DarkMode()),
-                );
-              } else {
-                print("Preferences else");
-                print(Constants.DarkModeBool);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LightMode()),
-                );
-              }
-            },
+          Container(
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
                   Text(
-                    "Preferences",
+                    "Total Followers:",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -162,9 +148,18 @@ class _Setup_pageState extends State<Setup_page> {
                   ),
                   Spacer(),
                   Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          Text(
+                            Constants.myFollowers.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -174,15 +169,14 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          GestureDetector(
-            onTap: () {},
+          Container(
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
                   Text(
-                    "Help",
+                    "Total Following:",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -190,9 +184,18 @@ class _Setup_pageState extends State<Setup_page> {
                   ),
                   Spacer(),
                   Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          Text(
+                            Constants.myFollowing.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -202,50 +205,14 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutUs()),
-                );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "About Us",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
-              ),
-            ),
-          ),
           Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              cancelSignOut(context);
-            },
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
                   Text(
-                    "Sign Out",
+                    "Total Likes:",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -253,9 +220,18 @@ class _Setup_pageState extends State<Setup_page> {
                   ),
                   Spacer(),
                   Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        children: [
+                          Text(
+                            Constants.myTotalLikes.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
