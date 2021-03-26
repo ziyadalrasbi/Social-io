@@ -6,7 +6,7 @@ import 'package:socialio/pages/home/home_page.dart';
 import 'package:socialio/pages/lightmode/lightmode.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:socialio/pages/navbar/bottombar.dart';
+import 'package:socialio/pages/navbar/parts/bottombar.dart';
 import 'package:socialio/pages/navbar/profile_settings.dart';
 import 'package:socialio/parts/button.dart';
 
@@ -25,14 +25,19 @@ class _Setup_pageState extends State<Setup_page> {
     getUserInfo();
     super.initState();
   }
+
   getUserInfo() async {
     Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
+    Constants.DarkModeBool = await HelperFunction.getThemeSharedPref();
+    Constants.myName = await HelperFunction.getUserNameSharedPref();
+    print("getUserInfo Settings");
+    print(Constants.DarkModeBool);
   }
+
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -50,7 +55,6 @@ class _Setup_pageState extends State<Setup_page> {
 
       // 6 navigate botton
       body: Center(
-        
           child: Column(
         children: [
           Container(
@@ -59,66 +63,24 @@ class _Setup_pageState extends State<Setup_page> {
             height: 2,
           ),
           GestureDetector(
-            onTap: (){
-            },
+            onTap: () {},
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
-                    
-                    Text(
-                      "Account Information", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Account Information",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => ProfileSettings()
                   ),
-                );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                    
-                    Text(
-                      "Profile Settings", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
                     child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
+                  ),
                 ],
               ),
             ),
@@ -128,15 +90,51 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          
           GestureDetector(
-            onTap: (){
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileSettings()),
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                  Text(
+                    "Profile Settings",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
+            onTap: () {
               if (Constants.DarkModeBool == true) {
+                print("Preferences true");
+                print(Constants.DarkModeBool);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => DarkMode()),
                 );
               } else {
+                print("Preferences else");
+                print(Constants.DarkModeBool);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LightMode()),
@@ -148,21 +146,18 @@ class _Setup_pageState extends State<Setup_page> {
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
-                    
-                    Text(
-                      "Preferences", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Preferences",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
+                  ),
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
                     child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
+                  ),
                 ],
               ),
             ),
@@ -172,30 +167,25 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          
           GestureDetector(
-            onTap: (){
-            },
+            onTap: () {},
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
-                    
-                    Text(
-                      "Help", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Help",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
+                  ),
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
                     child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
+                  ),
                 ],
               ),
             ),
@@ -205,30 +195,25 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          
           GestureDetector(
-            onTap: (){
-            },
+            onTap: () {},
             child: Container(
               color: Colors.transparent,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
-                    
-                    Text(
-                      "About Us", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "About Us",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
+                  ),
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
                     child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
+                  ),
                 ],
               ),
             ),
@@ -238,9 +223,8 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
-          
           GestureDetector(
-            onTap: (){
+            onTap: () {
               cancelSignOut(context);
             },
             child: Container(
@@ -248,21 +232,18 @@ class _Setup_pageState extends State<Setup_page> {
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 children: [
-                    
-                    Text(
-                      "Sign Out", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Sign Out",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
+                  ),
+                  Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
                     child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
+                  ),
                 ],
               ),
             ),
@@ -278,22 +259,20 @@ class _Setup_pageState extends State<Setup_page> {
   }
 }
 
-
 cancelSignOut(BuildContext context) {
-
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
-    onPressed:  () {
+    onPressed: () {
       Navigator.of(context, rootNavigator: true).pop();
     },
   );
   Widget continueButton = FlatButton(
     child: Text("Sign Out"),
-    onPressed:  () {
+    onPressed: () {
       signOut();
       Navigator.pushReplacement(
-        context, 
+        context,
         MaterialPageRoute(
           builder: (context) => HomePage(),
         ),

@@ -61,7 +61,6 @@ class _PostsState extends State<Posts> {
   StreamController upvoteStream;
   TextEditingController commentText = TextEditingController();
 
-
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
@@ -86,8 +85,9 @@ class _PostsState extends State<Posts> {
         FirebaseFirestore.instance
             .collection("uploads")
             .doc(result.id)
-            .collection("images").where('imageid', isNotEqualTo: null).orderBy('time', descending: true)
-            
+            .collection("images")
+            .where('imageid', isNotEqualTo: null)
+            .orderBy('time', descending: true)
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {
@@ -102,7 +102,7 @@ class _PostsState extends State<Posts> {
               upvotes.add(result.data()['upvotes']);
               taggedUsers.add(result.data()['tagged']);
               if (result.data()['profilepic'] != null) {
-              profilepics.add(result.data()['profilepic']);
+                profilepics.add(result.data()['profilepic']);
               }
               _getPost();
             });
@@ -111,8 +111,6 @@ class _PostsState extends State<Posts> {
       });
     });
   }
-
-  
 
   getUpvotes(int index) {
     return StreamBuilder<QuerySnapshot>(
@@ -144,24 +142,22 @@ class _PostsState extends State<Posts> {
 
   getLikedPosts() async {
     FirebaseFirestore.instance
-    .collection('users')
-    .where('username', isEqualTo: Constants.myName)
-    .get()
-    .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) { 
-        setState(() {  
-        if (result.data()['likedposts'] != null) {
-        likedposts = result.data()['likedposts'];
-        }
-        if (result.data()['downvotedposts'] != null) {
-        downvotedposts = result.data()['downvotedposts'];
-        }      
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        setState(() {
+          if (result.data()['likedposts'] != null) {
+            likedposts = result.data()['likedposts'];
+          }
+          if (result.data()['downvotedposts'] != null) {
+            downvotedposts = result.data()['downvotedposts'];
+          }
         });
       });
     });
   }
-
- 
 
   void addLikedPost() async {
     FirebaseFirestore.instance
@@ -216,8 +212,12 @@ class _PostsState extends State<Posts> {
               .collection('images')
               .doc(result.id)
               .collection('comments')
-              .add(
-                  {'commenter': Constants.myName, 'comment': commentText.text, 'imageid': posts[index], 'time': DateTime.now().millisecondsSinceEpoch});
+              .add({
+            'commenter': Constants.myName,
+            'comment': commentText.text,
+            'imageid': posts[index],
+            'time': DateTime.now().millisecondsSinceEpoch
+          });
         });
       });
     });
@@ -296,10 +296,10 @@ class _PostsState extends State<Posts> {
       if (likedposts.contains(posts[index])) {
         return Colors.blue;
       } else {
-        return Colors.white;
+        return Colors.transparent;
       }
     } else {
-      return Colors.white;
+      return Colors.transparent;
     }
   }
 
@@ -308,10 +308,10 @@ class _PostsState extends State<Posts> {
       if (downvotedposts.contains(posts[index])) {
         return Colors.blue;
       } else {
-        return Colors.white;
+        return Colors.transparent;
       }
     } else {
-      return Colors.white;
+      return Colors.transparent;
     }
   }
 
@@ -349,13 +349,19 @@ class _PostsState extends State<Posts> {
     String cancel = "Cancel";
     // set up the buttons
     Widget cancelButton = FlatButton(
-      child: Text(cancel, style: TextStyle(fontWeight: FontWeight.bold),),
+      child: Text(
+        cancel,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       onPressed: () {
         Navigator.of(context, rootNavigator: true).pop();
       },
     );
     Widget firstButton = FlatButton(
-      child: Text(rep1, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      child: Text(
+        rep1,
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+      ),
       onPressed: () {
         createReport(index: index, reason: rep1);
         Navigator.of(context, rootNavigator: true).pop();
@@ -363,7 +369,10 @@ class _PostsState extends State<Posts> {
       },
     );
     Widget secondButton = FlatButton(
-      child: Text(rep2, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      child: Text(
+        rep2,
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+      ),
       onPressed: () {
         createReport(index: index, reason: rep2);
         Navigator.of(context, rootNavigator: true).pop();
@@ -371,7 +380,10 @@ class _PostsState extends State<Posts> {
       },
     );
     Widget thirdButton = FlatButton(
-      child: Text(rep3, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      child: Text(
+        rep3,
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+      ),
       onPressed: () {
         createReport(index: index, reason: rep3);
         Navigator.of(context, rootNavigator: true).pop();
@@ -379,7 +391,10 @@ class _PostsState extends State<Posts> {
       },
     );
     Widget fourthButton = FlatButton(
-      child: Text(rep4, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      child: Text(
+        rep4,
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+      ),
       onPressed: () {
         createReport(index: index, reason: rep4);
         Navigator.of(context, rootNavigator: true).pop();
@@ -387,7 +402,10 @@ class _PostsState extends State<Posts> {
       },
     );
     Widget fifthButton = FlatButton(
-      child: Text(rep5, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
+      child: Text(
+        rep5,
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+      ),
       onPressed: () {
         createReport(index: index, reason: rep5);
         Navigator.of(context, rootNavigator: true).pop();
@@ -453,18 +471,26 @@ class _PostsState extends State<Posts> {
       control: commentText,
     );
 
+    Widget cancelButton = FlatButton(
+        child: Text("Cancel"),
+        onPressed: () {
+          Navigator.of(context, rootNavigator: true).pop();
+    });
+
     Widget confirmButton = FlatButton(
         child: Text("Comment"),
         onPressed: () {
           addComment(index);
           Navigator.of(context, rootNavigator: true).pop();
-        });
+    });
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+      scrollable: true,
       title: Text("Add Comment"),
       actions: [
         commentButton,
+        cancelButton,
         confirmButton,
       ],
     );
@@ -528,14 +554,17 @@ class _PostsState extends State<Posts> {
   Widget _getPost() {
     Size size = MediaQuery.of(context).size;
     if (url != null) {
-      
       return new ListView.builder(
           itemCount: images.length,
           itemBuilder: (BuildContext context, int userIndex) {
-            
             return Container(
                 child: Column(
               children: <Widget>[
+                Container(
+                  color: Colors.black,
+                  width: MediaQuery.of(context).size.width,
+                  height: 1,
+                ),
                 Container(
                   //Includes dp + username + report flag
                   margin: EdgeInsets.all(10),
@@ -556,7 +585,8 @@ class _PostsState extends State<Posts> {
                                     );
                                   },
                                   child: CircleAvatar(
-                                    backgroundImage: AssetImage(profilepics[userIndex].toString()),
+                                    backgroundImage: AssetImage(
+                                        profilepics[userIndex].toString()),
                                   ))),
                           RichText(
                             text: TextSpan(children: <TextSpan>[
@@ -723,27 +753,27 @@ class _PostsState extends State<Posts> {
                             TextSpan(text: captions[userIndex]),
                           ])),
                     ),
-                    
                   ],
                 ),
                 Column(
                   mainAxisAlignment: returnAlignment(),
                   //This column contains username and comment of commenters
                   children: <Widget>[
-
                     Container(
                       //view more comments
                       alignment: returnCommentAlignment(),
                       margin: EdgeInsets.only(left: 10, right: 10),
                       child: RichText(
                           text: TextSpan(
-                              style:
-                                  TextStyle(color: Colors.blue[900], fontSize: 20.0),
+                              style: TextStyle(
+                                  color: Colors.blue[900], fontSize: 20.0),
                               children: <TextSpan>[
                             TextSpan(
                                 text:
                                     'view comments', //will take to the comments
-                                style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: Colors.blue[900],
+                                    fontWeight: FontWeight.bold),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.push(
@@ -756,6 +786,260 @@ class _PostsState extends State<Posts> {
                                   }),
                           ])),
                     ),
+                    Container(
+                      color: Colors.transparent,
+                      width: MediaQuery.of(context).size.width,
+                      height: 15,
+                    ),
+                  ],
+                )
+              ],
+            ));
+          });
+    }
+  }
+
+  Widget _getPostDark() {
+    Size size = MediaQuery.of(context).size;
+    if (url != null) {
+      return new ListView.builder(
+          itemCount: images.length,
+          itemBuilder: (BuildContext context, int userIndex) {
+            return Container(
+                child: Column(
+              children: <Widget>[
+                Container(
+                  color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  height: 1,
+                ),
+                Container(
+                  //Includes dp + username + report flag
+                  margin: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(right: 8),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UserProfile(
+                                              usernames[userIndex])),
+                                    );
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                        profilepics[userIndex].toString()),
+                                  ))),
+                          RichText(
+                            text: TextSpan(children: <TextSpan>[
+                              TextSpan(
+                                  text: usernames[userIndex],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15.0),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => UserProfile(
+                                                usernames[userIndex])),
+                                      );
+                                    })
+                            ]),
+                          )
+                        ],
+                      ),
+                      IconButton(
+                        icon: Image.asset('assets/icons/DARKICON_flag.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          reportUser(userIndex, context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Stack(children: <Widget>[
+                  Container(
+                      //the post picture
+                      child: GestureDetector(
+                        //This is to handle the tagged users raised button
+                        onTap: () {
+                          if (isVisible == false)
+                            setState(() {
+                              isVisible = true;
+                            });
+                          else
+                            setState(() {
+                              isVisible = false;
+                            });
+                        },
+                      ),
+                      height: size.height * 0.5,
+                      width: returnWidth(),
+                      padding: EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 0,
+                        bottom: 24,
+                      ),
+                      // constraints: BoxConstraints(maxHeight: 50),
+
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(images[userIndex])),
+                      )),
+                  Positioned(
+                    top: 25,
+                    left: 50,
+                    child: returnTaggedUsers(userIndex),
+                  )
+                ]),
+                Row(
+                  mainAxisAlignment: returnAlignment(),
+                  // upvote + downvote + comment + send + save icons
+                  children: <Widget>[
+                    Container(
+                        color: returnUpvoteColor(userIndex),
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/icons/DARKICON_upvote.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            incrementUpvotes(userIndex);
+
+                            setState(() {
+                              getUpvotes(userIndex);
+                            });
+                          },
+                        )),
+                    Container(
+                        color: returnDownvoteColor(userIndex),
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon:
+                              Image.asset('assets/icons/DARKICON_downvote.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            setState(() {
+                              decrementUpvotes(userIndex);
+                            });
+                          },
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon:
+                              Image.asset('assets/icons/DARKICON_comment.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            commentPopUp(userIndex, context);
+                          },
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/icons/DARKICON_send.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            print(
+                                'This will let a user send the post to another user');
+                          },
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: Image.asset('assets/icons/DARKICON_save.png'),
+                          iconSize: 25,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReportPanel()),
+                            );
+                          },
+                        )),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: returnAlignment(),
+                  //This column contains username, upload description and total upvotes
+                  children: <Widget>[
+                    Container(
+                      //The total upvotes of post
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: getUpvotes(userIndex),
+                    ),
+                    Container(
+                      //The person who posted along with photo description
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 20.0),
+                              children: <TextSpan>[
+                            TextSpan(
+                                text: usernames[userIndex] + ': ',
+                                style: TextStyle(color: Colors.blue),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => UserProfile(
+                                              usernames[userIndex])),
+                                    );
+                                  }),
+                            TextSpan(text: captions[userIndex]),
+                          ])),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: returnAlignment(),
+                  //This column contains username and comment of commenters
+                  children: <Widget>[
+                    Container(
+                      //view more comments
+                      alignment: returnCommentAlignment(),
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: Colors.blue[900], fontSize: 20.0),
+                              children: <TextSpan>[
+                            TextSpan(
+                                text:
+                                    'view comments', //will take to the comments
+                                style: TextStyle(
+                                    color: Colors.blue[900],
+                                    fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CommentPage(
+                                              posts[userIndex],
+                                              usernames[userIndex])),
+                                    );
+                                  }),
+                          ])),
+                    ),
+                    Container(
+                      color: Colors.transparent,
+                      width: MediaQuery.of(context).size.width,
+                      height: 15,
+                    ),
                   ],
                 )
               ],
@@ -767,39 +1051,76 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          width: size.width * 0.5,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Constants.myAppBar.toString()),
-              fit: BoxFit.fill,
+    if (Constants.DarkModeBool == false) {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
             ),
           ),
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            FlatButton(
+              child: Image.asset(
+                'assets/icons/ICON_inbox.png',
+                width: 45,
+                height: 45,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-        backgroundColor: Colors.transparent,
-        actions: <Widget>[
-          FlatButton(
-            child: Image.asset(
-              'assets/icons/ICON_inbox.png',
-              width: 45,
-              height: 45,
+        body: _getPost(),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatPage(),
-                ),
-              );
-            },
           ),
-        ],
-      ),
-      body: _getPost(),
-    );
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            FlatButton(
+              child: Image.asset(
+                'assets/icons/DARKICON_inbox.png',
+                width: 45,
+                height: 45,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        body: _getPostDark(),
+      );
+    }
   }
 }

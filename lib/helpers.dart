@@ -1,6 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class HelperFunction {
   static String sharedPrefUserLoggedInKey = "ISLOGGEDIN";
   static String sharedPrefUserNameKey = "USERNAMEKEY";
@@ -15,10 +14,17 @@ class HelperFunction {
   static String sharedPrefProfileBorderKey = "PROFILEBORDERKEY";
   static String sharedPrefTotalLikesKey = "TOTALLIKESKEY";
 
+  static String sharedPrefThemeKey = "THEMEKEY";
+
   // save data
   static Future<bool> saveLoggedInSharedPref(bool isLogged) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setBool(sharedPrefUserLoggedInKey, isLogged);
+  }
+
+  static Future<bool> saveThemeSharedPref(bool isDark) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(sharedPrefThemeKey, isDark);
   }
 
   static Future<bool> saveUserNameSharedPref(String userName) async {
@@ -65,6 +71,7 @@ class HelperFunction {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPrefProfileBannerKey, banner);
   }
+
   static Future<bool> saveProfileBorderSharedPref(String border) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPrefProfileBorderKey, border);
@@ -74,7 +81,6 @@ class HelperFunction {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setInt(sharedPrefTotalLikesKey, totallikes);
   }
-
 
   // load data
   static Future<bool> getLoggedInSharedPref() async {
@@ -135,5 +141,10 @@ class HelperFunction {
   static Future<int> getTotalLikesSharedPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getInt(sharedPrefTotalLikesKey);
+  }
+
+  static Future<bool> getThemeSharedPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(sharedPrefThemeKey);
   }
 }

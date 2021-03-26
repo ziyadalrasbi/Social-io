@@ -10,7 +10,7 @@ import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
 import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/lightmode/lightmode.dart';
-import 'package:socialio/pages/navbar/bottombar.dart';
+import 'package:socialio/pages/navbar/parts/bottombar.dart';
 
 //import 'package:permission_handler/permission_handler.dart';
 bool faceDetected;
@@ -49,6 +49,23 @@ class DarkModeState extends State<DarkMode1> {
     Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
   }
 
+  updateTheme() {
+    FirebaseFirestore.instance
+        .collection("users")
+        .where("username", isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(result.id)
+            .update({"isDark": false});
+        HelperFunction.saveThemeSharedPref(Constants.DarkModeBool);
+        setState(() {});
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
@@ -78,6 +95,9 @@ class DarkModeState extends State<DarkMode1> {
           ),
           GestureDetector(
             onTap: () {
+              updateTheme();
+              print("darkmode bool");
+              print(Constants.DarkModeBool);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LightMode()),

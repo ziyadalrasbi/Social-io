@@ -7,7 +7,8 @@ import 'package:socialio/pages/home/home_page.dart';
 import 'package:socialio/pages/camera/camera.dart';
 import 'package:socialio/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:socialio/pages/navbar/bottombar.dart';
+import 'package:socialio/pages/navbar/bottom.dart';
+import 'package:socialio/pages/navbar/parts/bottombar.dart';
 import 'package:socialio/pages/profile/profile_1.dart';
 
 import 'package:provider/provider.dart';
@@ -76,7 +77,7 @@ class AuthWrapper extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
-            return BottomBar();
+            return bottomPage();
           }),
         );
       } else {

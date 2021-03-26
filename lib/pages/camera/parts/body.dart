@@ -9,11 +9,12 @@ import 'package:flutter/widgets.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
 import 'package:socialio/helpers.dart';
-import 'package:socialio/pages/navbar/bottombar.dart';
+
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:socialio/pages/navbar/parts/bottombar.dart';
 import 'package:socialio/parts/input_field_box.dart';
 
 //import 'package:permission_handler/permission_handler.dart';
@@ -21,23 +22,6 @@ bool faceDetected;
 TextEditingController captionController = TextEditingController();
 TextEditingController searchController = TextEditingController();
 List<String> taggedUsers = [];
-class Body extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    if (Constants.DarkModeBool == true) {
-      return MaterialApp(
-        theme: ThemeData(brightness: Brightness.dark),
-        home: ImageCapture(),
-      );
-    } else {
-      return MaterialApp(
-        theme: ThemeData(brightness: Brightness.light),
-        home: ImageCapture(),
-      );
-    }
-  }
-}
-
 
 
 
@@ -199,8 +183,8 @@ Widget listSearch() {
               },
               child: FittedBox(
                 child: SizedBox(
-                  width: _image.width.toDouble(),
-                  height: _image.height.toDouble(),
+                  width: _imageFile != null ? _image.width.toDouble() : CircularProgressIndicator(),
+                  height: _imageFile != null ? _image.height.toDouble(): CircularProgressIndicator(),
                   child: CustomPaint(
                     painter: FacePainter(_image, _faces),
                     ),

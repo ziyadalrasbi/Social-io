@@ -127,49 +127,44 @@ class _ChatSearchState extends State<ChatSearch> {
         backgroundColor: Colors.transparent,
       ),
       body: Container(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InputField(
-                      color: Colors.blueGrey[200],
-                      control: searchEditingController,
-                      hint: "Search for users",
-                      changes: (val) {
-                      },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InputField(
+                        color: Colors.blueGrey[200],
+                        control: searchEditingController,
+                        hint: "Search for users",
+                        changes: (val) {
+                        },
+                      ),
                     ),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () { 
-                      initSearch();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      padding: EdgeInsets.all(12),
-                      child: Image.asset("assets/icons/ICON_search.png")),
-                  ),
-                ],
+                    FloatingActionButton(
+                      onPressed: () { 
+                        initSearch();
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        padding: EdgeInsets.all(12),
+                        child: Image.asset("assets/icons/ICON_search.png")),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            listSearch(),
-          ],
+              listSearch(),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-
-
-  
-  
-  
-
-  
 getRoomId(String x, String y) {
   if (x.substring(0,1).codeUnitAt(0) > y.substring(0,1).codeUnitAt(0)) {
     return "$y\_$x";

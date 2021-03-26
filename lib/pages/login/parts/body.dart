@@ -34,96 +34,98 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Background(
-      child: Column(
-        key: _formKey,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          
-          InputField(
-            color: Colors.white,
-            validate: (value) {
-                  if (value.isEmpty) {
-                    return "This can't be empty.";
-                  }
-                  
-                  if (value.length < 2) {
-                    return "Must be a valid email.";
-                  }
-            },
-            control: emailController,
-            hint: "Email address",
+      child: SingleChildScrollView(
+        child: Column(
+          key: _formKey,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
             
-          ),
-          PassField(
-            color: Colors.white,
-            validate: (value) {
-                  if (value.isEmpty) {
-                    return "Password cannot be empty."; // check that passwords cant be empty
-                  }
-                  if (value.length < 6) {
-                    return "Password cannot be less than 6 characters."; // passwords cant be less than 6 and greater than 15 characters
-                  }
-                  if (value.length > 15) {
-                    return "Password cannot be greater than 15 characters.";
-                  }
-                  return null;
-                },
-            control: passController,
-            hint: "Password",
-            
-          ),
-          MainButton(
-            text: "Log In",
-            textColor: Colors.white,
-              color: Colors.indigo[500],
-            pressed: () async {
+            InputField(
+              color: Colors.white,
+              validate: (value) {
+                    if (value.isEmpty) {
+                      return "This can't be empty.";
+                    }
+                    
+                    if (value.length < 2) {
+                      return "Must be a valid email.";
+                    }
+              },
+              control: emailController,
+              hint: "Email address",
               
-              HelperFunction.saveUserEmailSharedPref(emailController.text);
-              setState(() {
-                isLoading = true;   
-              });
-              databaseMethods.getEmail(emailController.text)
-              .then((val){
-                querySnapshot = val;
-                HelperFunction.saveUserNameSharedPref(querySnapshot.docs[0].data()['username']);
-                HelperFunction.saveUserTypeSharedPref(querySnapshot.docs[0].data()['accType']);
-                HelperFunction.saveUserFollowersSharedPref(querySnapshot.docs[0].data()['followers']);
-                HelperFunction.saveUserFollowingSharedPref(querySnapshot.docs[0].data()['following']);
-                HelperFunction.saveProfilePicSharedPref(querySnapshot.docs[0].data()['profilepic']);
-                HelperFunction.saveProfileBarSharedPref(querySnapshot.docs[0].data()['appbar']);
-                HelperFunction.saveProfileBorderSharedPref(querySnapshot.docs[0].data()['border']);
-                HelperFunction.saveProfileBannerSharedPref(querySnapshot.docs[0].data()['banner']);
-              }); 
-              try {
-                UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: emailController.text,
-                  password: passController.text
-                );
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'user-not-found') {
-                  print('No user found for that email.');
-                } else if (e.code == 'wrong-password') {
-                  print('Wrong password provided for that user.');
+            ),
+            PassField(
+              color: Colors.white,
+              validate: (value) {
+                    if (value.isEmpty) {
+                      return "Password cannot be empty."; // check that passwords cant be empty
+                    }
+                    if (value.length < 6) {
+                      return "Password cannot be less than 6 characters."; // passwords cant be less than 6 and greater than 15 characters
+                    }
+                    if (value.length > 15) {
+                      return "Password cannot be greater than 15 characters.";
+                    }
+                    return null;
+                  },
+              control: passController,
+              hint: "Password",
+              
+            ),
+            MainButton(
+              text: "Log In",
+              textColor: Colors.white,
+                color: Colors.indigo[500],
+              pressed: () async {
+                
+                HelperFunction.saveUserEmailSharedPref(emailController.text);
+                setState(() {
+                  isLoading = true;   
+                });
+                databaseMethods.getEmail(emailController.text)
+                .then((val){
+                  querySnapshot = val;
+                  HelperFunction.saveUserNameSharedPref(querySnapshot.docs[0].data()['username']);
+                  HelperFunction.saveUserTypeSharedPref(querySnapshot.docs[0].data()['accType']);
+                  HelperFunction.saveUserFollowersSharedPref(querySnapshot.docs[0].data()['followers']);
+                  HelperFunction.saveUserFollowingSharedPref(querySnapshot.docs[0].data()['following']);
+                  HelperFunction.saveProfilePicSharedPref(querySnapshot.docs[0].data()['profilepic']);
+                  HelperFunction.saveProfileBarSharedPref(querySnapshot.docs[0].data()['appbar']);
+                  HelperFunction.saveProfileBorderSharedPref(querySnapshot.docs[0].data()['border']);
+                  HelperFunction.saveProfileBannerSharedPref(querySnapshot.docs[0].data()['banner']);
+                }); 
+                try {
+                  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: emailController.text,
+                    password: passController.text
+                  );
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                    print('No user found for that email.');
+                  } else if (e.code == 'wrong-password') {
+                    print('Wrong password provided for that user.');
+                  }
                 }
-              }
-              HelperFunction.saveLoggedInSharedPref(true);
+                HelperFunction.saveLoggedInSharedPref(true);
+                
+              },
               
-            },
-            
-          ),
-          AccountRecheck(
-            pressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SignUpSecond();
-                  }
-                ),
-              );
-            },
-          ),
-        ],
+            ),
+            AccountRecheck(
+              pressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SignUpSecond();
+                    }
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
