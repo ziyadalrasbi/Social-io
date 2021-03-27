@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/helpers.dart';
-import 'package:socialio/pages/profile/choose_banner.dart';
-import 'package:socialio/pages/profile/choose_border.dart';
-import 'package:socialio/pages/profile/choose_profile_pic.dart';
-import 'package:socialio/pages/profile/profile_appbar.dart';
+import 'package:socialio/pages/profile/bannerpages/city_banners.dart';
+import 'package:socialio/pages/profile/bannerpages/gamer_banners.dart';
+import 'package:socialio/pages/profile/bannerpages/landscape_banners.dart';
+import 'package:socialio/pages/profile/bannerpages/nightsky_banners.dart';
+import 'package:socialio/pages/profile/borderpages/element_borders.dart';
+import 'package:socialio/pages/profile/borderpages/prize_borders.dart';
+import 'package:socialio/pages/profile/borderpages/standard_borders.dart';
 
-import 'package:socialio/pages/profile/profilepicpages/animal_profiles.dart';
-
-
-
-class ProfileSettings extends StatefulWidget {
+class ChooseBorder extends StatefulWidget {
   @override
-  _ProfileSettingsState createState() => _ProfileSettingsState();
+  _ChooseBorderState createState() => _ChooseBorderState();
 }
 
-class _ProfileSettingsState extends State<ProfileSettings> {
-  @override
+class _ChooseBorderState extends State<ChooseBorder> {
+   @override
   void initState() {
     getUserInfo();
     super.initState();
@@ -58,7 +57,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => ChooseProfilePic()
+                  builder: (context) => StandardBordersPage()
                   ),
                 );
             },
@@ -69,7 +68,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 children: [
                     
                     Text(
-                      "Edit Profile Picture", 
+                      "Standard", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -96,7 +95,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => ChooseBanner()
+                  builder: (context) => ElementsBordersPage()
                   ),
                 );
             },
@@ -107,7 +106,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 children: [
                     
                     Text(
-                      "Edit Profile Banner", 
+                      "Elements", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -129,51 +128,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             width: dimensions.width,
             height: 2,
           ),
-          
           GestureDetector(
             onTap: (){
               Navigator.push(
                 context, 
                 MaterialPageRoute(
-                  builder: (context) => ChooseBorder()
-                  ),
-                );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                    Text(
-                      "Edit Profile Border", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => ProfileAppBar()
+                  builder: (context) => PrizeBordersPage()
                   ),
                 );
             },
@@ -184,7 +144,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                 children: [
                     
                     Text(
-                      "Edit Appbar", 
+                      "Prizes", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

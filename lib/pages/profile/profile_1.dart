@@ -5,7 +5,7 @@ import 'package:socialio/constants.dart';
 import 'package:socialio/extra/chatpage/parts/conversation_room.dart';
 import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/profile/post_page.dart';
-import 'package:socialio/pages/profile/profile_pic.dart';
+import 'package:socialio/pages/profile/profilepicpages/animal_profiles.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -96,7 +96,7 @@ class _Profile1State extends State<Profile> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => PostPage(Constants.myName, posts[index])),
+                builder: (context) => PostPage(posts[index])),
           );
         },
         child: Container(
@@ -170,7 +170,7 @@ class _Profile1State extends State<Profile> {
                             ),
                          ),
                   child: Container(
-                    height: size.height * 0.40,
+                    height: size.height * 0.2,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(Constants.myAppBorder.toString()),
@@ -180,7 +180,7 @@ class _Profile1State extends State<Profile> {
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          height: size.height*0.035,
+                          height: size.height*0.051,
                         ),
                   
                           
@@ -189,7 +189,7 @@ class _Profile1State extends State<Profile> {
                           onTap: () { 
                           },
                           child: CircleAvatar(
-                            radius: 48,
+                            radius: 45,
                             backgroundImage:
                                 AssetImage(Constants.myProfilePic.toString()),
                             backgroundColor: Colors.transparent,

@@ -1,33 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:socialio/constants.dart';
-import 'package:socialio/helpers.dart';
 import 'package:socialio/parts/button.dart';
 
+import '../../../constants.dart';
+import '../../../helpers.dart';
 
-class ProfileAppBar extends StatefulWidget {
+class AnimalProfilePicPage extends StatefulWidget {
   @override
-  _ProfileAppBarState createState() => _ProfileAppBarState();
+  _AnimalProfilePicPageState createState() => _AnimalProfilePicPageState();
 }
 
-class _ProfileAppBarState extends State<ProfileAppBar> {
-  
-Map<String, int> appbars = {
-    "assets/appbars/Original.png" : 0,
-    "assets/appbars/Black and White.png": 10,
-    "assets/appbars/Green.png": 20,
-    "assets/appbars/Inverted.png": 30,
-    "assets/appbars/Orange.png": 40,
-    "assets/appbars/Plain.png": 50,
-    "assets/appbars/Red.png": 60,
-  };
+class _AnimalProfilePicPageState extends State<AnimalProfilePicPage> {
 
 
+Map<String,int> banners = {
+  "assets/profilepics/animals/animal1.png": 5,
+  "assets/profilepics/animals/animal2.png": 7,
+  "assets/profilepics/animals/animal3.png": 10,
+  "assets/profilepics/animals/animal4.png": 11,
+  "assets/profilepics/animals/animal5.png": 12,
+  "assets/profilepics/animals/animal6.png": 13,
+  "assets/profilepics/animals/animal7.png": 15,
+  "assets/profilepics/animals/animal8.png": 20,
+  "assets/profilepics/animals/animal9.png": 25,
+  "assets/profilepics/animals/animal10.png": 30,
+  "assets/profilepics/animals/animal11.png": 50,
+};
+
+
+List<String> categories = [
+  "Animals"
+];
 
 String chosen = "";
 int totallikes = 0;
-var appbarvalues;
-var appbarnames;
+var bannernames;
+var bannervalues;
 bool requiredPointsBool;
 @override
   void initState() {
@@ -61,7 +69,7 @@ bool requiredPointsBool;
   }
 
   returnImageColor(int index) {
-    if (totallikes < appbarvalues[index]) {
+    if (totallikes < bannervalues[index]) {
       return Colors.grey;
     } else {
       return Colors.transparent;
@@ -73,21 +81,17 @@ bool requiredPointsBool;
   }
 
 printImages() {
-  appbarnames = appbars.keys.toList(); 
-  appbarvalues = appbars.values.toList();
-    return List.generate(appbars.length, (index) {
+  bannernames = banners.keys.toList(); 
+  bannervalues = banners.values.toList();
+    return List.generate(banners.length, (index) {
       print(requiredPointsBool);
       return GestureDetector(
         onTap: () async {
-          chosen = appbarnames[index];
-          if (totallikes < appbarvalues[index]) {
-            
+          chosen = bannernames[index];
+          if (totallikes < bannervalues[index]) {
               requiredPointsBool = false;
-            
           } else {
-            
               requiredPointsBool = true;
-           
           }
           setState(() {          
           });
@@ -103,11 +107,11 @@ printImages() {
               ),
             ),
             child: new Image.asset(
-             appbarnames[index],
+             bannernames[index],
              
               ),
           ),
-          Text(appbarvalues[index].toString()),
+          Text(bannervalues[index].toString()),
           ]),
       );
     });
@@ -115,8 +119,8 @@ printImages() {
 
   displayPics() {
     return GridView.count(
-      childAspectRatio: 1.5,
-      crossAxisCount: 1,
+      childAspectRatio: 0.7,
+      crossAxisCount: 3,
       crossAxisSpacing: 8,
       mainAxisSpacing: 4,
       physics: BouncingScrollPhysics(),
@@ -126,13 +130,13 @@ printImages() {
 
 returnChosenImage() {
   if (chosen.length > 2) {
-    return chosen.substring(15, chosen.length-4);
+    return chosen.substring(27, chosen.length-4);
   } else {
     return "";
   }
 }
 
-updateProfileAppbar() async {
+updateProfilePic() async {
  FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: Constants.myName)
@@ -142,13 +146,32 @@ updateProfileAppbar() async {
           FirebaseFirestore.instance
           .collection('users')
           .doc(result.id)
-          .update({'appbar': chosen,});   
+          .update({'profilepic': chosen,});   
           setState(() {
           }); 
-          HelperFunction.saveProfileBarSharedPref(chosen);
+          HelperFunction.saveProfilePicSharedPref(chosen);
     });
   });
 }
+
+updateUploadProfilePics() async {
+  FirebaseFirestore.instance
+    .collection("uploads")
+    .doc(Constants.myName)
+    .collection('images')
+    .get()
+    .then((querySnapshot) {
+  querySnapshot.docs.forEach((result) async {
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .doc(Constants.myName)
+        .collection("images")
+        .doc(result.id)
+        .update({'profilepic': chosen,});
+      });
+    });
+}
+
 
 
   @override
@@ -189,11 +212,12 @@ updateProfileAppbar() async {
             alignment: Alignment.bottomCenter,
             child: MainButton(
               color: Colors.indigo[500],
-              text: requiredPointsBool == true ? "Set profile appbar to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
+              text: requiredPointsBool == true ? "Set profile picture to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
               textColor: requiredPointsBool == true ? Colors.white : Colors.red,
               pressed: () {
                 if (requiredPointsBool == true) {
-                updateProfileAppbar();
+                updateProfilePic();
+                updateUploadProfilePics();
                 Navigator.pop(context);
                 } 
               },

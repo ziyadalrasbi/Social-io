@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/form_authentication.dart';
 import 'package:socialio/helpers.dart';
@@ -19,10 +20,12 @@ class AccountInfoState extends State<AccountInfo> {
   final _bottomNavigationColor = Colors.blue;
 
   int _currentIndex = 4;
+  int totallikes = 0;
 
   @override
   void initState() {
     getUserInfo();
+    getTotalLikes();
     super.initState();
   }
 
@@ -30,8 +33,27 @@ class AccountInfoState extends State<AccountInfo> {
     Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     Constants.DarkModeBool = await HelperFunction.getThemeSharedPref();
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-    print("getUserInfo Settings");
-    print(Constants.DarkModeBool);
+    Constants.myFollowers = await HelperFunction.getUserFollowersSharedPref();
+    Constants.myFollowing = await HelperFunction.getUserFollowingSharedPref();
+    setState(() {
+      
+    });
+  }
+
+  getTotalLikes() async {
+    FirebaseFirestore.instance
+    .collection('uploads')
+    .doc(Constants.myName)
+    .collection('images').where('username', isEqualTo: Constants.myName)
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        totallikes+= result.data()['upvotes'];
+      setState(() {
+        
+      });
+      });
+    });
   }
 
   @override
@@ -224,7 +246,7 @@ class AccountInfoState extends State<AccountInfo> {
                       child: Row(
                         children: [
                           Text(
-                            Constants.myTotalLikes.toString(),
+                            totallikes.toString(),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,

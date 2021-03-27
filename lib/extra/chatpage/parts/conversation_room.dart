@@ -1,7 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/pages/profile/post_page.dart';
 import 'package:socialio/parts/input_field_box.dart';
 import 'package:flutter/widgets.dart';
 
@@ -135,30 +137,51 @@ class _ConversationRoomState extends State<ConversationRoom> {
 }
 
 
-class TextTile extends StatelessWidget {
+class TextTile extends StatefulWidget {
   final bool sentByMe;
   final String message;
   
   TextTile(this.message, this.sentByMe);
 
   @override
+  _TextTileState createState() => _TextTileState();
+
+}
+
+class _TextTileState extends State<TextTile> {
+
+var url;
+String image = "";
+  printImage() async {
+    final ref =
+                FirebaseStorage.instance.ref().child(widget.message.toString());
+            url = await ref.getDownloadURL();
+            setState(() {
+              image = url.toString();
+            });
+  } 
+
+  
+  @override
   Widget build(BuildContext context) {
+     
+    if (!widget.message.startsWith("images/")) {
     return Container(
-      padding: EdgeInsets.only(left: sentByMe ? 0: 16, right: sentByMe ? 16 : 0),
+      padding: EdgeInsets.only(left: widget.sentByMe ? 0: 16, right: widget.sentByMe ? 16 : 0),
       margin: EdgeInsets.symmetric(vertical: 8),
       width: MediaQuery.of(context).size.width,
-      alignment: sentByMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 13),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: Constants.DarkModeBool == false ? (sentByMe ? [
+            colors: Constants.DarkModeBool == false ? (widget.sentByMe ? [
               Colors.indigo[600],
               Colors.indigo[600],
             ] :
             [ Colors.indigo[300],
               Colors.indigo[300],
-            ]) : (sentByMe ? [
+            ]) : (widget.sentByMe ? [
               Colors.white,
               Colors.white,
             ] :
@@ -166,7 +189,7 @@ class TextTile extends StatelessWidget {
               Colors.black54,
             ]), 
           ),
-          borderRadius: sentByMe ?
+          borderRadius: widget.sentByMe ?
           BorderRadius.only(
             topLeft: Radius.circular(23),
             topRight: Radius.circular(23),
@@ -179,13 +202,83 @@ class TextTile extends StatelessWidget {
         )
       ),
       child: Text(
-        message, 
+        widget.message, 
         style: TextStyle(
-          color: sentByMe ? Colors.black : Colors.white,
+          color: widget.sentByMe ? Colors.black : Colors.white,
           fontSize: 16
           ),
       ),
       ),
     );
+  } else {
+     printImage();
+      if (url != null) {
+    return Container(
+      padding: EdgeInsets.only(left: widget.sentByMe ? 0: 16, right: widget.sentByMe ? 16 : 0),
+      margin: EdgeInsets.symmetric(vertical: 8),
+      width: MediaQuery.of(context).size.width,
+      alignment: widget.sentByMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: Constants.DarkModeBool == false ? (widget.sentByMe ? [
+              Colors.indigo[600],
+              Colors.indigo[600],
+            ] :
+            [ Colors.indigo[300],
+              Colors.indigo[300],
+            ]) : (widget.sentByMe ? [
+              Colors.white,
+              Colors.white,
+            ] :
+            [ Colors.black54,
+              Colors.black54,
+            ]), 
+          ),
+          borderRadius: widget.sentByMe ?
+          BorderRadius.only(
+            topLeft: Radius.circular(23),
+            topRight: Radius.circular(23),
+            bottomLeft: Radius.circular(23),
+          ) :
+          BorderRadius.only(
+            topLeft: Radius.circular(23),
+            topRight: Radius.circular(23),
+            bottomRight: Radius.circular(23),
+        )
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PostPage(widget.message.toString())),
+                );
+        },
+        child: Container(
+          height: 300,
+          width: 300,
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 0,
+            bottom: 24,
+          ),
+          // constraints: BoxConstraints(maxHeight: 50),
+
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: NetworkImage(image)),
+          )
+          
+          ),
+      ),
+      ),
+    );
+  } else {
+    return Container();
   }
+  }
+  } 
 }

@@ -1,33 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:socialio/constants.dart';
-import 'package:socialio/helpers.dart';
 import 'package:socialio/parts/button.dart';
 
+import '../../../constants.dart';
+import '../../../helpers.dart';
 
-class ProfileAppBar extends StatefulWidget {
+class CityBanners extends StatefulWidget {
   @override
-  _ProfileAppBarState createState() => _ProfileAppBarState();
+  _CityBannersState createState() => _CityBannersState();
 }
 
-class _ProfileAppBarState extends State<ProfileAppBar> {
-  
-Map<String, int> appbars = {
-    "assets/appbars/Original.png" : 0,
-    "assets/appbars/Black and White.png": 10,
-    "assets/appbars/Green.png": 20,
-    "assets/appbars/Inverted.png": 30,
-    "assets/appbars/Orange.png": 40,
-    "assets/appbars/Plain.png": 50,
-    "assets/appbars/Red.png": 60,
-  };
+class _CityBannersState extends State<CityBanners> {
+
+Map<String,int> banners = {
+  "assets/banners/city/city1.png" : 0,
+  "assets/banners/city/city2.png" : 10,
+  "assets/banners/city/city3.png" : 20,
+  "assets/banners/city/city4.png" : 30,
+  "assets/banners/city/city5.png" : 40,
+};
 
 
 
 String chosen = "";
 int totallikes = 0;
-var appbarvalues;
-var appbarnames;
+var bannernames;
+var bannervalues;
 bool requiredPointsBool;
 @override
   void initState() {
@@ -61,7 +59,7 @@ bool requiredPointsBool;
   }
 
   returnImageColor(int index) {
-    if (totallikes < appbarvalues[index]) {
+    if (totallikes < bannervalues[index]) {
       return Colors.grey;
     } else {
       return Colors.transparent;
@@ -73,14 +71,14 @@ bool requiredPointsBool;
   }
 
 printImages() {
-  appbarnames = appbars.keys.toList(); 
-  appbarvalues = appbars.values.toList();
-    return List.generate(appbars.length, (index) {
+  bannernames = banners.keys.toList(); 
+  bannervalues = banners.values.toList();
+    return List.generate(banners.length, (index) {
       print(requiredPointsBool);
       return GestureDetector(
         onTap: () async {
-          chosen = appbarnames[index];
-          if (totallikes < appbarvalues[index]) {
+          chosen = bannernames[index];
+          if (totallikes < bannervalues[index]) {
             
               requiredPointsBool = false;
             
@@ -103,11 +101,11 @@ printImages() {
               ),
             ),
             child: new Image.asset(
-             appbarnames[index],
+             bannernames[index],
              
               ),
           ),
-          Text(appbarvalues[index].toString()),
+          Text(bannervalues[index].toString()),
           ]),
       );
     });
@@ -115,8 +113,8 @@ printImages() {
 
   displayPics() {
     return GridView.count(
-      childAspectRatio: 1.5,
-      crossAxisCount: 1,
+      childAspectRatio: 1,
+      crossAxisCount: 2,
       crossAxisSpacing: 8,
       mainAxisSpacing: 4,
       physics: BouncingScrollPhysics(),
@@ -126,13 +124,13 @@ printImages() {
 
 returnChosenImage() {
   if (chosen.length > 2) {
-    return chosen.substring(15, chosen.length-4);
+    return chosen.substring(20, chosen.length-4);
   } else {
     return "";
   }
 }
 
-updateProfileAppbar() async {
+updateProfileBanner() async {
  FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: Constants.myName)
@@ -142,13 +140,14 @@ updateProfileAppbar() async {
           FirebaseFirestore.instance
           .collection('users')
           .doc(result.id)
-          .update({'appbar': chosen,});   
+          .update({'banner': chosen,});   
           setState(() {
           }); 
-          HelperFunction.saveProfileBarSharedPref(chosen);
+          HelperFunction.saveProfileBannerSharedPref(chosen);
     });
   });
 }
+
 
 
   @override
@@ -189,11 +188,11 @@ updateProfileAppbar() async {
             alignment: Alignment.bottomCenter,
             child: MainButton(
               color: Colors.indigo[500],
-              text: requiredPointsBool == true ? "Set profile appbar to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
+              text: requiredPointsBool == true ? "Set profile banner to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
               textColor: requiredPointsBool == true ? Colors.white : Colors.red,
               pressed: () {
                 if (requiredPointsBool == true) {
-                updateProfileAppbar();
+                updateProfileBanner();
                 Navigator.pop(context);
                 } 
               },

@@ -15,10 +15,9 @@ import '../../database.dart';
 import '../../helpers.dart';
 
 class PostPage extends StatefulWidget {
-  final String userName;
   final String imageId;
 
-  PostPage(this.userName, this.imageId);
+  PostPage(this.imageId);
   
   @override
   _PostPageState createState() => _PostPageState();
@@ -69,7 +68,7 @@ class _PostPageState extends State<PostPage> {
 
   checkImages() async {
     FirebaseFirestore.instance
-        .collection("uploads").where('username', isEqualTo: widget.userName)
+        .collection("uploads")
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
@@ -230,7 +229,7 @@ class _PostPageState extends State<PostPage> {
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .where('caption', isEqualTo: captions[index])
+          .where('imageid', isEqualTo: posts[index])
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((result) async {
@@ -259,7 +258,7 @@ class _PostPageState extends State<PostPage> {
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .where('caption', isEqualTo: captions[index])
+          .where('imageid', isEqualTo: posts[index])
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((result) async {
@@ -293,7 +292,7 @@ class _PostPageState extends State<PostPage> {
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .where('caption', isEqualTo: captions[index])
+          .where('imageid', isEqualTo: posts[index])
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((result) async {
@@ -322,7 +321,7 @@ class _PostPageState extends State<PostPage> {
           .collection('uploads')
           .doc(usernames[index])
           .collection('images')
-          .where('caption', isEqualTo: captions[index])
+          .where('imageid', isEqualTo: posts[index])
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((result) async {
@@ -552,7 +551,7 @@ returnReportColor() {
 }
 
 returnReportButton(int index) {
-    if (widget.userName != Constants.myName) {
+    if (usernames[index] != Constants.myName) {
       return IconButton(
         icon: returnReportColor(),
         iconSize: 25,
@@ -765,6 +764,139 @@ void deletePost(int index) async {
     DatabaseMethods().createReport(imageId, reporter, poster, reason);
   }
 
+  shareImage(int index, BuildContext context) {
+    // set up the buttons
+    Widget rowButton = Row(
+                children: [
+                  Expanded(
+                    child: InputField(
+                      color: Colors.blueGrey[200],
+                      control: searchController,
+                      hint: "Search...",
+                      changes: (val) {
+                      },
+                    ),
+                  ),
+                ],
+                
+              );
+
+    Widget cancelButton = FlatButton(
+        child: Text("Cancel"),
+        onPressed: () {
+          Navigator.of(context, rootNavigator: true).pop();
+    });
+    
+    Widget confirmButton = FlatButton(
+      onPressed: () {
+        initSearch();
+        createChat(index: index);
+        sendMessage(index);
+         Navigator.of(context, rootNavigator: true).pop();
+      }, 
+      child: Text("Share"),
+      );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Share Image"),
+      content:
+          Text("Search for a user to share to:"),
+      actions: [
+        rowButton,
+        confirmButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
+  initSearch() {
+    databaseMethods.getUsername(searchController.text)
+    .then((val){
+      setState(() {
+        searchshot = val;
+      });
+    });
+  }
+
+  QuerySnapshot searchshot;
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  TextEditingController searchController = TextEditingController();
+
+  sendMessage(int index) {
+    String roomId = getRoomId(searchController.text, Constants.myName);
+    if(searchController.text.isNotEmpty) {
+    Map<String,dynamic> textMap = {
+      "message": posts[index],
+      "sentBy": Constants.myName,
+      "time": DateTime.now().millisecondsSinceEpoch,
+    };
+    databaseMethods.addConvoText(roomId, textMap);
+    searchController.clear();
+    }
+  }
+
+  createChat({int index}) {
+    if (searchController.text != Constants.myName) {
+    String roomId = getRoomId(searchController.text, Constants.myName);
+    List<String> users = [searchController.text, Constants.myName];
+    Map<String, dynamic> roomMap = {
+      "users": users,
+      "roomId": roomId,
+    };
+    DatabaseMethods().createChat(roomId, roomMap);
+    } else {
+      print("Can't chat with yourself!");
+    }
+  }
+
+  getRoomId(String x, String y) {
+    if (x.substring(0,1).codeUnitAt(0) > y.substring(0,1).codeUnitAt(0)) {
+      return "$y\_$x";
+    } else {
+      return "$x\_$y";
+    }
+  }
+
+
+  Widget SearchTile({String userName, String userEmail}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(userName),
+            ],
+          ),
+          Spacer(),
+          GestureDetector(
+            onTap: () {
+              taggedUsers.add(searchController.text);
+              print(taggedUsers);
+              searchController.clear();
+            },
+            child: Container(
+              color: primaryDarkColour,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Text("Tag"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   returnTaggedUsers(int index) {
     for (String post in posts) {
       if (taggedUsers[index]
@@ -949,8 +1081,7 @@ void deletePost(int index) async {
                           icon: Image.asset('assets/pictures/ICON-send.png'),
                           iconSize: 25,
                           onPressed: () {
-                            print(
-                                'This will let a user send the post to another user');
+                           shareImage(userIndex, context);
                           },
                         )),
                     Container(
@@ -1192,8 +1323,7 @@ void deletePost(int index) async {
                           icon: Image.asset('assets/icons/DARKICON_send.png'),
                           iconSize: 25,
                           onPressed: () {
-                            print(
-                                'This will let a user send the post to another user');
+                            shareImage(userIndex, context);
                           },
                         )),
                     Container(
