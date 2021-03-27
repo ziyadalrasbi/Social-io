@@ -65,7 +65,8 @@ class _UserProfile1State extends State<UserProfile> {
         FirebaseFirestore.instance
             .collection("uploads")
             .doc(result.id)
-            .collection("images")
+            .collection("images").orderBy('time', descending: true)
+            .where('username', isEqualTo: widget.userName)
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {

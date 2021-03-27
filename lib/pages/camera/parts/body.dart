@@ -36,16 +36,19 @@ class _ImageCaptureState extends State<ImageCapture> {
   List<Face> _faces;
   ui.Image _image;
   final _picker = ImagePicker();
+  bool isLoading = false;
   
   Future<void> _pickImage(ImageSource source) async {
     
     final imageFile = await _picker.getImage(source: source);
-    
+    setState(() {
+      isLoading = true;
+    });
     final image = FirebaseVisionImage.fromFile(File(imageFile.path));
     final faceDetector = FirebaseVision.instance.faceDetector();
     List<Face> faces = await faceDetector.processImage(image);
     
-    
+    if (mounted) {
       setState(() {
         _imageFile = File(imageFile.path);
         _faces = faces;
@@ -56,7 +59,7 @@ class _ImageCaptureState extends State<ImageCapture> {
           faceDetected = false;
         }
       });
-
+    }
       
     
 
@@ -66,6 +69,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     final data = await file.readAsBytes();
     await decodeImageFromList(data).then((value) => setState((){
       _image = value;
+      isLoading = false;
     }));
   }
 
@@ -177,6 +181,7 @@ Widget listSearch() {
       ),
       body: ListView(
         children: <Widget>[
+          if (isLoading == false) ...[
           if (_imageFile != null) ...[
             GestureDetector(
               onTap: () {
@@ -184,8 +189,8 @@ Widget listSearch() {
               },
               child: FittedBox(
                 child: SizedBox(
-                  width: _imageFile != null ? _image.width.toDouble() : CircularProgressIndicator(),
-                  height: _imageFile != null ? _image.height.toDouble(): CircularProgressIndicator(),
+                  width: _imageFile != null ? _image.width.toDouble() : Container(),
+                  height: _imageFile != null ? _image.height.toDouble(): Container(),
                   child: CustomPaint(
                     painter: FacePainter(_image, _faces),
                     ),
@@ -235,7 +240,12 @@ Widget listSearch() {
                 Uploader(file: _imageFile,)
               ],
             ),
+          ] else ... [
+            Container(),
           ]
+        ] else ...[
+          Center(child: CircularProgressIndicator(),),
+        ],
         ],
       ),
       
@@ -291,11 +301,11 @@ class _UploaderState extends State<Uploader> {
     Map<String,dynamic> imageMap = {
       "username": Constants.myName,
       "imageid": filePath,
-      "time": DateTime.now().millisecondsSinceEpoch,
       "upvotes": 0,
       "caption": captionController.text,
       "tagged": taggedUsers,
       "profilepic": Constants.myProfilePic,
+      "time": DateTime.now().millisecondsSinceEpoch,
     };
     databaseMethods.addImage(Constants.myName, imageMap);
 
@@ -305,6 +315,14 @@ class _UploaderState extends State<Uploader> {
       _uploadTask.snapshotEvents.listen((TaskSnapshot snapshot) { 
         print('Snapshot state: ${snapshot.state}');
         print('Progess: ${snapshot.totalBytes / snapshot.bytesTransferred}');
+        if (snapshot.totalBytes / snapshot.bytesTransferred == 1.0) {
+          Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BottomBar()),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator(),);
+        }
       }, onError: (Object e) {
         print(e);
       });
@@ -315,7 +333,7 @@ class _UploaderState extends State<Uploader> {
   Widget build(BuildContext context) {
     if ( faceDetected == false) {
         return FlatButton.icon(
-        label: Text('Upload to Firebase'),
+        label: Text('Post Image'),
         icon: Icon(Icons.cloud_upload),
         onPressed: 
            _startUpload,
