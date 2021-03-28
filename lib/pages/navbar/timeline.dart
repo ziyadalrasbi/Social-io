@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -461,6 +462,8 @@ class _PostsState extends State<Posts> {
     Size size = MediaQuery.of(context).size;
     if (kIsWeb) {
       return 700;
+    } else if (Platform.isIOS || Platform.isAndroid) {
+      return size.height * 0.5;
     } else {
       return size.height * 0.5;
     }
@@ -826,6 +829,7 @@ class _PostsState extends State<Posts> {
       }
     }
   }
+
 
   Widget _getPost() {
     Size size = MediaQuery.of(context).size;
@@ -1322,11 +1326,49 @@ class _PostsState extends State<Posts> {
     }
   }
 
+  appBarTest() {
+    if (!kIsWeb) {
+       Size size = MediaQuery.of(context).size;
+      return AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            FlatButton(
+              child: Image.asset(
+                'assets/icons/DARKICON_inbox.png',
+                width: 45,
+                height: 45,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     if (Constants.DarkModeBool == false) {
       return Scaffold(
+        
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
@@ -1363,37 +1405,7 @@ class _PostsState extends State<Posts> {
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Constants.myAppBar.toString()),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-          actions: <Widget>[
-            FlatButton(
-              child: Image.asset(
-                'assets/icons/DARKICON_inbox.png',
-                width: 45,
-                height: 45,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+        appBar: appBarTest(),
         body: _getPostDark(),
       );
     }
