@@ -41,6 +41,7 @@ class _BodyState extends State<Body> {
   List likedposts = [];
   List savedposts = [];
   int totallikes = 0;
+  bool isDark = false;
   String appbar = "assets/appbars/Original.png";
   String banner = "assets/banners/nightsky/nightsky3.png";
   String border = "";
@@ -181,6 +182,7 @@ class _BodyState extends State<Body> {
                     HelperFunction.saveProfileBannerSharedPref(banner);
                     HelperFunction.saveProfileBorderSharedPref(border);
                     HelperFunction.saveTotalLikesSharedPref(totallikes);
+                    HelperFunction.saveThemeSharedPref(isDark);
                     if (_formKey.currentState.validate()) {
                       setState(() {
                         isLoading = true;              
@@ -213,6 +215,7 @@ class _BodyState extends State<Body> {
                         border,
                         totallikes,
                         savedposts,
+                        isDark,
                         );
                     } on FirebaseAuthException catch (e) {
                         if (e.code == 'email-already-in-use') {

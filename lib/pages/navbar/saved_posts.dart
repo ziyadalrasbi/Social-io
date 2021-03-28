@@ -439,6 +439,15 @@ class _SavedPostsState extends State<SavedPosts> {
     }
   }
 
+  returnHeight() {
+    Size size = MediaQuery.of(context).size;
+    if (kIsWeb) {
+      return 700;
+    } else {
+      return size.height * 0.5;
+    }
+  }
+
   returnAlignment() {
     if (kIsWeb) {
       return MainAxisAlignment.center;
@@ -881,7 +890,7 @@ class _SavedPostsState extends State<SavedPosts> {
                             });
                         },
                       ),
-                      height: size.height * 0.5,
+                      height:returnHeight(),
                       width: returnWidth(),
                       padding: EdgeInsets.only(
                         left: 16,
@@ -1128,7 +1137,7 @@ class _SavedPostsState extends State<SavedPosts> {
                             });
                         },
                       ),
-                      height: size.height * 0.5,
+                      height: returnHeight(),
                       width: returnWidth(),
                       padding: EdgeInsets.only(
                         left: 16,

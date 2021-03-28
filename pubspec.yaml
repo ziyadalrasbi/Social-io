@@ -41,12 +41,14 @@ dependencies:
   stacked_themes: ^0.2.2+2
   plugin_platform_interface: ^1.0.1
   firebase_ml_vision: ^0.9.10
+  firebase_analytics: ^6.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
   
 
 dependency_overrides:
+  firebase_analytics: ^6.0.0
   firebase_ml_vision: ^0.9.10
   bubble_bottom_bar: ^1.2.0
   cloud_firestore: ^0.14.0

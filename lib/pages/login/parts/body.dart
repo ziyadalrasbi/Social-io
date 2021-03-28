@@ -94,6 +94,7 @@ class _BodyState extends State<Body> {
                   HelperFunction.saveProfileBarSharedPref(querySnapshot.docs[0].data()['appbar']);
                   HelperFunction.saveProfileBorderSharedPref(querySnapshot.docs[0].data()['border']);
                   HelperFunction.saveProfileBannerSharedPref(querySnapshot.docs[0].data()['banner']);
+                  HelperFunction.saveThemeSharedPref(querySnapshot.docs[0].data()['isDark']);
                 }); 
                 try {
                   UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
