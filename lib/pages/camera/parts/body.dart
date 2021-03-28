@@ -202,30 +202,14 @@ Widget listSearch() {
               control: captionController,
               changes: (value) {},
             ),
-            Row(
-                children: [
-                  Expanded(
-                    child: InputField(
-                      color: Colors.blueGrey[200],
-                      control: searchController,
-                      hint: "Search for users to tag (optional)",
-                      changes: (val) {
-                      },
-                    ),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () { 
-                      initSearch();
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      padding: EdgeInsets.all(12),
-                      child: Image.asset("assets/icons/ICON_search.png")),
-                  ),
-                ],
-                
+            Expanded(
+              child: InputField(
+                color: Colors.blueGrey[200],
+                control: searchController,
+                hint: "Tag your post with a # (optional)",
+                changes: (val) {},
               ),
+            ),
               listSearch(),
             Row(
               children: <Widget>[
@@ -303,7 +287,7 @@ class _UploaderState extends State<Uploader> {
       "imageid": filePath,
       "upvotes": 0,
       "caption": captionController.text,
-      "tagged": taggedUsers,
+      "tagged": searchController.text,
       "profilepic": Constants.myProfilePic,
       "time": DateTime.now().millisecondsSinceEpoch,
     };

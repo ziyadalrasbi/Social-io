@@ -83,6 +83,14 @@ class DatabaseMethods {
     .snapshots();
   }
 
+  getTag(String tagged) async {
+    return await FirebaseFirestore.instance
+      .collection('uploads')
+      .doc()
+      .collection('images')
+      .where('tagged', isEqualTo: tagged)
+      .get();
+  }
   
 
   
