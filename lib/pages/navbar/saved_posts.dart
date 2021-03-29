@@ -769,45 +769,37 @@ class _SavedPostsState extends State<SavedPosts> {
   }
 
   returnTaggedUsers(int index) {
-    for (String post in posts) {
-      if (taggedUsers[index]
-              .toString()
-              .substring(1, taggedUsers[index].toString().length - 1)
-              .length >
-          1) {
-        return Visibility(
-          //Raised button that comes into view when you tap the image, tap again to get rid of it
-          visible: isVisible,
-          child: RaisedButton(
-            onPressed: () {
-              if (taggedUsers[index]
-                      .toString()
-                      .substring(1, taggedUsers[index].toString().length - 1) !=
-                  Constants.myName) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UserProfile(taggedUsers[index]
-                          .toString()
-                          .substring(
-                              1, taggedUsers[index].toString().length - 1))),
-                );
-              } else {
-                print(likedposts);
-              }
-            },
-            child: Text(taggedUsers[index]
+    if (taggedUsers[index].toString().length > 1) {
+      for (String post in posts) {
+        if (taggedUsers[index]
                 .toString()
-                .substring(1, taggedUsers[index].toString().length - 1)),
-            color: Colors.blueGrey,
-          ),
-        );
-      } else {
-        return Container();
+                .substring(1, taggedUsers[index].toString().length)
+                .length >
+            1) {
+          return Visibility(
+            //Raised button that comes into view when you tap the image, tap again to get rid of it
+            visible: isVisible,
+            child: Container(
+              child: Text(
+                taggedUsers[index]
+                    .toString()
+                    .substring(1, taggedUsers[index].toString().length),
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  fontSize: 18.0,
+                ),
+              ),
+              color: Colors.transparent,
+            ),
+          );
+        } else {
+          return Container();
+        }
       }
+    } else {
+      return Container();
     }
   }
-
   Widget _getPost() {
     Size size = MediaQuery.of(context).size;
     if (url != null) {
@@ -850,7 +842,7 @@ class _SavedPostsState extends State<SavedPosts> {
                               TextSpan(
                                   text: usernames[userIndex],
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 15.0),
+                                      color: Colors.black, fontSize: 18.0),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.push(
@@ -864,6 +856,7 @@ class _SavedPostsState extends State<SavedPosts> {
                           )
                         ],
                       ),
+                      returnTaggedUsers(userIndex),
                       IconButton(
                         icon: Image.asset('assets/pictures/ICON_flag.png'),
                         iconSize: 25,
@@ -905,11 +898,6 @@ class _SavedPostsState extends State<SavedPosts> {
                             fit: BoxFit.fill,
                             image: NetworkImage(images[userIndex])),
                       )),
-                  Positioned(
-                    top: 25,
-                    left: 50,
-                    child: returnTaggedUsers(userIndex),
-                  )
                 ]),
                 Row(
                   mainAxisAlignment: returnAlignment(),
@@ -1097,7 +1085,7 @@ class _SavedPostsState extends State<SavedPosts> {
                               TextSpan(
                                   text: usernames[userIndex],
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 15.0),
+                                      color: Colors.white, fontSize: 18.0),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
                                       Navigator.push(
@@ -1111,6 +1099,7 @@ class _SavedPostsState extends State<SavedPosts> {
                           )
                         ],
                       ),
+                      returnTaggedUsers(userIndex),
                       IconButton(
                         icon: Image.asset('assets/icons/DARKICON_flag.png'),
                         iconSize: 25,
@@ -1152,11 +1141,7 @@ class _SavedPostsState extends State<SavedPosts> {
                             fit: BoxFit.fill,
                             image: NetworkImage(images[userIndex])),
                       )),
-                  Positioned(
-                    top: 25,
-                    left: 50,
-                    child: returnTaggedUsers(userIndex),
-                  )
+                 
                 ]),
                 Row(
                   mainAxisAlignment: returnAlignment(),

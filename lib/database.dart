@@ -73,6 +73,13 @@ class DatabaseMethods {
     return;
   }
 
+  getProfileTag(String profileTag) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .where('profiletag', isEqualTo: profileTag)
+        .get();
+  }
+
   addComment(String userName, String imageId, commentMap) async {
     return await FirebaseFirestore.instance.collection('uploads')
     .doc(userName).collection('images').doc(imageId).collection('comments')

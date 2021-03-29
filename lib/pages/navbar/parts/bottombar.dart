@@ -13,7 +13,6 @@ import 'package:socialio/pages/navbar/fake_profile.dart';
 import 'package:socialio/pages/profile/profile_1.dart';
 import 'package:socialio/pages/navbar/bottom.dart';
 import 'package:socialio/pages/student/classroom.dart';
-import 'package:socialio/pages/student/view_quizzes.dart';
 
 import '../../../constants.dart';
 import '../../../helpers.dart';
@@ -33,15 +32,11 @@ class BodyB extends StatelessWidget {
   Widget build(BuildContext context) {
     getTheme();
     if (Constants.DarkModeBool == true) {
-      print("bottombar");
-      print(Constants.DarkModeBool);
       return MaterialApp(
         theme: ThemeData(brightness: Brightness.dark),
         home: BottomBar(),
       );
     } else {
-      print("bottombar");
-      print(Constants.DarkModeBool);
       return MaterialApp(
         theme: ThemeData(brightness: Brightness.light),
         home: BottomBar(),
@@ -73,7 +68,7 @@ class _BottomBar extends State<BottomBar> {
     Posts(), //class name of timeline
     Explore(), //class name of search
     Profile(), //class name of profile
-    Classroom(),
+    (Constants.accType == "Student") ? Classroom() : SavedPosts(),
     Setup_page(), //class name of setting
   ];
 

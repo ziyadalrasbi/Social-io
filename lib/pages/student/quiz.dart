@@ -164,12 +164,35 @@ class _QuizState extends State<Quiz> {
                     if (firstselected != true) {
                     
                       firstselected = true;
-                      secondselected = false;
-                      thirdselected = false;
-                      fourthselected = false;
+                      if (listOfSecondBoolAnswers[index]  ==  true  && secondselected == true) {
+                        secondselected = false;
+                        userScore--;
+                      } else {
+                        secondselected = false;
+                      }
+
+                      if (listOfThirdBoolAnswers[index]  == true && thirdselected == true) {
+                        thirdselected = false;
+                        userScore--;
+                      } else {
+                        thirdselected = false;
+                      }
+
+                      if (listOfFourthBoolAnswers[index]  == true && fourthselected == true) {
+                        fourthselected = false;
+                        userScore--;
+                      } else {
+                        fourthselected = false;
+                      }
                   
-                    if (listOfFirstBoolAnswers[index] == true) {
+                      if (listOfFirstBoolAnswers[index] == true) {
                       userScore++;
+                      }
+                    
+                    } else if (firstselected == true) {
+                      firstselected = false;
+                       if (listOfFirstBoolAnswers[index] == true) {
+                      userScore--;
                     }
                     }
                     print(userScore);
@@ -187,15 +210,37 @@ class _QuizState extends State<Quiz> {
                   tileColor: Colors.grey,
                   onTap: () {
                     if (secondselected != true) {
-                    
-                      firstselected = false;
-                      secondselected = true;
-                      thirdselected = false;
-                      fourthselected = false;
+
+                    secondselected = true;
+                      if (listOfFirstBoolAnswers[index]  == true  && firstselected == true) {
+                        firstselected = false;
+                        userScore--;
+                      } else {
+                        firstselected = false;
+                      }
+
+                      if (listOfThirdBoolAnswers[index]  == true  && thirdselected == true) {
+                        thirdselected = false;
+                        userScore--;
+                      } else {
+                        thirdselected = false;
+                      }
+
+                      if (listOfFourthBoolAnswers[index]  == true  && fourthselected == true) {
+                        fourthselected = false;
+                        userScore--;
+                      } else {
+                        fourthselected = false;
+                      }
                   
-                    if (listOfSecondBoolAnswers[index] == true) {
+                      if (listOfSecondBoolAnswers[index] == true) {
                       userScore++;
-                    } 
+                      }
+                    } else if (secondselected == true) {
+                      secondselected = false;
+                       if (listOfSecondBoolAnswers[index]== true) {
+                      userScore--;
+                    }
                     }
                     print(userScore);
                   },
@@ -213,17 +258,39 @@ class _QuizState extends State<Quiz> {
                   onTap: () {
                     if (thirdselected != true) {
                     
-                      firstselected = false;
-                      secondselected = false;
                       thirdselected = true;
-                      fourthselected = false;
-                   
-                    if (listOfThirdBoolAnswers[index] == true) {
+                      if (listOfSecondBoolAnswers[index]  == true  && secondselected == true) {
+                        secondselected = false;
+                        userScore--;
+                      } else {
+                        secondselected = false;
+                      }
+
+                      if (listOfFirstBoolAnswers[index]  == true  && firstselected == true) {
+                        firstselected = false;
+                        userScore--;
+                      } else {
+                        firstselected = false;
+                      }
+
+                      if (listOfFourthBoolAnswers[index]  == true  && fourthselected == true) {
+                        fourthselected = false;
+                        userScore--;
+                      } else {
+                        fourthselected = false;
+                      }
+                  
+                      if (listOfThirdBoolAnswers[index] == true) {
                       userScore++;
-                      print(userScore);
-                    }
-                    }
+                      }
                     
+                    } else if (thirdselected == true) {
+                      thirdselected = false;
+                       if (listOfThirdBoolAnswers[index] == true) {
+                      userScore--;
+                    }
+                    }
+                    print(userScore);
                   },
                   leading: Text("3."),
                   title: Text(listOfThirdAnswers[index].toString()),
@@ -239,13 +306,36 @@ class _QuizState extends State<Quiz> {
                   onTap: () {
                     if (fourthselected != true) {
                     
-                      firstselected = false;
-                      secondselected = false;
-                      thirdselected = false;
                       fourthselected = true;
-                   
-                    if (listOfFourthBoolAnswers[index] == true) {
+
+                      if (listOfSecondBoolAnswers[index]  == true  && secondselected == true) {
+                        secondselected = false;
+                        userScore--;
+                      } else {
+                        secondselected = false;
+                      }
+
+                      if (listOfThirdBoolAnswers[index]  == true  && thirdselected == true) {
+                        thirdselected = false;
+                        userScore--;
+                      } else {
+                        thirdselected = false;
+                      }
+
+                      if (listOfFirstBoolAnswers[index]  == true  && firstselected == true) {
+                        firstselected = false;
+                        userScore--;
+                      } else {
+                        firstselected = false;
+                      }
+                  
+                      if (listOfFourthBoolAnswers[index] == true) {
                       userScore++;
+                      }
+                    } else if (fourthselected == true) {
+                      fourthselected = false;
+                       if (listOfFourthBoolAnswers[index]== true) {
+                      userScore--;
                     }
                     }
                     print(userScore);
@@ -297,7 +387,7 @@ class _QuizState extends State<Quiz> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Score(userScore),
+              builder: (context) => Score(userScore, listOfQuestions2.length),
             ));
       },
     );

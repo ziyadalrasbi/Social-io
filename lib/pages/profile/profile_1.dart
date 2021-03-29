@@ -13,7 +13,7 @@ class Profile extends StatefulWidget {
 }
 
 class _Profile1State extends State<Profile> {
-  
+  String dropdownValue = "Sort by:";
   int followers = 0;
   int following = 0;
   int postTime = 0;
@@ -45,6 +45,7 @@ class _Profile1State extends State<Profile> {
   }
 
   void checkImages() async {
+    print("checkimages time descending true");
     FirebaseFirestore.instance
         .collection("uploads")
         .where('username', isEqualTo: Constants.myName)
@@ -55,6 +56,7 @@ class _Profile1State extends State<Profile> {
             .collection("uploads")
             .doc(result.id)
             .collection("images")
+            .orderBy('time', descending: true)
             .get()
             .then((querySnapshot) {
           querySnapshot.docs.forEach((result) async {
@@ -73,6 +75,116 @@ class _Profile1State extends State<Profile> {
     });
   }
 
+  checkImagesLikesAscending() async {
+    print("checkimages likes descending false");
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(result.id)
+            .collection("images")
+            .orderBy('upvotes', descending: false)
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((result) async {
+            final ref =
+                FirebaseStorage.instance.ref().child(result.data()['imageid']);
+            url = await ref.getDownloadURL();
+            images.add(url);
+
+            setState(() {
+              posts.add(result.data()['imageid']);
+              printImages();
+            });
+          });
+        });
+      });
+    });
+  }
+
+  checkImagesLikesDescending() async {
+    print("checkimages likes descending true");
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(result.id)
+            .collection("images")
+            .orderBy('upvotes', descending: true)
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((result) async {
+            final ref =
+                FirebaseStorage.instance.ref().child(result.data()['imageid']);
+            url = await ref.getDownloadURL();
+            images.add(url);
+
+            setState(() {
+              posts.add(result.data()['imageid']);
+              printImages();
+            });
+          });
+        });
+      });
+    });
+  }
+
+  checkImagesDateAscending() async {
+    print("checkimages time descending false");
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        FirebaseFirestore.instance
+            .collection("uploads")
+            .doc(result.id)
+            .collection("images")
+            .orderBy('time', descending: false)
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((result) async {
+            final ref =
+                FirebaseStorage.instance.ref().child(result.data()['imageid']);
+            url = await ref.getDownloadURL();
+            images.add(url);
+
+            setState(() {
+              posts.add(result.data()['imageid']);
+              printImages();
+            });
+          });
+        });
+      });
+    });
+  }
+
+  initSearch() {
+    images = [];
+    if (dropdownValue == "Likes (ascending)") {
+      images = [];
+      checkImagesLikesAscending();
+    } else if (dropdownValue == "Likes (descending)") {
+      images = [];
+      checkImagesLikesDescending();
+    } else if (dropdownValue == "Date (ascending)") {
+      images = [];
+      checkImagesDateAscending();
+    } else {
+      images = [];
+      checkImages();
+    }
+  }
+
   void returnFollowers() async {
     FirebaseFirestore.instance
         .collection("users")
@@ -89,14 +201,12 @@ class _Profile1State extends State<Profile> {
   }
 
   printImages() {
-    
     return List.generate(images.length, (index) {
       return GestureDetector(
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => PostPage(posts[index])),
+            MaterialPageRoute(builder: (context) => PostPage(posts[index])),
           );
         },
         child: Container(
@@ -142,16 +252,15 @@ class _Profile1State extends State<Profile> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-          flexibleSpace: Container(
-            width: size.width*0.5,
-            decoration: 
-              BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Constants.myAppBar.toString()),
-                  fit: BoxFit.fill,
-                ),
-              ),
+        flexibleSpace: Container(
+          width: size.width * 0.5,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Constants.myAppBar.toString()),
+              fit: BoxFit.fill,
+            ),
           ),
+        ),
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
@@ -163,12 +272,12 @@ class _Profile1State extends State<Profile> {
               children: <Widget>[
                 Container(
                   height: size.height * 0.50,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(Constants.myAppBanner.toString()),
-                              fit: BoxFit.cover,
-                            ),
-                         ),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(Constants.myAppBanner.toString()),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   child: Container(
                     height: size.height * 0.2,
                     decoration: BoxDecoration(
@@ -180,14 +289,10 @@ class _Profile1State extends State<Profile> {
                     child: Column(
                       children: <Widget>[
                         SizedBox(
-                          height: size.height*0.051,
+                          height: size.height * 0.051,
                         ),
-                  
-                          
-                        
                         GestureDetector(
-                          onTap: () { 
-                          },
+                          onTap: () {},
                           child: CircleAvatar(
                             radius: 45,
                             backgroundImage:
@@ -195,62 +300,60 @@ class _Profile1State extends State<Profile> {
                             backgroundColor: Colors.transparent,
                           ),
                         ),
-                      
-                      SizedBox(
-                        height: size.height * 0.00925,
-                      ),
-                      Text(
-                        Constants.myName,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
+                        SizedBox(
+                          height: size.height * 0.00925,
                         ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.00625,
-                      ),
-                      Text(
-                        "SocialIO " + Constants.accType,
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
+                        Text(
+                          Constants.myName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Container(
-                        height: size.height * 0.075,
-                        color: Colors.black.withOpacity(0.4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Expanded(
-                              child: Container(),
-                            ),
-                            Container(
-                              width: 110,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "FOLLOWERS",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
+                        SizedBox(
+                          height: size.height * 0.00625,
+                        ),
+                        Text(
+                          "SocialIO " + Constants.accType,
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Container(
+                          height: size.height * 0.075,
+                          color: Colors.black.withOpacity(0.4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Expanded(
+                                child: Container(),
+                              ),
+                              Container(
+                                width: 110,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "FOLLOWERS",
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    followers.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      
+                                    SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      followers.toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
@@ -292,7 +395,6 @@ class _Profile1State extends State<Profile> {
                     ),
                   ),
                 ),
-                
                 Material(
                   elevation: 1,
                   child: Container(
@@ -327,6 +429,40 @@ class _Profile1State extends State<Profile> {
                         ),
                       ],
                     ),
+                  ),
+                ),
+                Container(
+                  width: size.width * 0.8,
+                  padding: EdgeInsets.symmetric(vertical: 7, horizontal: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton(
+                    isExpanded: true,
+                    value: dropdownValue,
+                    icon: Icon(Icons.arrow_drop_down_circle),
+                    iconSize: 20,
+                    elevation: 15,
+                    underline: Container(height: 2),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        dropdownValue = newValue;
+                        initSearch();
+                      });
+                    },
+                    items: <String>[
+                      "Sort by:",
+                      "Likes (ascending)",
+                      "Likes (descending)",
+                      "Date (ascending)",
+                      "Date (descending)",
+                    ].map<DropdownMenuItem<String>>((String val) {
+                      return DropdownMenuItem<String>(
+                        value: val,
+                        child: Text(val),
+                      );
+                    }).toList(),
                   ),
                 ),
                 Container(

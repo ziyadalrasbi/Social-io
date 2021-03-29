@@ -152,8 +152,7 @@ class ExploreState extends State<Explore> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => PostPage(posts[index])),
+            MaterialPageRoute(builder: (context) => PostPage(posts[index])),
           );
         },
         child: Container(
@@ -211,15 +210,15 @@ class ExploreState extends State<Explore> {
   initSearch() {
     if ('${searchEditingController.text[0]}' == "#") {
       images = [];
-      print("hello");
       checkImagesTagged();
       databaseMethods.getTag(searchEditingController.text).then((val) {
-        setState(() {
-          searchshot = val;
-          searchEditingController.clear();
+        databaseMethods.getProfileTag(searchEditingController.text).then((val) {
+          setState(() {
+            searchshot = val;
+            searchEditingController.clear();
+          });
         });
       });
-      print(images);
       printImages();
     } else {
       databaseMethods.getUsername(searchEditingController.text).then((val) {
@@ -256,41 +255,18 @@ class ExploreState extends State<Explore> {
         : Container();
   }
 
-  Widget _getSearchbar() {
-    Size size = MediaQuery.of(context).size;
-    if (url != null) {
-      return Scaffold(
-        body: Container(
-          child: Column(children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InputField(
-                      color: Colors.blueGrey[200],
-                      control: searchEditingController,
-                      hint: "Search for users",
-                      changes: (val) {},
-                    ),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      initSearch();
-                    },
-                    child: Container(
-                        height: 50,
-                        width: 50,
-                        padding: EdgeInsets.all(12),
-                        child: Image.asset("assets/icons/ICON_search.png")),
-                  ),
-                ],
-              ),
-            ),
-          ]),
-        ),
-      );
-    }
+  Widget listSearchTag() {
+    return searchshot != null
+        ? ListView.builder(
+            itemCount: searchshot.docs.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return SearchTileTag(
+                profileTag: searchshot.docs[index].data()["profiletag"],
+                userName: searchshot.docs[index].data()["username"],
+              );
+            })
+        : Container();
   }
 
   Widget SearchTile({String userName, String userEmail}) {
@@ -311,6 +287,31 @@ class ExploreState extends State<Explore> {
                 userName: userName,
               );
             },
+            child: Container(
+              color: primaryDarkColour,
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Text("View"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget SearchTileTag({String profileTag, String userName}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(userName),
+            ],
+          ),
+          Spacer(),
+          GestureDetector(
+            onTap: () {},
             child: Container(
               color: primaryDarkColour,
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -387,6 +388,7 @@ class ExploreState extends State<Explore> {
               ),
             ),
             listSearch(),
+            listSearchTag(),
             SingleChildScrollView(
               child: Stack(
                 children: <Widget>[

@@ -812,22 +812,6 @@ class _PostsState extends State<Posts> {
             //Raised button that comes into view when you tap the image, tap again to get rid of it
             visible: isVisible,
             child: Container(
-            //   //onPressed: () {
-            //   if (taggedUsers[index]
-            //           .toString()
-            //           .substring(1, taggedUsers[index].toString().length) !=
-            //       Constants.myName) {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => UserProfile(taggedUsers[index]
-            //               .toString()
-            //               .substring(1, taggedUsers[index].toString().length))),
-            //     );
-            //   } else {
-            //     print(likedposts);
-            //   }
-            // },/
               child: Text(
                 taggedUsers[index]
                     .toString()
