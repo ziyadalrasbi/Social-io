@@ -40,6 +40,7 @@ class _BodyState extends State<Body> {
   List followinglist = [];
   List likedposts = [];
   List savedposts = [];
+  List rewards = [];
   int totallikes = 0;
   bool isDark = false;
   String appbar = "assets/appbars/Original.png";
@@ -216,6 +217,7 @@ class _BodyState extends State<Body> {
                         totallikes,
                         savedposts,
                         isDark,
+                        rewards,
                         );
                     } on FirebaseAuthException catch (e) {
                         if (e.code == 'email-already-in-use') {

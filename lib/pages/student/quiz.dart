@@ -139,7 +139,10 @@ class _QuizState extends State<Quiz> {
   ];
 
   List<List> listOfListOfAnswers = [];
-  bool selected = false;
+  bool firstselected = false;
+  bool secondselected = false;
+  bool thirdselected = false;
+  bool fourthselected = false;
 
   returnUpvoteColour() {
     
@@ -158,7 +161,18 @@ class _QuizState extends State<Quiz> {
               child: ListTile(
                   tileColor:Colors.grey,
                   onTap: () {
+                    if (firstselected != true) {
                     
+                      firstselected = true;
+                      secondselected = false;
+                      thirdselected = false;
+                      fourthselected = false;
+                  
+                    if (listOfFirstBoolAnswers[index] == true) {
+                      userScore++;
+                    }
+                    }
+                    print(userScore);
                   },
                   leading: Text("1."),
                   title: Text(listOfFirstAnswers[index].toString()),
@@ -171,7 +185,20 @@ class _QuizState extends State<Quiz> {
           Card(
               child: ListTile(
                   tileColor: Colors.grey,
-                  onTap: () {},
+                  onTap: () {
+                    if (secondselected != true) {
+                    
+                      firstselected = false;
+                      secondselected = true;
+                      thirdselected = false;
+                      fourthselected = false;
+                  
+                    if (listOfSecondBoolAnswers[index] == true) {
+                      userScore++;
+                    } 
+                    }
+                    print(userScore);
+                  },
                   leading: Text("2."),
                   title: Text(listOfSecondtAnswers[index].toString()),
                   trailing: IconButton(
@@ -183,7 +210,21 @@ class _QuizState extends State<Quiz> {
           Card(
               child: ListTile(
                   tileColor: Colors.grey,
-                  onTap: () {},
+                  onTap: () {
+                    if (thirdselected != true) {
+                    
+                      firstselected = false;
+                      secondselected = false;
+                      thirdselected = true;
+                      fourthselected = false;
+                   
+                    if (listOfThirdBoolAnswers[index] == true) {
+                      userScore++;
+                      print(userScore);
+                    }
+                    }
+                    
+                  },
                   leading: Text("3."),
                   title: Text(listOfThirdAnswers[index].toString()),
                   trailing: IconButton(
@@ -195,7 +236,20 @@ class _QuizState extends State<Quiz> {
           Card(
               child: ListTile(
                   tileColor: Colors.grey,
-                  onTap: () {},
+                  onTap: () {
+                    if (fourthselected != true) {
+                    
+                      firstselected = false;
+                      secondselected = false;
+                      thirdselected = false;
+                      fourthselected = true;
+                   
+                    if (listOfFourthBoolAnswers[index] == true) {
+                      userScore++;
+                    }
+                    }
+                    print(userScore);
+                  },
                   leading: Text("4."),
                   title: Text(listOfFourthAnswers[index].toString()),
                   trailing: IconButton(
@@ -243,7 +297,7 @@ class _QuizState extends State<Quiz> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Score(),
+              builder: (context) => Score(userScore),
             ));
       },
     );

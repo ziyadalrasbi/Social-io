@@ -5,6 +5,9 @@ import 'package:socialio/database.dart';
 import 'package:socialio/pages/student/classroom.dart';
 
 class Score extends StatefulWidget {
+  final int score;
+
+  const Score(this.score);
   @override
   _ScoreState createState() => _ScoreState();
 }
@@ -18,7 +21,7 @@ class _ScoreState extends State<Score> {
       decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
       child: Center(
           child: Text(
-        "10/10",
+        widget.score.toString()+"/10",
         style: TextStyle(fontSize: 100.0),
       )),
     );
