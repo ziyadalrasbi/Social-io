@@ -35,6 +35,19 @@ class DatabaseMethods {
     .doc(roomId).collection('images').add(textMap)
     .catchError((e){print(e.toString());});
   }
+
+  uploadQuiz(String quizName, quizMap) {
+    FirebaseFirestore.instance.collection('quizzes')
+    .doc(quizName).set(quizMap).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  createQuiz(String quizName, quizMap) {
+    FirebaseFirestore.instance.collection('quizzes')
+    .doc(quizName).collection('questions').add(quizMap)
+    .catchError((e){print(e.toString());});
+  }
   
   getImage(String imageId) async {
     return await FirebaseFirestore.instance.collection('uploads')
@@ -91,8 +104,5 @@ class DatabaseMethods {
       .where('tagged', isEqualTo: tagged)
       .get();
   }
-  
 
-  
-  
 }

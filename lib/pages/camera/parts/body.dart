@@ -256,20 +256,15 @@ class _UploaderState extends State<Uploader> {
   List<String> files;
       
   UploadTask _uploadTask;
-@override
+  
+  @override
   void initState() {
-    
     getUserInfo();
     super.initState();
   }
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-    databaseMethods.getUsername(Constants.myName).then((val){
-    setState(() {  
-    });
-  });
-  
   }
   
 
@@ -287,7 +282,7 @@ class _UploaderState extends State<Uploader> {
       "imageid": filePath,
       "upvotes": 0,
       "caption": captionController.text,
-      "tagged": searchController.text,
+      "tagged": searchController.text.isEmpty,
       "profilepic": Constants.myProfilePic,
       "time": DateTime.now().millisecondsSinceEpoch,
     };
