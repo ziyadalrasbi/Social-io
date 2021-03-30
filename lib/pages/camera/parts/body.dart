@@ -180,12 +180,11 @@ Widget listSearch() {
           if (_imageFile != null) ...[
             GestureDetector(
               onTap: () {
-                print(faceDetected);
               },
               child: FittedBox(
                 child: SizedBox(
-                  width: _imageFile != null ? _image.width.toDouble() : Container(),
-                  height: _imageFile != null ? _image.height.toDouble(): Container(),
+                  width: _image.width.toDouble(),
+                  height:  _image.height.toDouble(),
                   child: CustomPaint(
                     painter: FacePainter(_image, _faces),
                     ),
