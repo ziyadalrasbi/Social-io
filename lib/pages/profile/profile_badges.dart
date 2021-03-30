@@ -133,7 +133,7 @@ class _ProfileBadgesState extends State<ProfileBadges> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(8),
-                      child: const Text('get a like'),
+                      child: const Text('get a comment'),
                     ),
                     Container(
                       child: list[list.length-1].contains('assets/badges/9.png') ? Image.asset('assets/badges/9.png'): Image.asset('assets/badges/09.png'),
@@ -141,7 +141,7 @@ class _ProfileBadgesState extends State<ProfileBadges> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(8),
-                      child: const Text('get a comment'),
+                      child: const Text('get a like'),
                     ),
                     Container(
                       child: list[list.length-1].contains('assets/badges/10.png') ? Image.asset('assets/badges/10.png'): Image.asset('assets/badges/010.png'),
