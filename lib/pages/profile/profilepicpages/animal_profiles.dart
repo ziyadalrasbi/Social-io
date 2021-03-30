@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:socialio/pages/camera/parts/body.dart';
 import 'package:socialio/parts/button.dart';
 
 import '../../../constants.dart';
@@ -215,7 +216,7 @@ updateUploadProfilePics() async {
               text: requiredPointsBool == true ? "Set profile picture to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
               textColor: requiredPointsBool == true ? Colors.white : Colors.red,
               pressed: () {
-                if (requiredPointsBool == true) {
+                if (requiredPointsBool == true && chosen.length>2) {
                 updateProfilePic();
                 updateUploadProfilePics();
                 Navigator.pop(context);

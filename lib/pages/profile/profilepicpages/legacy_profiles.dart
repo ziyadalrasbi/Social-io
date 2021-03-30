@@ -210,7 +210,7 @@ updateUploadProfilePics() async {
               text: requiredPointsBool == true ? "Set profile picture to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
               textColor: requiredPointsBool == true ? Colors.white : Colors.red,
               pressed: () {
-                if (requiredPointsBool == true) {
+                if (requiredPointsBool == true && chosen.length>2) {
                 updateProfilePic();
                 updateUploadProfilePics();
                 Navigator.pop(context);

@@ -385,6 +385,7 @@ class _UploaderState extends State<Uploader> {
     if (true) {
       uploadMissionComplete();//1.png
     }
+    
     setState(() {
       captionController.clear();
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);

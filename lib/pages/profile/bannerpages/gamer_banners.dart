@@ -189,7 +189,7 @@ updateProfileBanner() async {
               text: requiredPointsBool == true ? "Set profile banner to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
               textColor: requiredPointsBool == true ? Colors.white : Colors.red,
               pressed: () {
-                if (requiredPointsBool == true) {
+                if (requiredPointsBool == true && chosen.length>2) {
                 updateProfileBanner();
                 Navigator.pop(context);
                 } 
