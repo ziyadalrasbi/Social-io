@@ -94,8 +94,6 @@ class _ImageCaptureState extends State<ImageCapture> {
     });
   }
 
-  
-
   QuerySnapshot searchshot;
 DatabaseMethods databaseMethods = new DatabaseMethods();
 
@@ -258,95 +256,20 @@ class _UploaderState extends State<Uploader> {
   List<String> files;
       
   UploadTask _uploadTask;
-  
-  @override
+@override
   void initState() {
+    
     getUserInfo();
     super.initState();
   }
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-  }
-
-   List<String> badges = [];
-
-  uploadMissionComplete() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: Constants.myName)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(result.id)
-            .update({'rewards': FieldValue.arrayUnion(['assets/badges/1.png'])});
-      });
+    databaseMethods.getUsername(Constants.myName).then((val){
+    setState(() {  
     });
-  }
-
-  cowMissionComplete() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: Constants.myName)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(result.id)
-            .update({'rewards': FieldValue.arrayUnion(['assets/badges/2.png'])});
-      });
-    });
-  }
-
-  tigerMissionComplete() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: Constants.myName)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(result.id)
-            .update({'rewards': FieldValue.arrayUnion(['assets/badges/5.png'])});
-      });
-    });
-  }
-
-  giraffeMissionComplete() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: Constants.myName)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(result.id)
-            .update({'rewards': FieldValue.arrayUnion(['assets/badges/3.png'])});
-      });
-    });
-  }
-
-  List elephant = ['assets/badges/4.png'];
-  // String elephant = 'assets/badges/4.png';
-  elephantMissionComplete() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .where('username', isEqualTo: Constants.myName)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) async {
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(result.id)
-            .update({'rewards': FieldValue.arrayUnion(['assets/badges/4.png'])});
-
-      });
-    });
+  });
+  
   }
   
 
@@ -370,22 +293,6 @@ class _UploaderState extends State<Uploader> {
     };
     databaseMethods.addImage(Constants.myName, imageMap);
 
-    if ( searchController.text == "cow" ) {
-      cowMissionComplete();
-    }
-    if ( searchController.text == "giraffe") {
-      giraffeMissionComplete();
-    }
-    if (searchController.text == "tiger" ) {
-      tigerMissionComplete();
-    }
-    if (searchController.text == "elephant") {
-      elephantMissionComplete();//4.png
-    }
-    if (true) {
-      uploadMissionComplete();//1.png
-    }
-    
     setState(() {
       captionController.clear();
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
