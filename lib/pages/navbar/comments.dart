@@ -138,7 +138,7 @@ returnAlignment() {
                   Container(
                     //view more comments
                     alignment: returnCommentAlignment(),
-                    margin: EdgeInsets.only(left: 10, right: 10),
+                    margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                     child: RichText(
                         text: TextSpan(
                             style:

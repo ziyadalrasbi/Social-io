@@ -9,10 +9,16 @@ import 'package:socialio/parts/input_field_box.dart';
 import 'package:socialio/helpers.dart';
 import 'package:socialio/parts/input_field_box.dart';
 import 'package:socialio/pages/student/make_quiz.dart';
+import 'package:socialio/pages/student/quiz.dart';
 
 class Classroom extends StatefulWidget {
   @override
   _ClassroomState createState() => _ClassroomState();
+}
+
+class QuizPick {
+  String quizName;
+  QuizPick({this.quizName});
 }
 
 class _ClassroomState extends State<Classroom> {
@@ -22,10 +28,17 @@ class _ClassroomState extends State<Classroom> {
 
   @override
   void initState() {
-    //for _setClassroomName
+    getUserInfo();
+    getQuizzes();
     super.initState();
     _editingController = TextEditingController(
         text: classNameText); //Initialise to say "Classroom Name"
+  }
+
+  getUserInfo() async {
+    Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
+    setState(() {});
   }
 
   @override
@@ -69,153 +82,26 @@ class _ClassroomState extends State<Classroom> {
   TextEditingController searchEditingController = new TextEditingController();
   QuerySnapshot searchshot;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
-  Widget listSearch() {
-    return searchshot != null
-        ? ListView.builder(
-            itemCount: searchshot.docs.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return searchTile(
-                userName: searchshot.docs[index].data()["username"],
-                userEmail: searchshot.docs[index].data()["email"],
-              );
-            })
-        : Container();
-  }
-
-  initSearch() {
-    databaseMethods.getUsername(searchEditingController.text).then((val) {
-      setState(() {
-        searchshot = val;
-        searchEditingController.clear();
-      });
-    });
-  }
-
-  Widget searchTile({String userName, String userEmail}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(userName),
-            ],
-          ),
-          Spacer(),
-          GestureDetector(
-            onTap: () {
-              students.add(userName);
-              setState(() {});
-            },
-            child: Container(
-              color: primaryDarkColour,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Text("INVITE"),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  createChat({String userName}) {
-    if (userName != Constants.myName) {
-      String roomId = getRoomId(userName, Constants.myName);
-      List<String> users = [userName, Constants.myName];
-      Map<String, dynamic> roomMap = {
-        "users": users,
-        "roomId": roomId,
-      };
-      DatabaseMethods().createChat(roomId, roomMap);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConversationRoom(roomId)),
+  getQuizBtn() {
+    if (Constants.accType != "Student") {
+      return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.blue,
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+          textStyle: TextStyle(fontSize: 30),
+        ),
+        child: Text('NEW QUIZ'),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Quizmaker(),
+              ));
+        },
       );
     } else {
-      print("Can't chat with yourself!");
+      return Container();
     }
-  }
-
-  Widget _searchBar() {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: InputField(
-                    color: Colors.blueGrey[200],
-                    control: searchEditingController,
-                    hint: "Search for students",
-                    changes: (val) {},
-                  ),
-                ),
-                FloatingActionButton(
-                  onPressed: () {
-                    initSearch();
-                  },
-                  child: Container(
-                      height: 50,
-                      width: 50,
-                      padding: EdgeInsets.all(12),
-                      child: Image.asset("assets/icons/ICON_search.png")),
-                ),
-              ],
-            ),
-          ),
-          listSearch(),
-        ],
-      ),
-    );
-  }
-
-  List<String> students = [
-    'Bobby',
-    'Clarence',
-    'Sassy',
-    'Somebody',
-    'Sean Kingston',
-    'Pure mad jimmy',
-    'Jason Jenova',
-    'Philip',
-    'Brucie',
-    'Epa',
-    'Okja',
-    'George',
-    'Sady',
-    'Jackson',
-    'Elizabeth',
-    'Andrew',
-  ];
-
-  Widget _listStudents() {
-    return new ListView.builder(
-      itemCount: students.length,
-      itemBuilder: (context, int index) {
-        return Container(
-            padding: EdgeInsets.fromLTRB(1, 1, 1, 1),
-            decoration: new BoxDecoration(color: Colors.white),
-            child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                color: Colors.blue,
-                elevation: 10,
-                child: new ListTile(
-                  leading: Image.asset("assets/pictures/ICON_Student.png"),
-                  title: Text(students[index]),
-                )));
-      },
-    );
   }
 
   Widget _getClassroom() {
@@ -229,52 +115,54 @@ class _ClassroomState extends State<Classroom> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 10),
-                          textStyle: TextStyle(fontSize: 30),
-                        ),
-                        child: Text('MY QUIZZES'),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Viewquizzes(),
-                              ));
-                        },
-                      ),
-                    ],
-                  ),
-                  Column(children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                        textStyle: TextStyle(fontSize: 30),
-                      ),
-                      child: Text('NEW QUIZ'),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Quizmaker(),
-                            ));
-                      },
-                    )
-                  ])
+                  Column(children: [getQuizBtn()])
                 ],
-              ),
-              Container(
-                child: _searchBar(),
               ),
             ],
           )),
     ]);
+  }
+
+  List<String> listOfQuizzes = [];
+
+  getQuizzes() async {
+    final QuerySnapshot result =
+        await FirebaseFirestore.instance.collection('quizzes').get();
+    final List<DocumentSnapshot> documents = result.docs;
+    documents.forEach((data) => listOfQuizzes.add(data.id));
+    setState(() {});
+  }
+
+  Widget _quizPicker() {
+    print(listOfQuizzes);
+    return ListView.builder(
+        itemCount: listOfQuizzes.length,
+        itemBuilder: (context, index) {
+          final item = listOfQuizzes[index];
+          return Card(
+              color: Color.fromRGBO(4, 10, 120, 1.0),
+              child: Column(
+                children: [
+                  Card(
+                    child: ListTile(
+                      tileColor: Colors.grey,
+                      title: Text(listOfQuizzes[index].toString()),
+                      trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Quiz(listOfQuizzes[index])));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ));
+        });
   }
 
   @override
@@ -296,18 +184,7 @@ class _ClassroomState extends State<Classroom> {
         ),
         body: Column(children: [
           _getClassroom(),
-          Expanded(
-              child: Container(
-            child: _listStudents(),
-          ))
+          Expanded(child: Container(child: _quizPicker()))
         ]));
-  }
-}
-
-getRoomId(String x, String y) {
-  if (x.substring(0, 1).codeUnitAt(0) > y.substring(0, 1).codeUnitAt(0)) {
-    return "$y\_$x";
-  } else {
-    return "$x\_$y";
   }
 }

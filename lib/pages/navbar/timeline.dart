@@ -221,6 +221,8 @@ class _PostsState extends State<Posts> {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) async {
         setState(() {
+          commentMissionComplete();
+          getCommentMissionComplete(index);
           FirebaseFirestore.instance
               .collection('uploads')
               .doc(usernames[index])
@@ -249,6 +251,8 @@ class _PostsState extends State<Posts> {
       }
       likedposts.add(posts[index]);
       addLikedPost();
+      likeMissionComplete();
+      getLikeMissionComplete(index);
       upVoted = true;
       downVoted = false;
       FirebaseFirestore.instance
@@ -362,6 +366,65 @@ class _PostsState extends State<Posts> {
         });
       });
     }
+  }
+  commentMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/6.png'])});
+      });
+    });
+  }
+
+  likeMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/7.png'])});
+      });
+    });
+  }
+
+  getLikeMissionComplete(int index) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: usernames[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/8.png'])});
+      });
+    });
+  }
+
+  getCommentMissionComplete(int index) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: usernames[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/9.png'])});
+      });
+    });
   }
 
   returnUpvoteColor(int index) {

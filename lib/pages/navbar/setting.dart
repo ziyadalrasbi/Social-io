@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:socialio/pages/navbar/parts/bottombar.dart';
 import 'package:socialio/pages/navbar/profile_settings.dart';
 import 'package:socialio/pages/navbar/saved_posts.dart';
+import 'package:socialio/pages/profile/profile_badges.dart';
 import 'package:socialio/parts/button.dart';
 import 'package:provider/provider.dart';
 
@@ -34,8 +35,6 @@ class _Setup_pageState extends State<Setup_page> {
     Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     Constants.DarkModeBool = await HelperFunction.getThemeSharedPref();
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-    print("getUserInfo Settings");
-    print(Constants.DarkModeBool);
   }
 
   @override
@@ -177,6 +176,43 @@ class _Setup_pageState extends State<Setup_page> {
             height: 2,
           ),
           GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfileBadges()
+                ),
+              );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+
+                  Text(
+                    "Badges",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                  ),
+                ],
+              )
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
@@ -209,6 +245,7 @@ class _Setup_pageState extends State<Setup_page> {
             width: dimensions.width,
             height: 2,
           ),
+          
           GestureDetector(
             onTap: () {},
             child: Container(
