@@ -36,14 +36,9 @@ class _ImageCaptureState extends State<ImageCapture> {
   List<Face> _faces;
   ui.Image _image;
   final _picker = ImagePicker();
-  bool isLoading = false;
-  
   Future<void> _pickImage(ImageSource source) async {
     
     final imageFile = await _picker.getImage(source: source);
-    setState(() {
-      isLoading = true;
-    });
     final image = FirebaseVisionImage.fromFile(File(imageFile.path));
     final faceDetector = FirebaseVision.instance.faceDetector();
     List<Face> faces = await faceDetector.processImage(image);
@@ -69,7 +64,6 @@ class _ImageCaptureState extends State<ImageCapture> {
     final data = await file.readAsBytes();
     await decodeImageFromList(data).then((value) => setState((){
       _image = value;
-      isLoading = false;
     }));
   }
 
@@ -93,6 +87,8 @@ class _ImageCaptureState extends State<ImageCapture> {
       _imageFile = cropped ?? _imageFile;
     });
   }
+
+  
 
   QuerySnapshot searchshot;
 DatabaseMethods databaseMethods = new DatabaseMethods();
@@ -181,7 +177,6 @@ Widget listSearch() {
       ),
       body: ListView(
         children: <Widget>[
-          if (isLoading == false) ...[
           if (_imageFile != null) ...[
             GestureDetector(
               onTap: () {
@@ -227,10 +222,7 @@ Widget listSearch() {
           ] else ... [
             Container(),
           ]
-        ] else ...[
-          Center(child: CircularProgressIndicator(),),
-        ],
-        ],
+        ] 
       ),
       
     );
@@ -256,20 +248,95 @@ class _UploaderState extends State<Uploader> {
   List<String> files;
       
   UploadTask _uploadTask;
-@override
+  
+  @override
   void initState() {
-    
     getUserInfo();
     super.initState();
   }
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-    databaseMethods.getUsername(Constants.myName).then((val){
-    setState(() {  
+  }
+
+   List<String> badges = [];
+
+  uploadMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/1.png'])});
+      });
     });
-  });
-  
+  }
+
+  cowMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/2.png'])});
+      });
+    });
+  }
+
+  tigerMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/5.png'])});
+      });
+    });
+  }
+
+  giraffeMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/3.png'])});
+      });
+    });
+  }
+
+  List elephant = ['assets/badges/4.png'];
+  // String elephant = 'assets/badges/4.png';
+  elephantMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/4.png'])});
+
+      });
+    });
   }
   
 
@@ -293,6 +360,22 @@ class _UploaderState extends State<Uploader> {
     };
     databaseMethods.addImage(Constants.myName, imageMap);
 
+    if ( searchController.text == "cow" ) {
+      cowMissionComplete();
+    }
+    if ( searchController.text == "giraffe") {
+      giraffeMissionComplete();
+    }
+    if (searchController.text == "tiger" ) {
+      tigerMissionComplete();
+    }
+    if (searchController.text == "elephant") {
+      elephantMissionComplete();//4.png
+    }
+    if (true) {
+      uploadMissionComplete();//1.png
+    }
+    
     setState(() {
       captionController.clear();
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
