@@ -36,9 +36,14 @@ class _ImageCaptureState extends State<ImageCapture> {
   List<Face> _faces;
   ui.Image _image;
   final _picker = ImagePicker();
+  bool isLoading = false;
+  
   Future<void> _pickImage(ImageSource source) async {
     
     final imageFile = await _picker.getImage(source: source);
+    setState(() {
+      isLoading = true;
+    });
     final image = FirebaseVisionImage.fromFile(File(imageFile.path));
     final faceDetector = FirebaseVision.instance.faceDetector();
     List<Face> faces = await faceDetector.processImage(image);
@@ -64,6 +69,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     final data = await file.readAsBytes();
     await decodeImageFromList(data).then((value) => setState((){
       _image = value;
+      isLoading = false;
     }));
   }
 
@@ -93,17 +99,17 @@ class _ImageCaptureState extends State<ImageCapture> {
   QuerySnapshot searchshot;
 DatabaseMethods databaseMethods = new DatabaseMethods();
 
-Widget listSearch() {
-    return searchshot != null ? ListView.builder(
-      itemCount: searchshot.docs.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return SearchTile(
-          userName: searchshot.docs[index].data()["username"],
-          userEmail: searchshot.docs[index].data()["email"],
-        );
-      }) : Container();
-  }
+// Widget listSearch() {
+//     return searchshot != null ? ListView.builder(
+//       itemCount: searchshot.docs.length,
+//       shrinkWrap: true,
+//       itemBuilder: (context, index) {
+//         return SearchTile(
+//           userName: searchshot.docs[index].data()["username"],
+//           userEmail: searchshot.docs[index].data()["email"],
+//         );
+//       }) : Container();
+//   }
 
   initSearch() {
     databaseMethods.getUsername(searchController.text)
@@ -177,14 +183,16 @@ Widget listSearch() {
       ),
       body: ListView(
         children: <Widget>[
+          if (isLoading == false) ...[
           if (_imageFile != null) ...[
             GestureDetector(
               onTap: () {
+                print(faceDetected);
               },
               child: FittedBox(
                 child: SizedBox(
-                  width: _image.width.toDouble(),
-                  height:  _image.height.toDouble(),
+                  width: _imageFile != null ? _image.width.toDouble() : Container(),
+                  height: _imageFile != null ? _image.height.toDouble(): Container(),
                   child: CustomPaint(
                     painter: FacePainter(_image, _faces),
                     ),
@@ -196,15 +204,13 @@ Widget listSearch() {
               control: captionController,
               changes: (value) {},
             ),
-            Expanded(
-              child: InputField(
+            InputField(
                 color: Colors.blueGrey[200],
                 control: searchController,
                 hint: "Tag your post with a # (optional)",
                 changes: (val) {},
               ),
-            ),
-              listSearch(),
+              // listSearch(),
             Row(
               children: <Widget>[
                 FlatButton(
@@ -221,7 +227,10 @@ Widget listSearch() {
           ] else ... [
             Container(),
           ]
-        ] 
+        ] else ...[
+          Center(child: CircularProgressIndicator(),),
+        ],
+        ],
       ),
       
     );
@@ -374,7 +383,6 @@ class _UploaderState extends State<Uploader> {
     if (true) {
       uploadMissionComplete();//1.png
     }
-    
     setState(() {
       captionController.clear();
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
