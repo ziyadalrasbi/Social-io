@@ -236,6 +236,7 @@ class _PostsState extends State<Posts> {
             'imageid': posts[index],
             'time': DateTime.now().millisecondsSinceEpoch
           });
+          commentText.clear();
         });
       });
     });
@@ -817,6 +818,7 @@ confirmDelete(int index, BuildContext context) {
     Widget cancelButton = FlatButton(
         child: Text("Cancel"),
         onPressed: () {
+          commentText.clear();
           Navigator.of(context, rootNavigator: true).pop();
     });
 
@@ -824,6 +826,7 @@ confirmDelete(int index, BuildContext context) {
         child: Text("Comment"),
         onPressed: () {
           addComment(index);
+          
           Navigator.of(context, rootNavigator: true).pop();
     });
 
@@ -947,6 +950,74 @@ confirmDelete(int index, BuildContext context) {
       return "$y\_$x";
     } else {
       return "$x\_$y";
+    }
+  }
+
+  returnMessageIcon(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/ICON_comment.png'),
+          iconSize: 25,
+          onPressed: () {
+            commentPopUp(index, context);
+          },
+        )
+      );
+    }
+  }
+
+  returnShareIcon(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/ICON-send.png'),
+          iconSize: 25,
+          onPressed: () {
+            shareImage(index, context);
+          }
+        )
+      );
+    }
+  }
+
+  returnMessageIconDark(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/DARKICON_comment.png'),
+          iconSize: 25,
+          onPressed: () {
+            commentPopUp(index, context);
+          },
+        )
+      );
+    }
+  }
+
+  returnShareIconDark(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/DARKICON_send.png'),
+          iconSize: 25,
+          onPressed: () {
+            shareImage(index, context);
+          }
+        )
+      );
     }
   }
 
@@ -1151,24 +1222,8 @@ confirmDelete(int index, BuildContext context) {
                             });
                           },
                         )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon: Image.asset('assets/pictures/ICON_comment.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            commentPopUp(userIndex, context);
-                          },
-                        )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon: Image.asset('assets/pictures/ICON-send.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            shareImage(userIndex, context);
-                          }
-                        )),
+                    returnMessageIcon(userIndex),
+                    returnShareIcon(userIndex),
                     Container(
                       color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
@@ -1395,25 +1450,8 @@ confirmDelete(int index, BuildContext context) {
                             });
                           },
                         )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon:
-                              Image.asset('assets/icons/DARKICON_comment.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            commentPopUp(userIndex, context);
-                          },
-                        )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon: Image.asset('assets/icons/DARKICON_send.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            shareImage(userIndex, context);
-                          }
-                        )),
+                    returnMessageIconDark(userIndex),
+                    returnShareIconDark(userIndex),
                     Container(
                       color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
@@ -1553,6 +1591,8 @@ confirmDelete(int index, BuildContext context) {
       return Container();
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

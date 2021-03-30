@@ -14,12 +14,12 @@ class _CartoonAnimalProfilePicPageState extends State<CartoonAnimalProfilePicPag
 
 
 Map<String,int> banners = {
-  "assets/profilepics/canimals/canimal1.png": 5,
-  "assets/profilepics/canimals/canimal2.png": 7,
-  "assets/profilepics/canimals/canimal3.png": 10,
-  "assets/profilepics/canimals/canimal4.png": 11,
-  "assets/profilepics/canimals/canimal5.png": 12,
-  "assets/profilepics/canimals/canimal6.png": 13,
+  "assets/profilepics/canimals/canimal1.png": 0,
+  "assets/profilepics/canimals/canimal2.png": 10,
+  "assets/profilepics/canimals/canimal3.png": 20,
+  "assets/profilepics/canimals/canimal4.png": 30,
+  "assets/profilepics/canimals/canimal5.png": 40,
+  "assets/profilepics/canimals/canimal6.png": 50,
 };
 
 

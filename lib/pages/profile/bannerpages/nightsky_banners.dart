@@ -13,10 +13,10 @@ class NightskyBanners extends StatefulWidget {
 class _NightskyBannersState extends State<NightskyBanners> {
 
 Map<String,int> banners = {
-  "assets/banners/nightsky/nightsky1.png" : 0,
-  "assets/banners/nightsky/nightsky2.png" : 10,
-  "assets/banners/nightsky/nightsky3.png" : 20,
-  "assets/banners/nightsky/nightsky4.png" : 30,
+  "assets/banners/nightsky/nightsky3.png" : 100,
+  "assets/banners/nightsky/nightsky2.png" : 200,
+  "assets/banners/nightsky/nightsky4.png" : 300,
+  "assets/banners/nightsky/nightsky1.png" : 400,
 };
 
 

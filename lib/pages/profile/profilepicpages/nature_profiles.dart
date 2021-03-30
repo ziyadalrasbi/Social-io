@@ -14,11 +14,11 @@ class _NatureProfilePicPageState extends State<NatureProfilePicPage> {
 
 
 Map<String,int> banners = {
-  "assets/profilepics/nature/nature1.png": 5,
-  "assets/profilepics/nature/nature2.png": 7,
-  "assets/profilepics/nature/nature3.png": 10,
-  "assets/profilepics/nature/nature4.png": 11,
-  "assets/profilepics/nature/nature5.png": 12,
+  "assets/profilepics/nature/nature1.png": 0,
+  "assets/profilepics/nature/nature2.png": 0,
+  "assets/profilepics/nature/nature4.png": 50,
+  "assets/profilepics/nature/nature5.png": 100,
+  "assets/profilepics/nature/nature3.png": 1999,
 };
 
 

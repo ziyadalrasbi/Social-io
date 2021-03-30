@@ -13,10 +13,10 @@ class GamerBanners extends StatefulWidget {
 class _GamerBannersState extends State<GamerBanners> {
   
 Map<String,int> banners = {
-  "assets/banners/gamer/gamer1.png" : 0,
-  "assets/banners/gamer/gamer2.png" : 10,
-  "assets/banners/gamer/gamer3.png" : 20,
-  "assets/banners/gamer/gamer4.png" : 30,
+  "assets/banners/gamer/gamer1.png" : 500,
+  "assets/banners/gamer/gamer2.png" : 1000,
+  "assets/banners/gamer/gamer3.png" : 1500,
+  "assets/banners/gamer/gamer4.png" : 2000,
 };
 
 

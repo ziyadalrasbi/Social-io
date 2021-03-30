@@ -14,12 +14,12 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
   
 Map<String, int> appbars = {
     "assets/appbars/Original.png" : 0,
-    "assets/appbars/Black and White.png": 10,
-    "assets/appbars/Green.png": 20,
-    "assets/appbars/Inverted.png": 30,
-    "assets/appbars/Orange.png": 40,
-    "assets/appbars/Plain.png": 50,
-    "assets/appbars/Red.png": 60,
+    "assets/appbars/Plain.png": 10,
+    "assets/appbars/Green.png": 50,
+    "assets/appbars/Orange.png": 50,
+    "assets/appbars/Red.png": 50,
+    "assets/appbars/Inverted.png": 100,
+    "assets/appbars/Black and White.png": 500,
   };
 
 
@@ -76,7 +76,6 @@ printImages() {
   appbarnames = appbars.keys.toList(); 
   appbarvalues = appbars.values.toList();
     return List.generate(appbars.length, (index) {
-      print(requiredPointsBool);
       return GestureDetector(
         onTap: () async {
           chosen = appbarnames[index];
@@ -94,6 +93,11 @@ printImages() {
         },
         child: Column(
           children:[ 
+            Text(
+              appbarnames[index].toString().substring(15, appbarnames[index].toString().length-4),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+
             Container(
             foregroundDecoration: BoxDecoration(
               color: returnImageColor(index),

@@ -70,7 +70,7 @@ class _BottomBar extends State<BottomBar> {
     Posts(), //class name of timeline
     Explore(), //class name of search
     Profile(), //class name of profile
-    (Constants.accType == "Student") ? Viewquizzes() : ChatPage(),
+    (Constants.accType == "Student") ? Classroom() : ChatPage(),
     Setup_page(), //class name of setting
   ];
 
@@ -147,7 +147,7 @@ class _BottomBar extends State<BottomBar> {
   }
 
   userCameraButton() {
-    if (Constants.accType == "Creator") {
+    if (Constants.accType == "Creator" || Constants.accType == "Student") {
      return FloatingActionButton(
         onPressed: () {
           Navigator.push(

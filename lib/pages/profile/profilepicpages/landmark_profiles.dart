@@ -14,13 +14,13 @@ class _LandmarkProfilePicPageState extends State<LandmarkProfilePicPage> {
 
 
 Map<String,int> banners = {
-  "assets/profilepics/landmarks/landmark1.png": 5,
-  "assets/profilepics/landmarks/landmark2.png": 7,
-  "assets/profilepics/landmarks/landmark3.png": 10,
-  "assets/profilepics/landmarks/landmark4.png": 11,
-  "assets/profilepics/landmarks/landmark5.png": 12,
-  "assets/profilepics/landmarks/landmark6.png": 13,
-  "assets/profilepics/landmarks/landmark7.png": 15,
+  "assets/profilepics/landmarks/landmark1.png": 80,
+  "assets/profilepics/landmarks/landmark2.png": 90,
+  "assets/profilepics/landmarks/landmark3.png": 100,
+  "assets/profilepics/landmarks/landmark4.png": 110,
+  "assets/profilepics/landmarks/landmark6.png": 150,
+  "assets/profilepics/landmarks/landmark7.png": 250,
+  "assets/profilepics/landmarks/landmark5.png": 500,
 };
 
 

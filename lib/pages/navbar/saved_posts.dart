@@ -824,19 +824,19 @@ confirmDelete(int index, BuildContext context) {
   shareImage(int index, BuildContext context) {
     // set up the buttons
     Widget rowButton = Row(
-                children: [
-                  Expanded(
-                    child: InputField(
-                      color: Colors.blueGrey[200],
-                      control: searchController,
-                      hint: "Search...",
-                      changes: (val) {
-                      },
-                    ),
-                  ),
-                ],
-                
-              );
+      children: [
+        Expanded(
+          child: InputField(
+            color: Colors.blueGrey[200],
+            control: searchController,
+            hint: "Search...",
+            changes: (val) {
+            },
+          ),
+        ),
+      ],
+      
+    );
 
     Widget cancelButton = FlatButton(
         child: Text("Cancel"),
@@ -873,6 +873,74 @@ confirmDelete(int index, BuildContext context) {
         return alert;
       },
     );
+  }
+
+  returnMessageIcon(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/ICON_comment.png'),
+          iconSize: 25,
+          onPressed: () {
+            commentPopUp(index, context);
+          },
+        )
+      );
+    }
+  }
+
+  returnShareIcon(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/ICON-send.png'),
+          iconSize: 25,
+          onPressed: () {
+            shareImage(index, context);
+          }
+        )
+      );
+    }
+  }
+
+  returnMessageIconDark(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/DARKICON_comment.png'),
+          iconSize: 25,
+          onPressed: () {
+            commentPopUp(index, context);
+          },
+        )
+      );
+    }
+  }
+
+  returnShareIconDark(int index) {
+    if (Constants.accType == "Student") {
+      return Container();
+    } else {
+      return Container(
+        margin: EdgeInsets.only(right: 8),
+        child: IconButton(
+          icon: Image.asset('assets/pictures/DARKICON_send.png'),
+          iconSize: 25,
+          onPressed: () {
+            shareImage(index, context);
+          }
+        )
+      );
+    }
   }
 
 
@@ -1116,24 +1184,8 @@ confirmDelete(int index, BuildContext context) {
                             });
                           },
                         )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon: Image.asset('assets/pictures/ICON_comment.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            commentPopUp(userIndex, context);
-                          },
-                        )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon: Image.asset('assets/pictures/ICON-send.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            shareImage(userIndex, context);
-                          },
-                        )),
+                    returnMessageIcon(userIndex),
+                    returnShareIcon(userIndex),
                         Container(
                       color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),
@@ -1360,25 +1412,8 @@ confirmDelete(int index, BuildContext context) {
                             });
                           },
                         )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon:
-                              Image.asset('assets/icons/DARKICON_comment.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            commentPopUp(userIndex, context);
-                          },
-                        )),
-                    Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
-                          icon: Image.asset('assets/icons/DARKICON_send.png'),
-                          iconSize: 25,
-                          onPressed: () {
-                            shareImage(userIndex, context);
-                          },
-                        )),
+                    returnMessageIconDark(userIndex),
+                    returnShareIconDark(userIndex),
                         Container(
                       color: returnSaveColor(userIndex),
                         margin: EdgeInsets.only(right: 8),

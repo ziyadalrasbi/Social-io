@@ -14,9 +14,9 @@ class _LandscapeBannersState extends State<LandscapeBanners> {
 
 Map<String,int> banners = {
   "assets/banners/landscape/landscape1.png" : 0,
-  "assets/banners/landscape/landscape2.png" : 10,
-  "assets/banners/landscape/landscape3.png" : 20,
-  "assets/banners/landscape/landscape4.png" : 30,
+  "assets/banners/landscape/landscape2.png" : 5,
+  "assets/banners/landscape/landscape3.png" : 10,
+  "assets/banners/landscape/landscape4.png" : 15,
 };
 
 

@@ -167,12 +167,13 @@ class _ClassroomState extends State<Classroom> {
             width: size.width * 0.5,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/icons/TOPBAR_v2.png"),
+                image: AssetImage(Constants.myAppBar.toString()),
                 fit: BoxFit.fill,
               ),
             ),
           ),
           backgroundColor: Colors.transparent,
+          
         ),
         body: Column(children: [
           _getClassroom(),

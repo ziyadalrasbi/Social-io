@@ -14,12 +14,12 @@ class _LegacyProfilePicPageState extends State<LegacyProfilePicPage> {
 
 
 Map<String,int> banners = {
-  "assets/profilepics/legacy/legacy1.png": 5,
-  "assets/profilepics/legacy/legacy2.png": 7,
-  "assets/profilepics/legacy/legacy3.png": 10,
-  "assets/profilepics/legacy/legacy4.png": 11,
-  "assets/profilepics/legacy/legacy5.png": 12,
-  "assets/profilepics/legacy/legacy6.png": 13,
+  "assets/profilepics/legacy/legacy1.png": 200,
+  "assets/profilepics/legacy/legacy2.png": 420,
+  "assets/profilepics/legacy/legacy3.png": 690,
+  "assets/profilepics/legacy/legacy4.png": 750,
+  "assets/profilepics/legacy/legacy5.png": 900,
+  "assets/profilepics/legacy/legacy6.png": 2000,
 };
 
 

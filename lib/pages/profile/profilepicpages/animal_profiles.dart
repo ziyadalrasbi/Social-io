@@ -15,7 +15,7 @@ class _AnimalProfilePicPageState extends State<AnimalProfilePicPage> {
 
 
 Map<String,int> banners = {
-  "assets/profilepics/animals/animal1.png": 5,
+  "assets/profilepics/animals/animal1.png": 0,
   "assets/profilepics/animals/animal2.png": 7,
   "assets/profilepics/animals/animal3.png": 10,
   "assets/profilepics/animals/animal4.png": 11,

@@ -239,12 +239,7 @@ class _QuizState extends State<Quiz> {
                           color: Colors.white,
                           fontSize: 20.0,
                         )),
-                    trailing: IconButton(
-                        icon: Image.asset('assets/icons/ICON_Tick.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          setState(() {});
-                        })))),
+                    ))),
         Card(
             child: Container(
                 decoration: listOfBooleansSecondSelected[index]
@@ -312,12 +307,7 @@ class _QuizState extends State<Quiz> {
                           color: Colors.white,
                           fontSize: 20.0,
                         )),
-                    trailing: IconButton(
-                        icon: Image.asset('assets/icons/ICON_Tick.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          setState(() {});
-                        })))),
+                    ))),
         Card(
             child: Container(
                 decoration: listOfBooleansThirdSelected[index]
@@ -384,12 +374,7 @@ class _QuizState extends State<Quiz> {
                           color: Colors.white,
                           fontSize: 20.0,
                         )),
-                    trailing: IconButton(
-                        icon: Image.asset('assets/icons/ICON_Tick.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          setState(() {});
-                        })))),
+                    ))),
         Card(
             child: Container(
                 decoration: listOfBooleansFourthSelected[index]
@@ -458,12 +443,7 @@ class _QuizState extends State<Quiz> {
                           color: Colors.white,
                           fontSize: 20.0,
                         )),
-                    trailing: IconButton(
-                        icon: Image.asset('assets/icons/ICON_Tick.png'),
-                        iconSize: 25,
-                        onPressed: () {
-                          setState(() {});
-                        })))),
+                    ))),
       ],
     ));
   }
@@ -533,12 +513,13 @@ class _QuizState extends State<Quiz> {
             width: size.width * 0.5,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/icons/TOPBAR_v2.png"),
+                image: AssetImage(Constants.myAppBar.toString()),
                 fit: BoxFit.fill,
               ),
             ),
           ),
           backgroundColor: Colors.transparent,
+          
         ),
         body: Column(
           children: [
