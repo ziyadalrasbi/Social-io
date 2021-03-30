@@ -83,6 +83,10 @@ flutter:
     - assets/icons/
     - assets/pictures/
     - assets/profilepics/animals/
+    - assets/profilepics/canimals/
+    - assets/profilepics/legacy/
+    - assets/profilepics/nature/
+    - assets/profilepics/landmarks/
     - assets/banners/city/
     - assets/banners/gamer/
     - assets/banners/landscape/

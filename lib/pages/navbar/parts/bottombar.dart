@@ -14,6 +14,7 @@ import 'package:socialio/pages/navbar/fake_profile.dart';
 import 'package:socialio/pages/profile/profile_1.dart';
 import 'package:socialio/pages/navbar/bottom.dart';
 import 'package:socialio/pages/student/classroom.dart';
+import 'package:socialio/pages/student/view_quizzes.dart';
 
 import '../../../constants.dart';
 import '../../../helpers.dart';
@@ -69,7 +70,7 @@ class _BottomBar extends State<BottomBar> {
     Posts(), //class name of timeline
     Explore(), //class name of search
     Profile(), //class name of profile
-    (Constants.accType == "Student") ? Classroom() : SavedPosts(),
+    (Constants.accType == "Student") ? Viewquizzes() : ChatPage(),
     Setup_page(), //class name of setting
   ];
 

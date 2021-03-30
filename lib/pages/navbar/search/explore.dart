@@ -110,11 +110,8 @@ class ExploreState extends State<Explore> {
 
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
-
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
-
     Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
-
     setState(() {});
   }
 
@@ -411,98 +408,100 @@ class ExploreState extends State<Explore> {
           ),
           backgroundColor: Colors.transparent,
         ),
-        body: Container(
-          child: Column(children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InputField(
-                      color: Colors.blueGrey[200],
-                      control: searchEditingController,
-                      hint: "Search for users or tags",
-                      changes: (val) {},
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InputField(
+                        color: Colors.blueGrey[200],
+                        control: searchEditingController,
+                        hint: "Search for users or tags",
+                        changes: (val) {},
+                      ),
                     ),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      initSearch();
-                    },
-                    backgroundColor: Colors.lightBlue,
-                    child: Container(
-                        height: 50,
-                        width: 50,
-                        padding: EdgeInsets.all(12),
-                        child: Image.asset("assets/icons/ICON_search.png")),
-                  ),
-                ],
+                    FloatingActionButton(
+                      onPressed: () {
+                        initSearch();
+                      },
+                      backgroundColor: Colors.lightBlue,
+                      child: Container(
+                          height: 50,
+                          width: 50,
+                          padding: EdgeInsets.all(12),
+                          child: Image.asset("assets/icons/ICON_search.png")),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            listSearch(),
-            listSearchTag(),
-            SingleChildScrollView(
-              child: Stack(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Material(
-                        elevation: 1,
-                        child: Container(
-                          height: 40,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  listCount++;
+              listSearch(),
+              listSearchTag(),
+              SingleChildScrollView(
+                child: Stack(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Material(
+                          elevation: 1,
+                          child: Container(
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    listCount++;
 
-                                  setState(() {
-                                    listWanted = false;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.grid_view,
-                                  color:
-                                      listWanted ? Colors.grey : Colors.black,
-                                  size: 28,
+                                    setState(() {
+                                      listWanted = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.grid_view,
+                                    color:
+                                        listWanted ? Colors.grey : Colors.black,
+                                    size: 28,
+                                  ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    listWanted = true;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.view_list,
-                                  color:
-                                      listWanted ? Colors.black : Colors.grey,
-                                  size: 30,
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      listWanted = true;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.view_list,
+                                    color:
+                                        listWanted ? Colors.black : Colors.grey,
+                                    size: 30,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        height: size.height * 0.70 - 68,
-                        padding: EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                          top: 0,
-                          bottom: 24,
+                        Container(
+                          height: size.height * 0.70 - 68,
+                          padding: EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            top: 0,
+                            bottom: 24,
+                          ),
+                          child: listWanted ? displayPicsList() : displayPics(),
                         ),
-                        child: listWanted ? displayPicsList() : displayPics(),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ));
   }
 }

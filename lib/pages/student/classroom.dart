@@ -24,7 +24,7 @@ class QuizPick {
 class _ClassroomState extends State<Classroom> {
   bool _isEditingText = false; //for _setClassroomName
   TextEditingController _editingController; //for _setClassroomName
-  String classNameText = "Classroom Name"; //for _setClassroomName
+  String classNameText = "Classroom"; //for _setClassroomName
 
   @override
   void initState() {
@@ -49,33 +49,13 @@ class _ClassroomState extends State<Classroom> {
   }
 
   Widget _setClassroomName() {
-    if (_isEditingText)
-      return Center(
-        child: TextField(
-          onSubmitted: (newValue) {
-            setState(() {
-              classNameText = newValue;
-              _isEditingText = false;
-            });
-          },
-          autofocus: true,
-          controller: _editingController,
-        ),
-      );
-    return InkWell(
-        //makes the text respond to a tap
-        onTap: () {
-          setState(() {
-            _isEditingText = true; //goes into editing mode
-          });
-        },
-        child: Text(
-          classNameText,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 50.0,
-          ),
-        ));
+    return Text(
+      classNameText,
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 50.0,
+      ),
+    );
   }
 
   DatabaseMethods databaseMethods = new DatabaseMethods();
@@ -84,21 +64,26 @@ class _ClassroomState extends State<Classroom> {
 
   getQuizBtn() {
     if (Constants.accType != "Student") {
-      return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.blue,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          textStyle: TextStyle(fontSize: 30),
-        ),
-        child: Text('NEW QUIZ'),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Quizmaker(),
-              ));
-        },
-      );
+      return Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage('assets/pictures/answer4_selected.png'))),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              textStyle: TextStyle(fontSize: 30),
+            ),
+            child: Text('NEW QUIZ'),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Quizmaker(),
+                  ));
+            },
+          ));
     } else {
       return Container();
     }
@@ -140,13 +125,20 @@ class _ClassroomState extends State<Classroom> {
         itemBuilder: (context, index) {
           final item = listOfQuizzes[index];
           return Card(
-              color: Color.fromRGBO(4, 10, 120, 1.0),
+              color: Colors.black,
               child: Column(
                 children: [
                   Card(
+                      child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer1_correct.png'))),
                     child: ListTile(
-                      tileColor: Colors.grey,
-                      title: Text(listOfQuizzes[index].toString()),
+                      tileColor: Colors.transparent,
+                      title: Text(listOfQuizzes[index].toString(),
+                          style: TextStyle(color: Colors.white)),
                       trailing: IconButton(
                         icon: Image.asset('assets/icons/ICON_Tick.png'),
                         iconSize: 25,
@@ -159,7 +151,7 @@ class _ClassroomState extends State<Classroom> {
                         },
                       ),
                     ),
-                  ),
+                  )),
                 ],
               ));
         });

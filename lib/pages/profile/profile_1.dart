@@ -431,40 +431,7 @@ class _Profile1State extends State<Profile> {
                     ),
                   ),
                 ),
-                Container(
-                  width: size.width * 0.8,
-                  padding: EdgeInsets.symmetric(vertical: 7, horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: DropdownButton(
-                    isExpanded: true,
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_drop_down_circle),
-                    iconSize: 20,
-                    elevation: 15,
-                    underline: Container(height: 2),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownValue = newValue;
-                        initSearch();
-                      });
-                    },
-                    items: <String>[
-                      "Sort by:",
-                      "Likes (ascending)",
-                      "Likes (descending)",
-                      "Date (ascending)",
-                      "Date (descending)",
-                    ].map<DropdownMenuItem<String>>((String val) {
-                      return DropdownMenuItem<String>(
-                        value: val,
-                        child: Text(val),
-                      );
-                    }).toList(),
-                  ),
-                ),
+               
                 Container(
                   height: size.height * 0.60 - 56,
                   padding: EdgeInsets.only(

@@ -15,9 +15,10 @@ class Score extends StatefulWidget {
 
 class _ScoreState extends State<Score> {
   Widget _returnScore() {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      height: 350.0,
-      width: 350.0,
+      height: size.height*0.7,
+      width: size.width*0.7,
       margin: EdgeInsets.all(25.0),
       decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
       child: Center(
@@ -29,20 +30,24 @@ class _ScoreState extends State<Score> {
   }
 
   Widget _returnToClassroomBtn() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Color.fromRGBO(4, 10, 120, 1.0),
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-        textStyle: TextStyle(fontSize: 30),
+   Size size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width*0.9,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color.fromRGBO(4, 10, 120, 1.0),
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+          textStyle: TextStyle(fontSize: 18),
+        ),
+        child: Text('RETURN TO CLASSROOM'),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Classroom(),
+              ));
+        },
       ),
-      child: Text('RETURN TO CLASSROOM'),
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Classroom(),
-            ));
-      },
     );
   }
 

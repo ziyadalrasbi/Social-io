@@ -105,38 +105,54 @@ class _QuizMakerState extends State<Quizmaker> {
   }
 
   Widget _saveQuizBtn() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Color.fromRGBO(4, 10, 120, 1.0),
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-        textStyle: TextStyle(fontSize: 30),
-      ),
-      child: Text('SAVE QUIZ'),
-      onPressed: () {
-        for (int i = 0; i < listOfQuestions.length; i++) {
-          makeQuiz(i);
-        }
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Classroom(),
-            ));
-      },
-    );
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width*0.5,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('assets/pictures/answer4_selected.png'))),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            textStyle: TextStyle(fontSize: 18),
+          ),
+          child: Text('SAVE QUIZ'),
+          onPressed: () {
+            for (int i = 0; i < listOfQuestions.length; i++) {
+              makeQuiz(i);
+            }
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Classroom(),
+                ));
+          },
+        ));
   }
 
   Widget _newQuestionBtn() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Color.fromRGBO(4, 10, 120, 1.0),
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-        textStyle: TextStyle(fontSize: 30),
-      ),
-      child: Text('+ QUESTION'),
-      onPressed: () {
-        addQuestionToList();
-      },
-    );
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width*0.5,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('assets/pictures/answer4_green.png'))),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            textStyle: TextStyle(fontSize: 18),
+          ),
+          child: Text('+ QUESTION'),
+          onPressed: () {
+            addQuestionToList();
+          },
+        ));
   }
 
   void addQuestionToList() {
@@ -205,6 +221,7 @@ class _QuizMakerState extends State<Quizmaker> {
     if (listOfQuestions[index].isBeingEdited)
       return Center(
         child: TextField(
+          style: TextStyle(color: Colors.white),
           onSubmitted: (newValue) {
             setState(() {
               listOfQuestions[index].actualQuestion = newValue;
@@ -228,7 +245,7 @@ class _QuizMakerState extends State<Quizmaker> {
         child: Text(
           listOfQuestions[index].actualQuestion,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20.0,
           ),
         ));
@@ -254,6 +271,7 @@ class _QuizMakerState extends State<Quizmaker> {
     if (listOfQuestions[index].isOneBeingEdited)
       return Center(
         child: TextField(
+          style: TextStyle(color: Colors.white),
           onSubmitted: (newValue) {
             setState(() {
               listOfQuestions[index].answerOne = newValue;
@@ -277,7 +295,7 @@ class _QuizMakerState extends State<Quizmaker> {
         child: Text(
           listOfQuestions[index].answerOne,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20.0,
           ),
         ));
@@ -287,6 +305,7 @@ class _QuizMakerState extends State<Quizmaker> {
     if (listOfQuestions[index].isTwoBeingEdited)
       return Center(
         child: TextField(
+          style: TextStyle(color: Colors.white),
           onSubmitted: (newValue) {
             setState(() {
               listOfQuestions[index].answerTwo = newValue;
@@ -310,7 +329,7 @@ class _QuizMakerState extends State<Quizmaker> {
         child: Text(
           listOfQuestions[index].answerTwo,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20.0,
           ),
         ));
@@ -320,6 +339,7 @@ class _QuizMakerState extends State<Quizmaker> {
     if (listOfQuestions[index].isThreeBeingEdited)
       return Center(
         child: TextField(
+          style: TextStyle(color: Colors.white),
           onSubmitted: (newValue) {
             setState(() {
               listOfQuestions[index].answerThree = newValue;
@@ -343,7 +363,7 @@ class _QuizMakerState extends State<Quizmaker> {
         child: Text(
           listOfQuestions[index].answerThree,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20.0,
           ),
         ));
@@ -353,6 +373,7 @@ class _QuizMakerState extends State<Quizmaker> {
     if (listOfQuestions[index].isFourBeingEdited)
       return Center(
         child: TextField(
+          style: TextStyle(color: Colors.white),
           onSubmitted: (newValue) {
             setState(() {
               listOfQuestions[index].answerFour = newValue;
@@ -376,7 +397,7 @@ class _QuizMakerState extends State<Quizmaker> {
         child: Text(
           listOfQuestions[index].answerFour,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20.0,
           ),
         ));
@@ -387,115 +408,184 @@ class _QuizMakerState extends State<Quizmaker> {
         child: Column(
       children: [
         Card(
-            child: ListTile(
-                tileColor: listOfQuestions[index].isOneCorrect
-                    ? Colors.green
-                    : Colors.grey,
-                onTap: () {},
-                leading: Text("1."),
-                title: _setAnswerOneText(index),
-                trailing: IconButton(
-                    icon: Image.asset('assets/icons/ICON_Tick.png'),
-                    iconSize: 25,
-                    onPressed: () {
-                      setState(() {
-                        if (listOfQuestions[index].isOneCorrect) {
-                          listOfQuestions[index].isOneCorrect = false;
-                        } else {
-                          listOfQuestions[index].isOneCorrect = true;
-                        }
-                      });
-                    }))),
+            child: Container(
+                decoration: listOfQuestions[index].isOneCorrect
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer1_correct.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer1.png'))),
+                child: ListTile(
+                    onTap: () {},
+                    leading: Text("1.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: _setAnswerOneText(index),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            if (listOfQuestions[index].isOneCorrect) {
+                              listOfQuestions[index].isOneCorrect = false;
+                            } else {
+                              listOfQuestions[index].isOneCorrect = true;
+                            }
+                          });
+                        })))),
         Card(
-            child: ListTile(
-                tileColor: listOfQuestions[index].isTwoCorrect
-                    ? Colors.green
-                    : Colors.grey,
-                onTap: () {},
-                leading: Text("2."),
-                title: _setAnswerTwoText(index),
-                trailing: IconButton(
-                    icon: Image.asset('assets/icons/ICON_Tick.png'),
-                    iconSize: 25,
-                    onPressed: () {
-                      setState(() {
-                        if (listOfQuestions[index].isTwoCorrect) {
-                          listOfQuestions[index].isTwoCorrect = false;
-                        } else {
-                          listOfQuestions[index].isTwoCorrect = true;
-                        }
-                      });
-                    }))),
+            child: Container(
+                decoration: listOfQuestions[index].isTwoCorrect
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer2_correct.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer2.png'))),
+                child: ListTile(
+                    onTap: () {},
+                    leading: Text("2.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: _setAnswerTwoText(index),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            if (listOfQuestions[index].isTwoCorrect) {
+                              listOfQuestions[index].isTwoCorrect = false;
+                            } else {
+                              listOfQuestions[index].isTwoCorrect = true;
+                            }
+                          });
+                        })))),
         Card(
-            child: ListTile(
-                tileColor: listOfQuestions[index].isThreeCorrect
-                    ? Colors.green
-                    : Colors.grey,
-                onTap: () {},
-                leading: Text("3."),
-                title: _setAnswerThreeText(index),
-                trailing: IconButton(
-                    icon: Image.asset('assets/icons/ICON_Tick.png'),
-                    iconSize: 25,
-                    onPressed: () {
-                      setState(() {
-                        if (listOfQuestions[index].isThreeCorrect) {
-                          listOfQuestions[index].isThreeCorrect = false;
-                        } else {
-                          listOfQuestions[index].isThreeCorrect = true;
-                        }
-                      });
-                    }))),
+            child: Container(
+                decoration: listOfQuestions[index].isThreeCorrect
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer3_green.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer3.png'))),
+                child: ListTile(
+                    onTap: () {},
+                    leading: Text("3.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: _setAnswerThreeText(index),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            if (listOfQuestions[index].isThreeCorrect) {
+                              listOfQuestions[index].isThreeCorrect = false;
+                            } else {
+                              listOfQuestions[index].isThreeCorrect = true;
+                            }
+                          });
+                        })))),
         Card(
-            child: ListTile(
-                tileColor: listOfQuestions[index].isFourCorrect
-                    ? Colors.green
-                    : Colors.grey,
-                onTap: () {},
-                leading: Text("4."),
-                title: _setAnswerFourText(index),
-                trailing: IconButton(
-                    icon: Image.asset('assets/icons/ICON_Tick.png'),
-                    iconSize: 25,
-                    onPressed: () {
-                      setState(() {
-                        if (listOfQuestions[index].isFourCorrect) {
-                          listOfQuestions[index].isFourCorrect = false;
-                        } else {
-                          listOfQuestions[index].isFourCorrect = true;
-                        }
-                      });
-                    })))
+            child: Container(
+                decoration: listOfQuestions[index].isFourCorrect
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer4_green.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer4.png'))),
+                child: ListTile(
+                    onTap: () {},
+                    leading: Text("4.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: _setAnswerFourText(index),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            if (listOfQuestions[index].isFourCorrect) {
+                              listOfQuestions[index].isFourCorrect = false;
+                            } else {
+                              listOfQuestions[index].isFourCorrect = true;
+                            }
+                          });
+                        }))))
       ],
     ));
   }
 
   Widget _questionCards() {
     return ListView.builder(
+        padding: EdgeInsets.all(8),
         itemCount: listOfQuestions.length,
         itemBuilder: (context, index) {
           final item = listOfQuestions[index];
           return Dismissible(
-            key: ObjectKey(item),
-            onDismissed: (direction) {
-              setState(() {
-                listOfQuestions.removeAt(index);
-              });
-            },
-            child: Card(
-                color: Color.fromRGBO(4, 10, 120, 1.0),
-                child: Column(
-                  children: [
-                    Card(
-                      child: ListTile(
-                          tileColor: Colors.grey,
-                          title: _setQuestionText(index)),
-                    ),
-                    Container(child: _answerCard(index)),
-                    Container(child: _deleteQuestionBtn(index))
-                  ],
-                )),
-          );
+              key: ObjectKey(item),
+              onDismissed: (direction) {
+                setState(() {
+                  listOfQuestions.removeAt(index);
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('assets/pictures/wood.jpeg'))),
+                child: Card(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        Card(
+                            child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/pictures/question.png'))),
+                          child: ListTile(
+                              tileColor: Colors.transparent,
+                              title: _setQuestionText(index)),
+                        )),
+                        Container(child: _answerCard(index)),
+                        Container(child: _deleteQuestionBtn(index))
+                      ],
+                    )),
+              ));
         });
   }
 

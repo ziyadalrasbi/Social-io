@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/helpers.dart';
 import 'package:socialio/pages/profile/choose_banner.dart';
-import 'package:socialio/pages/profile/choose_border.dart';
+
 import 'package:socialio/pages/profile/choose_profile_pic.dart';
 import 'package:socialio/pages/profile/profile_appbar.dart';
 
@@ -130,43 +130,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             height: 2,
           ),
           
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => ChooseBorder()
-                  ),
-                );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                    Text(
-                      "Edit Profile Border", 
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Spacer(),
-                    Container(
-                      
-                      alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                    ),
-                    
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
           
           GestureDetector(
             onTap: (){

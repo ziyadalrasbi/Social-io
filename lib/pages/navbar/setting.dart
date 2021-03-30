@@ -61,292 +61,296 @@ class _Setup_pageState extends State<Setup_page> {
       ),
 
       // 6 navigate botton
-      body: Center(
-          child: Column(
-        children: [
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AccountInfo()),
-                );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "Account Information",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
-              ),
+      body: SingleChildScrollView(
+        child: Center(
+            child: Column(
+          children: [
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
             ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileSettings()),
-              );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "Profile Settings",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              if (Constants.DarkModeBool == true) {
-                print("Preferences true");
-                print(Constants.DarkModeBool);
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DarkMode()),
-                );
-              } else {
-                print("Preferences else");
-                print(Constants.DarkModeBool);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LightMode()),
-                );
-              }
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "Preferences",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                    context,
+                    MaterialPageRoute(builder: (context) => AccountInfo()),
+                  );
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Account Information",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfileBadges()
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
                 ),
-              );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-
-                  Text(
-                    "Missions",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
-              )
-            ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SavedPosts()),
-              );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "Saved Images",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
               ),
             ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "Help",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
-              ),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
             ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AboutUs()),
+                  MaterialPageRoute(builder: (context) => ProfileSettings()),
                 );
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "About Us",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Profile Settings",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-          GestureDetector(
-            onTap: () {
-              cancelSignOut(context);
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                children: [
-                  Text(
-                    "Sign Out",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            GestureDetector(
+              onTap: () {
+                if (Constants.DarkModeBool == true) {
+                  print("Preferences true");
+                  print(Constants.DarkModeBool);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DarkMode()),
+                  );
+                } else {
+                  print("Preferences else");
+                  print(Constants.DarkModeBool);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LightMode()),
+                  );
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Preferences",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.keyboard_arrow_right_rounded),
-                  ),
-                ],
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            color: Colors.black,
-            width: dimensions.width,
-            height: 2,
-          ),
-        ],
-      )),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfileBadges()
+                  ),
+                );
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+
+                    Text(
+                      "Missions",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                )
+              ),
+            ),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SavedPosts()),
+                );
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Saved Images",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Help",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutUs()),
+                  );
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "About Us",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            GestureDetector(
+              onTap: () {
+                cancelSignOut(context);
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Sign Out",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.black,
+              width: dimensions.width,
+              height: 2,
+            ),
+            
+          ],
+        )),
+      ),
     );
   }
 }
 
+bool resetTheme = false;
 
 cancelSignOut(BuildContext context) {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -360,6 +364,7 @@ cancelSignOut(BuildContext context) {
   Widget continueButton = FlatButton(
     child: Text("Sign Out"),
     onPressed: () {
+      HelperFunction.saveThemeSharedPref(resetTheme);
       Navigator.of(context, rootNavigator: true).pop();
       auth.signOut().then((res) {
         Navigator.pushReplacement(

@@ -28,6 +28,7 @@ class InputField extends StatelessWidget {
       color: color,
       child: TextFormField(
         // style: style,
+        style: TextStyle(color: Colors.black),
         controller: control,
         validator: validate, 
         onChanged: changes,
@@ -35,6 +36,7 @@ class InputField extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none, // making it have no border
           hintText: hint,
+          hintStyle: TextStyle(color: Colors.black),
         ),
       ),
     );

@@ -63,7 +63,7 @@ class _BodyState extends State<Body> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                  InputField(
-                   color: Colors.white,
+                  color: Colors.white,
                   type: TextInputType.name,
                   validate: (value) {
                     if (value.isEmpty) {
@@ -139,6 +139,9 @@ class _BodyState extends State<Body> {
                   ),
                   
                   child: DropdownButton(
+                  style: TextStyle(color: Colors.black),
+                  iconEnabledColor: Colors.black,
+                  dropdownColor: Colors.white,
                   isExpanded: true,
                   value: dropdownValue,
                   icon: Icon(Icons.arrow_drop_down_circle),

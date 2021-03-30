@@ -56,7 +56,6 @@ class _QuizState extends State<Quiz> {
   List listOfThirdBoolAnswers = [];
   List listOfFourthBoolAnswers = [];
 
-
   getQuestions() async {
     FirebaseFirestore.instance
         .collection('quizzes')
@@ -143,234 +142,365 @@ class _QuizState extends State<Quiz> {
   bool secondselected = false;
   bool thirdselected = false;
   bool fourthselected = false;
+  List listOfBooleanHolder = [];
+  List listOfBooleans = [];
+  List listOfBooleansFirstSelected = [];
+  List listOfBooleansSecondSelected = [];
+  List listOfBooleansThirdSelected = [];
+  List listOfBooleansFourthSelected = [];
 
-  returnUpvoteColour() {
-    
+  generateListOfBooleans() {
+    for (int i = 0; i < listOfQuestions2.length; i++) {
+      listOfBooleansFirstSelected.add(firstselected);
+      listOfBooleansSecondSelected.add(secondselected);
+      listOfBooleansThirdSelected.add(thirdselected);
+      listOfBooleansFourthSelected.add(firstselected);
+      print(listOfBooleansFirstSelected);
+      print(listOfBooleansSecondSelected);
+      print(listOfBooleansThirdSelected);
+      print(listOfBooleansFourthSelected);
+    }
   }
+
   int answerIndex = 0;
   int userScore = 0;
   List<bool> answers = [];
   Widget _answerCard(index) {
-      print(listOfFirstAnswers);
-      print(listOfSecondtAnswers);
-      print(listOfQuestions2);
-      return Container(
-          child: Column(
-        children: [
-          Card(
-              child: ListTile(
-                  tileColor:Colors.grey,
-                  onTap: () {
-                    if (firstselected != true) {
-                    
-                      firstselected = true;
-                      if (listOfSecondBoolAnswers[index]  ==  true  && secondselected == true) {
-                        secondselected = false;
-                        userScore--;
-                      } else {
-                        secondselected = false;
-                      }
+    generateListOfBooleans();
+    print(listOfFirstAnswers);
+    print(listOfSecondtAnswers);
+    print(listOfQuestions2);
+    return Container(
+        child: Column(
+      children: [
+        Card(
+            child: Container(
+                decoration: listOfBooleansFirstSelected[index]
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer1_selected.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer1.png'))),
+                child: ListTile(
+                    tileColor: Colors.transparent,
+                    onTap: () {
+                      setState(() {
+                        if (listOfBooleansFirstSelected[index] != true) {
+                          listOfBooleansFirstSelected[index] = true;
+                          if (listOfSecondBoolAnswers[index] == true &&
+                              listOfBooleansSecondSelected[index] == true) {
+                            listOfBooleansSecondSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansSecondSelected[index] = false;
+                          }
 
-                      if (listOfThirdBoolAnswers[index]  == true && thirdselected == true) {
-                        thirdselected = false;
-                        userScore--;
-                      } else {
-                        thirdselected = false;
-                      }
+                          if (listOfThirdBoolAnswers[index] == true &&
+                              listOfBooleansThirdSelected[index] == true) {
+                            listOfBooleansThirdSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansThirdSelected[index] = false;
+                          }
 
-                      if (listOfFourthBoolAnswers[index]  == true && fourthselected == true) {
-                        fourthselected = false;
-                        userScore--;
-                      } else {
-                        fourthselected = false;
-                      }
-                  
-                      if (listOfFirstBoolAnswers[index] == true) {
-                      userScore++;
-                      }
-                    
-                    } else if (firstselected == true) {
-                      firstselected = false;
-                       if (listOfFirstBoolAnswers[index] == true) {
-                      userScore--;
-                    }
-                    }
-                    print(userScore);
-                  },
-                  leading: Text("1."),
-                  title: Text(listOfFirstAnswers[index].toString()),
-                  trailing: IconButton(
-                      icon: Image.asset('assets/icons/ICON_Tick.png'),
-                      iconSize: 25,
-                      onPressed: () {
-                        setState(() {});
-                      }))),
-          Card(
-              child: ListTile(
-                  tileColor: Colors.grey,
-                  onTap: () {
-                    if (secondselected != true) {
+                          if (listOfFourthBoolAnswers[index] == true &&
+                              listOfBooleansFourthSelected[index] == true) {
+                            listOfBooleansFourthSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansFourthSelected[index] = false;
+                          }
 
-                    secondselected = true;
-                      if (listOfFirstBoolAnswers[index]  == true  && firstselected == true) {
-                        firstselected = false;
-                        userScore--;
-                      } else {
-                        firstselected = false;
-                      }
+                          if (listOfFirstBoolAnswers[index] == true) {
+                            userScore++;
+                          }
+                        } else if (listOfBooleansFirstSelected[index] == true) {
+                          listOfBooleansFirstSelected[index] = false;
+                          if (listOfFirstBoolAnswers[index] == true) {
+                            userScore--;
+                          }
+                        }
+                        print(userScore);
+                      });
+                    },
+                    leading: Text("1.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: Text(listOfFirstAnswers[index].toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {});
+                        })))),
+        Card(
+            child: Container(
+                decoration: listOfBooleansSecondSelected[index]
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer2_selected.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer2.png'))),
+                child: ListTile(
+                    tileColor: Colors.transparent,
+                    onTap: () {
+                      setState(() {
+                        if (listOfBooleansSecondSelected[index] != true) {
+                          listOfBooleansSecondSelected[index] = true;
+                          if (listOfFirstBoolAnswers[index] == true &&
+                              listOfBooleansFirstSelected[index] == true) {
+                            listOfBooleansFirstSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansFirstSelected[index] = false;
+                          }
 
-                      if (listOfThirdBoolAnswers[index]  == true  && thirdselected == true) {
-                        thirdselected = false;
-                        userScore--;
-                      } else {
-                        thirdselected = false;
-                      }
+                          if (listOfThirdBoolAnswers[index] == true &&
+                              listOfBooleansThirdSelected[index] == true) {
+                            listOfBooleansThirdSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansThirdSelected[index] = false;
+                          }
 
-                      if (listOfFourthBoolAnswers[index]  == true  && fourthselected == true) {
-                        fourthselected = false;
-                        userScore--;
-                      } else {
-                        fourthselected = false;
-                      }
-                  
-                      if (listOfSecondBoolAnswers[index] == true) {
-                      userScore++;
-                      }
-                    } else if (secondselected == true) {
-                      secondselected = false;
-                       if (listOfSecondBoolAnswers[index]== true) {
-                      userScore--;
-                    }
-                    }
-                    print(userScore);
-                  },
-                  leading: Text("2."),
-                  title: Text(listOfSecondtAnswers[index].toString()),
-                  trailing: IconButton(
-                      icon: Image.asset('assets/icons/ICON_Tick.png'),
-                      iconSize: 25,
-                      onPressed: () {
-                        setState(() {});
-                      }))),
-          Card(
-              child: ListTile(
-                  tileColor: Colors.grey,
-                  onTap: () {
-                    if (thirdselected != true) {
-                    
-                      thirdselected = true;
-                      if (listOfSecondBoolAnswers[index]  == true  && secondselected == true) {
-                        secondselected = false;
-                        userScore--;
-                      } else {
-                        secondselected = false;
-                      }
+                          if (listOfFourthBoolAnswers[index] == true &&
+                              listOfBooleansFourthSelected[index] == true) {
+                            listOfBooleansFourthSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansFourthSelected[index] = false;
+                          }
 
-                      if (listOfFirstBoolAnswers[index]  == true  && firstselected == true) {
-                        firstselected = false;
-                        userScore--;
-                      } else {
-                        firstselected = false;
-                      }
+                          if (listOfSecondBoolAnswers[index] == true) {
+                            userScore++;
+                          }
+                        } else if (listOfBooleansSecondSelected[index] ==
+                            true) {
+                          listOfBooleansSecondSelected[index] = false;
+                          if (listOfSecondBoolAnswers[index] == true) {
+                            userScore--;
+                          }
+                        }
+                        print(userScore);
+                      });
+                    },
+                    leading: Text("2.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: Text(listOfSecondtAnswers[index].toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {});
+                        })))),
+        Card(
+            child: Container(
+                decoration: listOfBooleansThirdSelected[index]
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer3_selected.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer3.png'))),
+                child: ListTile(
+                    tileColor: Colors.transparent,
+                    onTap: () {
+                      setState(() {
+                        if (listOfBooleansThirdSelected[index] != true) {
+                          listOfBooleansThirdSelected[index] = true;
+                          if (listOfSecondBoolAnswers[index] == true &&
+                              listOfBooleansSecondSelected[index] == true) {
+                            listOfBooleansSecondSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansSecondSelected[index] = false;
+                          }
 
-                      if (listOfFourthBoolAnswers[index]  == true  && fourthselected == true) {
-                        fourthselected = false;
-                        userScore--;
-                      } else {
-                        fourthselected = false;
-                      }
-                  
-                      if (listOfThirdBoolAnswers[index] == true) {
-                      userScore++;
-                      }
-                    
-                    } else if (thirdselected == true) {
-                      thirdselected = false;
-                       if (listOfThirdBoolAnswers[index] == true) {
-                      userScore--;
-                    }
-                    }
-                    print(userScore);
-                  },
-                  leading: Text("3."),
-                  title: Text(listOfThirdAnswers[index].toString()),
-                  trailing: IconButton(
-                      icon: Image.asset('assets/icons/ICON_Tick.png'),
-                      iconSize: 25,
-                      onPressed: () {
-                        setState(() {});
-                      }))),
-          Card(
-              child: ListTile(
-                  tileColor: Colors.grey,
-                  onTap: () {
-                    if (fourthselected != true) {
-                    
-                      fourthselected = true;
+                          if (listOfFirstBoolAnswers[index] == true &&
+                              listOfBooleansFirstSelected[index] == true) {
+                            listOfBooleansFirstSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansFirstSelected[index] = false;
+                          }
 
-                      if (listOfSecondBoolAnswers[index]  == true  && secondselected == true) {
-                        secondselected = false;
-                        userScore--;
-                      } else {
-                        secondselected = false;
-                      }
+                          if (listOfFourthBoolAnswers[index] == true &&
+                              listOfBooleansFourthSelected[index] == true) {
+                            listOfBooleansFourthSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansFourthSelected[index] = false;
+                          }
 
-                      if (listOfThirdBoolAnswers[index]  == true  && thirdselected == true) {
-                        thirdselected = false;
-                        userScore--;
-                      } else {
-                        thirdselected = false;
-                      }
+                          if (listOfThirdBoolAnswers[index] == true) {
+                            userScore++;
+                          }
+                        } else if (listOfBooleansThirdSelected[index] == true) {
+                          listOfBooleansThirdSelected[index] = false;
+                          if (listOfThirdBoolAnswers[index] == true) {
+                            userScore--;
+                          }
+                        }
+                        print(userScore);
+                      });
+                    },
+                    leading: Text("3.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: Text(listOfThirdAnswers[index].toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {});
+                        })))),
+        Card(
+            child: Container(
+                decoration: listOfBooleansFourthSelected[index]
+                    ? BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                'assets/pictures/answer4_selected.png')))
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage('assets/pictures/answer4.png'))),
+                child: ListTile(
+                    tileColor: Colors.transparent,
+                    onTap: () {
+                      setState(() {
+                        if (listOfBooleansFourthSelected[index] != true) {
+                          listOfBooleansFourthSelected[index] = true;
 
-                      if (listOfFirstBoolAnswers[index]  == true  && firstselected == true) {
-                        firstselected = false;
-                        userScore--;
-                      } else {
-                        firstselected = false;
-                      }
-                  
-                      if (listOfFourthBoolAnswers[index] == true) {
-                      userScore++;
-                      }
-                    } else if (fourthselected == true) {
-                      fourthselected = false;
-                       if (listOfFourthBoolAnswers[index]== true) {
-                      userScore--;
-                    }
-                    }
-                    print(userScore);
-                  },
-                  leading: Text("4."),
-                  title: Text(listOfFourthAnswers[index].toString()),
-                  trailing: IconButton(
-                      icon: Image.asset('assets/icons/ICON_Tick.png'),
-                      iconSize: 25,
-                      onPressed: () {
-                        setState(() {});
-                      }))),
-        ],
-      ));
+                          if (listOfSecondBoolAnswers[index] == true &&
+                              listOfBooleansSecondSelected[index] == true) {
+                            listOfBooleansSecondSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansSecondSelected[index] = false;
+                          }
+
+                          if (listOfThirdBoolAnswers[index] == true &&
+                              listOfBooleansThirdSelected[index] == true) {
+                            listOfBooleansThirdSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansThirdSelected[index] = false;
+                          }
+
+                          if (listOfFirstBoolAnswers[index] == true &&
+                              listOfBooleansFirstSelected[index] == true) {
+                            listOfBooleansFirstSelected[index] = false;
+                            userScore--;
+                          } else {
+                            listOfBooleansFirstSelected[index] = false;
+                          }
+
+                          if (listOfFourthBoolAnswers[index] == true) {
+                            userScore++;
+                          }
+                        } else if (listOfBooleansFourthSelected[index] ==
+                            true) {
+                          listOfBooleansFourthSelected[index] = false;
+                          if (listOfFourthBoolAnswers[index] == true) {
+                            userScore--;
+                          }
+                        }
+                        print(userScore);
+                      });
+                    },
+                    leading: Text("4.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    title: Text(listOfFourthAnswers[index].toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        )),
+                    trailing: IconButton(
+                        icon: Image.asset('assets/icons/ICON_Tick.png'),
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {});
+                        })))),
+      ],
+    ));
   }
-
-  
 
   Widget _questionCards() {
     return ListView.builder(
         itemCount: listOfQuestions2.length,
         itemBuilder: (context, index) {
           final item = listOfQuestions2[index];
-          return Card(
-              color: Color.fromRGBO(4, 10, 120, 1.0),
-              child: Column(
-                children: [
-                  Card(
-                    child: ListTile(
-                        tileColor: Colors.grey,
-                        title: Text(listOfQuestions2[index])),
-                  ),
-                  Container(child: _answerCard(index))
-                ],
-              ));
+          return Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/pictures/wood.jpeg'))),
+              child: Card(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: [
+                      Card(
+                          child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(
+                                    'assets/pictures/question.png'))),
+                        child: ListTile(
+                            tileColor: Colors.transparent,
+                            title: Text(
+                              listOfQuestions2[index],
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 25.0),
+                            )),
+                      )),
+                      Container(child: _answerCard(index))
+                    ],
+                  )));
         });
   }
 
@@ -414,7 +544,7 @@ class _QuizState extends State<Quiz> {
           children: [
             Container(
                 alignment: Alignment.center,
-                child: Text(widget.quizName.toString())),
+                child: Text(widget.quizName.toString(), style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),)),
             Expanded(child: Container(child: _questionCards())),
             Container(alignment: Alignment.center, child: _sumbitQuizBtn())
           ],

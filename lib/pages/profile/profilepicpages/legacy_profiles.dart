@@ -5,25 +5,32 @@ import 'package:socialio/parts/button.dart';
 import '../../../constants.dart';
 import '../../../helpers.dart';
 
-class PrizeBordersPage extends StatefulWidget {
+class LegacyProfilePicPage extends StatefulWidget {
   @override
-  _PrizeBordersPageState createState() => _PrizeBordersPageState();
+  _LegacyProfilePicPageState createState() => _LegacyProfilePicPageState();
 }
 
-class _PrizeBordersPageState extends State<PrizeBordersPage> {
+class _LegacyProfilePicPageState extends State<LegacyProfilePicPage> {
 
 
-Map<String,int> borders = {
-  "assets/borders/prizes/prize1.png": 30,
-  "assets/borders/prizes/prize2.png": 50,
+Map<String,int> banners = {
+  "assets/profilepics/legacy/legacy1.png": 5,
+  "assets/profilepics/legacy/legacy2.png": 7,
+  "assets/profilepics/legacy/legacy3.png": 10,
+  "assets/profilepics/legacy/legacy4.png": 11,
+  "assets/profilepics/legacy/legacy5.png": 12,
+  "assets/profilepics/legacy/legacy6.png": 13,
 };
 
 
+List<String> categories = [
+  "Animals"
+];
 
 String chosen = "";
 int totallikes = 0;
-var bordernames;
-var bordervalues;
+var bannernames;
+var bannervalues;
 bool requiredPointsBool;
 @override
   void initState() {
@@ -57,7 +64,7 @@ bool requiredPointsBool;
   }
 
   returnImageColor(int index) {
-    if (totallikes < bordervalues[index]) {
+    if (totallikes < bannervalues[index]) {
       return Colors.grey;
     } else {
       return Colors.transparent;
@@ -69,14 +76,14 @@ bool requiredPointsBool;
   }
 
 printImages() {
-  bordernames = borders.keys.toList(); 
-  bordervalues = borders.values.toList();
-    return List.generate(borders.length, (index) {
+  bannernames = banners.keys.toList(); 
+  bannervalues = banners.values.toList();
+    return List.generate(banners.length, (index) {
       print(requiredPointsBool);
       return GestureDetector(
         onTap: () async {
-          chosen = bordernames[index];
-          if (totallikes < bordervalues[index]) {
+          chosen = bannernames[index];
+          if (totallikes < bannervalues[index]) {
               requiredPointsBool = false;
           } else {
               requiredPointsBool = true;
@@ -95,11 +102,11 @@ printImages() {
               ),
             ),
             child: new Image.asset(
-             bordernames[index],
+             bannernames[index],
              
               ),
           ),
-          Text(bordervalues[index].toString()),
+          Text(bannervalues[index].toString()),
           ]),
       );
     });
@@ -107,8 +114,8 @@ printImages() {
 
   displayPics() {
     return GridView.count(
-      childAspectRatio: 1,
-      crossAxisCount: 2,
+      childAspectRatio: 0.7,
+      crossAxisCount: 3,
       crossAxisSpacing: 8,
       mainAxisSpacing: 4,
       physics: BouncingScrollPhysics(),
@@ -118,13 +125,13 @@ printImages() {
 
 returnChosenImage() {
   if (chosen.length > 2) {
-    return chosen.substring(23, chosen.length-4);
+    return chosen.substring(26, chosen.length-4);
   } else {
     return "";
   }
 }
 
-updateProfileBorder() async {
+updateProfilePic() async {
  FirebaseFirestore.instance
     .collection('users')
     .where('username', isEqualTo: Constants.myName)
@@ -134,13 +141,33 @@ updateProfileBorder() async {
           FirebaseFirestore.instance
           .collection('users')
           .doc(result.id)
-          .update({'border': chosen,});   
+          .update({'profilepic': chosen,});   
           setState(() {
           }); 
-          HelperFunction.saveProfileBorderSharedPref(chosen);
+          HelperFunction.saveProfilePicSharedPref(chosen);
     });
   });
 }
+
+updateUploadProfilePics() async {
+  FirebaseFirestore.instance
+    .collection("uploads")
+    .doc(Constants.myName)
+    .collection('images')
+    .get()
+    .then((querySnapshot) {
+  querySnapshot.docs.forEach((result) async {
+    FirebaseFirestore.instance
+        .collection("uploads")
+        .doc(Constants.myName)
+        .collection("images")
+        .doc(result.id)
+        .update({'profilepic': chosen,});
+      });
+    });
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,11 +207,12 @@ updateProfileBorder() async {
             alignment: Alignment.bottomCenter,
             child: MainButton(
               color: Colors.indigo[500],
-              text: requiredPointsBool == true ? "Set profile border to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
+              text: requiredPointsBool == true ? "Set profile picture to: "+ returnChosenImage() : "Not enough points for this image. Please select another.",
               textColor: requiredPointsBool == true ? Colors.white : Colors.red,
               pressed: () {
                 if (requiredPointsBool == true) {
-                updateProfileBorder();
+                updateProfilePic();
+                updateUploadProfilePics();
                 Navigator.pop(context);
                 } 
               },

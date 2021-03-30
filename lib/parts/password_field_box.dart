@@ -26,6 +26,7 @@ class PassField extends StatelessWidget {
     return TextFieldBox(
       color: color,
       child: TextFormField(
+        style: TextStyle(color: Colors.black),
         validator: validate,
         controller: control,
         obscureText: true, // this makes text hidden
@@ -33,7 +34,7 @@ class PassField extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,
-          
+          hintStyle: TextStyle(color: Colors.black),
         ),
       ),
     );

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/pages/profile/profilepicpages/animal_profiles.dart';
+import 'package:socialio/pages/profile/profilepicpages/cartoon_animal_profiles.dart';
+import 'package:socialio/pages/profile/profilepicpages/landmark_profiles.dart';
+import 'package:socialio/pages/profile/profilepicpages/legacy_profiles.dart';
+import 'package:socialio/pages/profile/profilepicpages/nature_profiles.dart';
 
 import '../../helpers.dart';
 
@@ -64,6 +68,158 @@ class _ChooseProfilePicState extends State<ChooseProfilePic> {
                     
                     Text(
                       "Animals", 
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      
+                      alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                    
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => CartoonAnimalProfilePicPage()
+                  ),
+                );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                    
+                    Text(
+                      "Cartoon Animals", 
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      
+                      alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                    
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => LandmarkProfilePicPage()
+                  ),
+                );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                    
+                    Text(
+                      "Landmarks", 
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      
+                      alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                    
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => NatureProfilePicPage()
+                  ),
+                );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                    
+                    Text(
+                      "Nature", 
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      
+                      alignment: Alignment.centerRight,
+                    child: Icon(Icons.keyboard_arrow_right_rounded),
+                    ),
+                    
+                ],
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.black,
+            width: dimensions.width,
+            height: 2,
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => LegacyProfilePicPage()
+                  ),
+                );
+            },
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                    
+                    Text(
+                      "Legacy", 
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

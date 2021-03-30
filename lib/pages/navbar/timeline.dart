@@ -11,6 +11,7 @@ import 'package:socialio/extra/chatpage/chat_page.dart';
 import 'package:socialio/pages/navbar/comments.dart';
 import 'package:socialio/pages/navbar/report_panel.dart';
 import 'package:socialio/pages/navbar/search/user_profile.dart';
+import 'package:socialio/pages/student/make_quiz.dart';
 import 'package:socialio/parts/input_field_box.dart';
 import 'package:intl/intl.dart';
 import '../../constants.dart';
@@ -849,19 +850,19 @@ confirmDelete(int index, BuildContext context) {
   shareImage(int index, BuildContext context) {
     // set up the buttons
     Widget rowButton = Row(
-                children: [
-                  Expanded(
-                    child: InputField(
-                      color: Colors.blueGrey[200],
-                      control: searchController,
-                      hint: "Search...",
-                      changes: (val) {
-                      },
-                    ),
-                  ),
-                ],
-                
-              );
+        children: [
+          Expanded(
+            child: InputField(
+              color: Colors.blueGrey[200],
+              control: searchController,
+              hint: "Search...",
+              changes: (val) {
+              },
+            ),
+          ),
+        ],
+        
+      );
 
     Widget cancelButton = FlatButton(
         child: Text("Cancel"),
@@ -1531,6 +1532,28 @@ confirmDelete(int index, BuildContext context) {
     }
   }
 
+  returnCreateQuiz() {
+    if (Constants.accType == "Creator") {
+      return FlatButton(
+              child: Image.asset(
+                'assets/icons/ICON_chalkboard.png',
+                width: 45,
+                height: 45,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Quizmaker(),
+                  ),
+                );
+              },
+            );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -1551,7 +1574,16 @@ confirmDelete(int index, BuildContext context) {
           ),
           backgroundColor: Colors.transparent,
           actions: <Widget>[
-            returnMessaging(),
+            Container(
+              width: size.width,
+              child: Row(                
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                        returnCreateQuiz(),
+                        returnMessaging(),
+                ],
+              ),
+            )
           ],
         ),
         body: _getPost(),
@@ -1572,7 +1604,16 @@ confirmDelete(int index, BuildContext context) {
           ),
           backgroundColor: Colors.transparent,
           actions: <Widget>[
-            returnMessaging(),
+            Container(
+              width: size.width,
+              child: Row(                
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  returnCreateQuiz(),
+                  returnMessaging(),
+                ],
+              ),
+            )
           ],
         ),
         body: _getPostDark(),

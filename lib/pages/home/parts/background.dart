@@ -20,9 +20,10 @@ class Background extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
+          
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Colors.white,Colors.purple[300], Colors.blue,])
+        colors: [Colors.green[600], Color.fromRGBO(110, 159, 255, 1), Color.fromRGBO(78, 9, 206, 1),])
       ),
       
       width: double.infinity,
