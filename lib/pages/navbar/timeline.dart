@@ -558,6 +558,129 @@ class _PostsState extends State<Posts> {
     }
   }
 
+  
+  returnReportButton(int index) {
+    if (Constants.accType == "Manager") {
+      return editPost(index, context);
+    } else {
+      return reportUser(index, context);
+    }
+  }
+
+  returnReportIcon(int index) {
+    if (Constants.accType == "Manager") {
+      return Icon(Icons.delete_forever_outlined, color: Colors.red);
+    } else {
+      return Image.asset('assets/pictures/ICON_flag.png');
+    }
+  }
+
+  returnReportIconDark(int index) {
+    if (Constants.accType == "Manager") {
+      return Icon(Icons.delete_forever_outlined, color: Colors.red);
+    } else {
+      return Image.asset('assets/pictures/DARKICON_flag.png');
+    }
+  }
+
+  editPost(int index, BuildContext context) {
+    String rep1 = "Edit caption";
+    String rep2 = "Delete post";
+    String cancel = "Cancel";
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text(cancel),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
+  Widget deleteButton = FlatButton(
+    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+      confirmDelete(index, context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete Post"),
+    content: Text("Select an option to delete this post."),
+    actions: [
+      cancelButton,
+      deleteButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+confirmDelete(int index, BuildContext context) {
+    String rep1 = "Cancel";
+    String rep2 = "Confirm";
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text(rep1),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+  Widget deleteButton = FlatButton(
+    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+    onPressed:  () {
+      deletePost(index);
+      Navigator.of(context, rootNavigator: true).pop();
+      
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete Post"),
+    content: Text("Are you sure you want to delete this post? This action cannot be undone."),
+    actions: [
+      cancelButton,
+      deleteButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+  void deletePost(int index) async {
+  FirebaseFirestore.instance
+    .collection('uploads')
+    .doc(usernames[index])
+    .collection('images')
+    .where('imageid', isEqualTo: posts[index])
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        setState(() {     
+          FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .doc(result.id)
+          .delete();  
+          });
+      });
+    });
+  }
+  
   reportUser(int index, BuildContext context) {
     String rep1 = "Contains a human";
     String rep2 = "Harmful content";
@@ -955,10 +1078,10 @@ class _PostsState extends State<Posts> {
                       ),
                       returnTaggedUsers(userIndex),
                       IconButton(
-                        icon: Image.asset('assets/pictures/ICON_flag.png'),
+                        icon: returnReportIcon(userIndex),
                         iconSize: 25,
                         onPressed: () {
-                          reportUser(userIndex, context);
+                          returnReportButton(userIndex);
                         },
                       ),
                     ],
@@ -1198,10 +1321,10 @@ class _PostsState extends State<Posts> {
                       ),
                       returnTaggedUsers(userIndex),
                       IconButton(
-                        icon: Image.asset('assets/icons/DARKICON_flag.png'),
+                        icon: returnReportIconDark(userIndex),
                         iconSize: 25,
                         onPressed: () {
-                          reportUser(userIndex, context);
+                         returnReportButton(userIndex);
                         },
                       ),
                     ],
@@ -1385,26 +1508,12 @@ class _PostsState extends State<Posts> {
     }
   }
 
-  appBarTest() {
-    if (!kIsWeb) {
-       Size size = MediaQuery.of(context).size;
-      return AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Constants.myAppBar.toString()),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-          actions: <Widget>[
-            FlatButton(
+
+  returnMessaging() {
+    if (Constants.accType != "Student") {
+      return FlatButton(
               child: Image.asset(
-                'assets/icons/DARKICON_inbox.png',
+                'assets/icons/ICON_inbox.png',
                 width: 45,
                 height: 45,
               ),
@@ -1416,9 +1525,9 @@ class _PostsState extends State<Posts> {
                   ),
                 );
               },
-            ),
-          ],
-        );
+            );
+    } else {
+      return Container();
     }
   }
 
@@ -1427,7 +1536,6 @@ class _PostsState extends State<Posts> {
     Size size = MediaQuery.of(context).size;
     if (Constants.DarkModeBool == false) {
       return Scaffold(
-        
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
@@ -1443,28 +1551,30 @@ class _PostsState extends State<Posts> {
           ),
           backgroundColor: Colors.transparent,
           actions: <Widget>[
-            FlatButton(
-              child: Image.asset(
-                'assets/icons/ICON_inbox.png',
-                width: 45,
-                height: 45,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(),
-                  ),
-                );
-              },
-            ),
+            returnMessaging(),
           ],
         ),
         body: _getPost(),
       );
     } else {
       return Scaffold(
-        appBar: appBarTest(),
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            returnMessaging(),
+          ],
+        ),
         body: _getPostDark(),
       );
     }

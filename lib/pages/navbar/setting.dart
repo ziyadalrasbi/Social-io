@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/form_authentication.dart';
 import 'package:socialio/helpers.dart';
+import 'package:socialio/main.dart';
 import 'package:socialio/pages/darkmode/darkmode.dart';
 import 'package:socialio/pages/home/home_page.dart';
 import 'package:socialio/pages/lightmode/lightmode.dart';
+import 'package:socialio/pages/login/login_screen.dart';
 import 'package:socialio/pages/navbar/about_us.dart';
 import 'package:socialio/pages/navbar/account_info.dart';
 import 'package:socialio/pages/navbar/fake_timeline.dart';
@@ -19,6 +22,7 @@ class Setup_page extends StatefulWidget {
   @override
   _Setup_pageState createState() => _Setup_pageState();
 }
+
 
 class _Setup_pageState extends State<Setup_page> {
   final _bottomNavigationColor = Colors.blue;
@@ -191,7 +195,7 @@ class _Setup_pageState extends State<Setup_page> {
                 children: [
 
                   Text(
-                    "Badges",
+                    "Missions",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -343,7 +347,9 @@ class _Setup_pageState extends State<Setup_page> {
   }
 }
 
+
 cancelSignOut(BuildContext context) {
+  FirebaseAuth auth = FirebaseAuth.instance;
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
@@ -355,7 +361,13 @@ cancelSignOut(BuildContext context) {
     child: Text("Sign Out"),
     onPressed: () {
       Navigator.of(context, rootNavigator: true).pop();
-      context.read<AuthService>().signOut();
+      auth.signOut().then((res) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()));
+      });
+      
+      
       
     },
   );

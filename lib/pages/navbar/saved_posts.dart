@@ -264,6 +264,8 @@ class _SavedPostsState extends State<SavedPosts> {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) async {
         setState(() {
+          getCommentMissionComplete(index);
+          commentMissionComplete();
           FirebaseFirestore.instance
               .collection('uploads')
               .doc(usernames[index])
@@ -292,6 +294,8 @@ class _SavedPostsState extends State<SavedPosts> {
       }
       likedposts.add(posts[index]);
       addLikedPost();
+      likeMissionComplete();
+      getLikeMissionComplete(index);
       upVoted = true;
       downVoted = false;
       FirebaseFirestore.instance
@@ -406,6 +410,66 @@ class _SavedPostsState extends State<SavedPosts> {
       });
     }
   }
+
+  commentMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/6.png'])});
+      });
+    });
+  }
+
+  likeMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/7.png'])});
+      });
+    });
+  }
+
+  getLikeMissionComplete(int index) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: usernames[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/8.png'])});
+      });
+    });
+  }
+
+  getCommentMissionComplete(int index) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: usernames[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/9.png'])});
+      });
+    });
+  }
   returnUpvoteColor(int index) {
     if (likedposts != null) {
       if (likedposts.contains(posts[index])) {
@@ -462,6 +526,128 @@ class _SavedPostsState extends State<SavedPosts> {
     } else {
       return Alignment.topLeft;
     }
+  }
+
+  returnReportButton(int index) {
+    if (Constants.accType == "Manager") {
+      return editPost(index, context);
+    } else {
+      return reportUser(index, context);
+    }
+  }
+
+  returnReportIcon(int index) {
+    if (Constants.accType == "Manager") {
+      return Icon(Icons.delete_forever_outlined, color: Colors.red);
+    } else {
+      return Image.asset('assets/pictures/ICON_flag.png');
+    }
+  }
+
+  returnReportIconDark(int index) {
+    if (Constants.accType == "Manager") {
+      return Icon(Icons.delete_forever_outlined, color: Colors.red);
+    } else {
+      return Image.asset('assets/pictures/DARKICON_flag.png');
+    }
+  }
+
+  editPost(int index, BuildContext context) {
+    String rep1 = "Edit caption";
+    String rep2 = "Delete post";
+    String cancel = "Cancel";
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text(cancel),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
+  Widget deleteButton = FlatButton(
+    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+      confirmDelete(index, context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete Post"),
+    content: Text("Select an option to delete this post."),
+    actions: [
+      cancelButton,
+      deleteButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+confirmDelete(int index, BuildContext context) {
+    String rep1 = "Cancel";
+    String rep2 = "Confirm";
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text(rep1),
+    onPressed:  () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+  Widget deleteButton = FlatButton(
+    child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+    onPressed:  () {
+      deletePost(index);
+      Navigator.of(context, rootNavigator: true).pop();
+      
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete Post"),
+    content: Text("Are you sure you want to delete this post? This action cannot be undone."),
+    actions: [
+      cancelButton,
+      deleteButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+  void deletePost(int index) async {
+  FirebaseFirestore.instance
+    .collection('uploads')
+    .doc(usernames[index])
+    .collection('images')
+    .where('imageid', isEqualTo: posts[index])
+    .get()
+    .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async { 
+        setState(() {     
+          FirebaseFirestore.instance
+          .collection('uploads')
+          .doc(usernames[index])
+          .collection('images')
+          .doc(result.id)
+          .delete();  
+          });
+      });
+    });
   }
 
   reportUser(int index, BuildContext context) {
@@ -858,10 +1044,10 @@ class _SavedPostsState extends State<SavedPosts> {
                       ),
                       returnTaggedUsers(userIndex),
                       IconButton(
-                        icon: Image.asset('assets/pictures/ICON_flag.png'),
+                        icon: returnReportIcon(userIndex),
                         iconSize: 25,
                         onPressed: () {
-                          reportUser(userIndex, context);
+                          returnReportButton(userIndex);
                         },
                       ),
                     ],
@@ -1101,10 +1287,10 @@ class _SavedPostsState extends State<SavedPosts> {
                       ),
                       returnTaggedUsers(userIndex),
                       IconButton(
-                        icon: Image.asset('assets/icons/DARKICON_flag.png'),
+                        icon: returnReportIconDark(userIndex),
                         iconSize: 25,
                         onPressed: () {
-                          reportUser(userIndex, context);
+                          returnReportButton(userIndex);
                         },
                       ),
                     ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
 import 'package:socialio/pages/camera/camera.dart';
+import 'package:socialio/pages/navbar/report_panel.dart';
 import 'package:socialio/pages/navbar/saved_posts.dart';
 import 'package:socialio/pages/navbar/search/explore.dart';
 import 'package:socialio/pages/navbar/timeline.dart';
@@ -144,22 +145,40 @@ class _BottomBar extends State<BottomBar> {
     }
   }
 
+  userCameraButton() {
+    if (Constants.accType == "Creator") {
+     return FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CameraPage()),
+          );
+        },
+        child: Icon(Icons.camera_alt_outlined),
+        backgroundColor: Colors.blue,
+      );
+    } else if (Constants.accType == "Manager") {
+      return FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ReportPanel()),
+          );
+        },
+        child: Icon(Icons.report_gmailerrorred_outlined),
+        backgroundColor: Colors.blue,
+      );
+    } else {
+      return;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     if (Constants.DarkModeBool == false) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: this._pageList[this._currentIndex],
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CameraPage()),
-            );
-          },
-          child: Icon(Icons.camera_alt_outlined),
-          backgroundColor: Colors.blue,
-        ),
+        floatingActionButton: userCameraButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BubbleBottomBar(
           opacity: 0.2,
@@ -253,16 +272,7 @@ class _BottomBar extends State<BottomBar> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: this._pageList[this._currentIndex],
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CameraPage()),
-            );
-          },
-          child: Icon(Icons.camera_alt_outlined),
-          backgroundColor: Colors.blue,
-        ),
+        floatingActionButton: userCameraButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BubbleBottomBar(
           opacity: 0.2,

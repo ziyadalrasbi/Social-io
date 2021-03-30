@@ -195,6 +195,8 @@ class _PostPageState extends State<PostPage> {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) async {
         setState(() {
+          commentMissionComplete();
+          getCommentMissionComplete(index);
           FirebaseFirestore.instance
               .collection('uploads')
               .doc(usernames[index])
@@ -223,6 +225,8 @@ class _PostPageState extends State<PostPage> {
       }
       likedposts.add(posts[index]);
       addLikedPost();
+      likeMissionComplete();
+      getLikeMissionComplete(index);
       upVoted = true;
       downVoted = false;
       FirebaseFirestore.instance
@@ -338,6 +342,66 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
+  commentMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/6.png'])});
+      });
+    });
+  }
+
+  likeMissionComplete() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: Constants.myName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/7.png'])});
+      });
+    });
+  }
+
+  getLikeMissionComplete(int index) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: usernames[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/8.png'])});
+      });
+    });
+  }
+
+  getCommentMissionComplete(int index) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: usernames[index])
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) async {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(result.id)
+            .update({'rewards': FieldValue.arrayUnion(['assets/badges/9.png'])});
+      });
+    });
+  }
+
   returnUpvoteColor(int index) {
     if (likedposts != null) {
       if (likedposts.contains(posts[index])) {
@@ -433,6 +497,8 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
+  
+
   returnWidth() {
     Size size = MediaQuery.of(context).size;
     if (kIsWeb) {
@@ -479,12 +545,6 @@ class _PostPageState extends State<PostPage> {
     },
   );
 
-  Widget editButton = FlatButton(
-    child: Text(rep1),
-    onPressed:  () {
-      Navigator.of(context, rootNavigator: true).pop();
-    },
-  );
   Widget deleteButton = FlatButton(
     child: Text(rep2, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
     onPressed:  () {
@@ -495,11 +555,10 @@ class _PostPageState extends State<PostPage> {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Edit Post"),
-    content: Text("Select an option to edit this post."),
+    title: Text("Delete Post"),
+    content: Text("Select an option to delete this post."),
     actions: [
       cancelButton,
-      editButton,
       deleteButton,
     ],
   );
@@ -560,7 +619,7 @@ returnReportColor() {
 }
 
 returnReportButton(int index) {
-    if (usernames[index] != Constants.myName) {
+    if (usernames[index] != Constants.myName && Constants.accType != "Manager") {
       return IconButton(
         icon: returnReportColor(),
         iconSize: 25,
@@ -569,9 +628,19 @@ returnReportButton(int index) {
     
         },
       );
+    } else if (Constants.accType == "Manager") {
+      return IconButton(
+        icon: Icon(Icons.delete_forever_outlined, color: Colors.red),
+        iconSize: 25,
+        onPressed: () {
+          editPost(index, context);
+    
+        },
+      );
+      
     } else {
       return IconButton(
-        icon: Icon(Icons.edit),
+        icon: Icon(Icons.delete_forever_outlined, color: Colors.red),
         iconSize: 25,
         onPressed: () {
           editPost(index, context);
@@ -584,7 +653,7 @@ returnReportButton(int index) {
 void deletePost(int index) async {
   FirebaseFirestore.instance
     .collection('uploads')
-    .doc(Constants.myName)
+    .doc(usernames[index])
     .collection('images')
     .where('imageid', isEqualTo: posts[index])
     .get()
@@ -593,7 +662,7 @@ void deletePost(int index) async {
         setState(() {     
           FirebaseFirestore.instance
           .collection('uploads')
-          .doc(Constants.myName)
+          .doc(usernames[index])
           .collection('images')
           .doc(result.id)
           .delete();  

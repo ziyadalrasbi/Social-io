@@ -126,7 +126,6 @@ class ExploreState extends State<Explore> {
 
     checkImagesTagged();
 
-    printImages();
 
     displayPics();
 
@@ -161,7 +160,7 @@ class ExploreState extends State<Explore> {
 
               username.add(result.data()['username']);
 
-              printImages();
+              
             });
           });
         });
@@ -411,23 +410,6 @@ class ExploreState extends State<Explore> {
             ),
           ),
           backgroundColor: Colors.transparent,
-          actions: <Widget>[
-            FlatButton(
-              child: Image.asset(
-                'assets/icons/ICON_inbox.png',
-                width: 45,
-                height: 45,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(),
-                  ),
-                );
-              },
-            ),
-          ],
         ),
         body: Container(
           child: Column(children: [

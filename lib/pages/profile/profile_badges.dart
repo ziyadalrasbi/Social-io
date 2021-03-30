@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-List list = [];
+
 
 class ProfileBadges extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class ProfileBadges extends StatefulWidget {
 }
 
 class _ProfileBadgesState extends State<ProfileBadges> {
+  List list = [];
   checkUserRewards() async {
     FirebaseFirestore.instance
         .collection('users')
@@ -22,6 +23,9 @@ class _ProfileBadgesState extends State<ProfileBadges> {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) async {
         list.add(result.data()['rewards'].toString());
+        setState(() {
+          
+        });
       });
     });
   }
@@ -39,10 +43,22 @@ class _ProfileBadgesState extends State<ProfileBadges> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    checkUserRewards();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Badges"),
-      ),
+          centerTitle: true,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+        ),
       body: Center(
           child: CustomScrollView(
             primary: false,
@@ -142,5 +158,5 @@ class _ProfileBadgesState extends State<ProfileBadges> {
           )
       ),
     );
-  }
+  } 
 }

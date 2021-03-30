@@ -52,6 +52,7 @@ class _ReportPanelState extends State<ReportPanel> {
   getUserInfo() async {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
     Constants.accType = await HelperFunction.getUserTypeSharedPref();
+    Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
     setState(() {});
   }
 @override
@@ -359,41 +360,21 @@ returnWidth() {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.blue,
           centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-            Image.asset(
-              "assets/icons/LOGONEW.png", 
-              height: 50, 
-              alignment: Alignment.center,
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          FlatButton(
-                child:
-                  Image.asset(
-                  'assets/icons/ICON_inbox.png',
-                  width: 45,
-                  height: 45,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(),
-                    ),
-                  );
-                },
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
               ),
-        ],
-      ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+        ),
       body: _getPost(),
     );
   }
