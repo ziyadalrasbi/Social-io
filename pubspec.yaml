@@ -43,6 +43,12 @@ dependencies:
   firebase_ml_vision: ^0.9.10
   firebase_analytics: ^6.0.0
 dev_dependencies:
+  flutter_launcher_icons: "^0.7.0"
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/icons/AppIcon.png"
+  image_path_android: "assets/icons/AppIcon.png"
   flutter_test:
     sdk: flutter
   

@@ -37,7 +37,7 @@ class AboutUsState extends State<AboutUs> {
   }
 
   _launchURL() async {
-    const url = 'https://socialioapp.web.app/aboutUs.html';
+    const url = 'https://www2.macs.hw.ac.uk/~jw147/Social-IO-Website/aboutUs.html';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -94,7 +94,7 @@ class AboutUsState extends State<AboutUs> {
               child: Row(
                 children: [
                   Text(
-                    "https://socialioapp.web.app/aboutUs.html",
+                    "https://www2.macs.hw.ac.uk/~jw147/Social-IO-Website/aboutUs.html",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,

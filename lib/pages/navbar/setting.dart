@@ -17,6 +17,7 @@ import 'package:socialio/pages/navbar/saved_posts.dart';
 import 'package:socialio/pages/profile/profile_badges.dart';
 import 'package:socialio/parts/button.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Setup_page extends StatefulWidget {
   @override
@@ -41,6 +42,24 @@ class _Setup_pageState extends State<Setup_page> {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
   }
 
+  _launchURL() async {
+    const url = 'https://www2.macs.hw.ac.uk/~jw147/Social-IO-Website/aboutUs.html';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchURL2() async {
+    const url = 'https://www2.macs.hw.ac.uk/~jw147/Social-IO-Website/userGuide.html';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
@@ -252,7 +271,9 @@ class _Setup_pageState extends State<Setup_page> {
             ),
             
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                _launchURL2();
+              },
               child: Container(
                 color: Colors.transparent,
                 padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -281,10 +302,7 @@ class _Setup_pageState extends State<Setup_page> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AboutUs()),
-                  );
+                _launchURL();
               },
               child: Container(
                 color: Colors.transparent,

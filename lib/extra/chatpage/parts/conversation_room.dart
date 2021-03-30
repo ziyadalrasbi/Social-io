@@ -105,10 +105,10 @@ class _ConversationRoomState extends State<ConversationRoom> {
                     Expanded(
                       child: TextField(
                         controller: messageController,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           hintText: "Message...",
-                          hintStyle: TextStyle(color: Colors.white54),
+                          hintStyle: TextStyle(color: Colors.black),
                           border: InputBorder.none
                         ),
                       ),
