@@ -2,364 +2,1756 @@
 set namespaceSeparator ::
 
 class "socialio::constants.dart::Constants" {
-  {static} +String myName
-  {static} +String accType
+  {static} +dynamic myName
+  {static} +dynamic accType
+  {static} +List files
+  {static} +int myFollowers
+  {static} +int myFollowing
+  {static} +int myTotalLikes
+  {static} +dynamic myProfilePic
+  {static} +dynamic myAppBar
+  {static} +dynamic myAppBanner
+  {static} +dynamic myAppBorder
+  {static} +bool DarkModeBool
 }
 
 class "socialio::constants.dart::ThemeChange" {
-  -dynamic _themeData
+  -ThemeData _themeData
   +dynamic getTheme()
   +dynamic setTheme()
-  +dynamic notifyListeners()
+  +void notifyListeners()
 }
+
+"socialio::constants.dart::ThemeChange" o-- "flutter::src::material::theme_data.dart::ThemeData"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "socialio::constants.dart::ThemeChange"
 
 class "socialio::database.dart::DatabaseMethods" {
   +dynamic getUsername()
   +dynamic getEmail()
+  +dynamic getFollowers()
+  +dynamic uploadImage()
+  +dynamic addImage()
+  +dynamic uploadQuiz()
+  +dynamic createQuiz()
+  +dynamic getImage()
   +dynamic createChat()
+  +dynamic createReport()
+  +dynamic getProfileTag()
+  +dynamic addComment()
   +dynamic getConvoText()
   +dynamic addConvoText()
   +dynamic getRooms()
+  +dynamic getTag()
 }
 
 class "socialio::extra::chatpage::chat_page.dart::ChatPage" {
-  +dynamic build()
+  +Widget build()
 }
 
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::extra::chatpage::chat_page.dart::ChatPage"
+
 class "socialio::extra::chatpage::parts::background.dart::Background" {
-  +dynamic child
-  +dynamic body
-  +dynamic build()
+  +Widget child
+  +Widget body
+  +Widget build()
 }
+
+"socialio::extra::chatpage::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::extra::chatpage::parts::background.dart::Background"
 
 class "socialio::extra::chatpage::parts::body.dart::Body" {
   +_BodyState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::extra::chatpage::parts::body.dart::Body"
+
 class "socialio::extra::chatpage::parts::body.dart::_BodyState" {
   +DatabaseMethods databaseMethods
   +Stream roomStream
-  +dynamic roomList()
+  +Widget roomList()
   +void initState()
   +dynamic getUserInfo()
-  +dynamic build()
+  +dynamic returnAppBar()
+  +Widget build()
 }
 
 "socialio::extra::chatpage::parts::body.dart::_BodyState" o-- "socialio::database.dart::DatabaseMethods"
 "socialio::extra::chatpage::parts::body.dart::_BodyState" o-- "dart::async::Stream"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::extra::chatpage::parts::body.dart::_BodyState"
 
 class "socialio::extra::chatpage::parts::body.dart::RoomTile" {
-  +String userName
-  +String chatRoom
-  +dynamic build()
+  +dynamic userName
+  +dynamic chatRoom
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::extra::chatpage::parts::body.dart::RoomTile"
 
 class "socialio::extra::chatpage::parts::chat_search.dart::ChatSearch" {
   +_ChatSearchState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::extra::chatpage::parts::chat_search.dart::ChatSearch"
+
 class "socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState" {
   +DatabaseMethods databaseMethods
-  +dynamic searchEditingController
-  +dynamic searchshot
+  +TextEditingController searchEditingController
+  +QuerySnapshot searchshot
   +void initState()
-  +dynamic listSearch()
+  +dynamic getUserInfo()
+  +Widget listSearch()
   +dynamic initSearch()
-  +dynamic SearchTile()
+  +Widget SearchTile()
   +dynamic createChat()
-  +dynamic build()
+  +dynamic returnAppBar()
+  +Widget build()
 }
 
 "socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::extra::chatpage::parts::chat_search.dart::_ChatSearchState"
 
 class "socialio::extra::chatpage::parts::conversation_room.dart::ConversationRoom" {
-  +String roomId
+  +dynamic roomId
   +_ConversationRoomState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::extra::chatpage::parts::conversation_room.dart::ConversationRoom"
+
 class "socialio::extra::chatpage::parts::conversation_room.dart::_ConversationRoomState" {
-  +dynamic MessageList()
+  +Widget MessageList()
   +dynamic sendMessage()
   +void initState()
-  +dynamic build()
+  +dynamic getUserInfo()
+  +dynamic returnAppBar()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::extra::chatpage::parts::conversation_room.dart::_ConversationRoomState"
 
 class "socialio::extra::chatpage::parts::conversation_room.dart::TextTile" {
   +bool sentByMe
-  +String message
-  +dynamic build()
+  +dynamic message
+  +_TextTileState createState()
 }
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::extra::chatpage::parts::conversation_room.dart::TextTile"
+
+class "socialio::extra::chatpage::parts::conversation_room.dart::_TextTileState" {
+  +dynamic url
+  +dynamic image
+  +dynamic printImage()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::extra::chatpage::parts::conversation_room.dart::_TextTileState"
 
 class "socialio::form_authentication.dart::AuthService" {
-  -dynamic _firebaseAuth
-  +Stream authStateChanges
-  +Future logIn()
+  -FirebaseAuth _firebaseAuth
+  +Stream<User> authStateChanges
+  +dynamic signOut()
+  +dynamic logIn()
 }
 
-"socialio::form_authentication.dart::AuthService" o-- "dart::async::Stream"
+"socialio::form_authentication.dart::AuthService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"socialio::form_authentication.dart::AuthService" o-- "dart::async::Stream<User>"
 
 class "socialio::helpers.dart::HelperFunction" {
   {static} +String sharedPrefUserLoggedInKey
   {static} +String sharedPrefUserNameKey
   {static} +String sharedPrefUserEmailKey
   {static} +String sharedPrefUserTypeKey
-  {static} +Future saveLoggedInSharedPref()
-  {static} +Future saveUserNameSharedPref()
-  {static} +Future saveUserEmailSharedPref()
-  {static} +Future saveUserTypeSharedPref()
-  {static} +Future getLoggedInSharedPref()
-  {static} +Future getUserNameSharedPref()
-  {static} +Future getUserEmailSharedPref()
-  {static} +Future getUserTypeSharedPref()
+  {static} +String sharedPrefFollowersKey
+  {static} +String sharedPrefFollowingKey
+  {static} +String sharedPostUpvotesKey
+  {static} +String sharedPrefProfilePicKey
+  {static} +String sharedPrefProfileBannerKey
+  {static} +String sharedPrefProfileBarKey
+  {static} +String sharedPrefProfileBorderKey
+  {static} +String sharedPrefTotalLikesKey
+  {static} +String sharedPrefProfileTagKey
+  {static} +String sharedPrefThemeKey
+  {static} +dynamic saveLoggedInSharedPref()
+  {static} +dynamic saveThemeSharedPref()
+  {static} +dynamic saveUserNameSharedPref()
+  {static} +dynamic saveUserEmailSharedPref()
+  {static} +dynamic saveUserTypeSharedPref()
+  {static} +dynamic saveUserFollowersSharedPref()
+  {static} +dynamic saveUserFollowingSharedPref()
+  {static} +dynamic savePostUpvotesSharedPref()
+  {static} +dynamic saveProfilePicSharedPref()
+  {static} +dynamic saveProfileBarSharedPref()
+  {static} +dynamic saveProfileBannerSharedPref()
+  {static} +dynamic saveProfileBorderSharedPref()
+  {static} +dynamic saveTotalLikesSharedPref()
+  {static} +dynamic saveProfileTagSharedPref()
+  {static} +dynamic getProfileTagSharedPref()
+  {static} +dynamic getLoggedInSharedPref()
+  {static} +dynamic getUserNameSharedPref()
+  {static} +dynamic getUserEmailSharedPref()
+  {static} +dynamic getUserTypeSharedPref()
+  {static} +dynamic getUserFollowersSharedPref()
+  {static} +dynamic getUserFollowingSharedPref()
+  {static} +dynamic getPostUpvotesSharedPref()
+  {static} +dynamic getProfilePicSharedPref()
+  {static} +dynamic getProfileBarSharedPref()
+  {static} +dynamic getProfileBannerSharedPref()
+  {static} +dynamic getProfileBorderSharedPref()
+  {static} +dynamic getTotalLikesSharedPref()
+  {static} +dynamic getThemeSharedPref()
 }
 
 class "socialio::main.dart::MyApp" {
   +_MyAppState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::main.dart::MyApp"
+
 class "socialio::main.dart::_MyAppState" {
   +bool userLogged
   +void initState()
   +dynamic getUserInfo()
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::main.dart::_MyAppState"
 
 class "socialio::main.dart::AuthWrapper" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::main.dart::AuthWrapper"
 
 class "socialio::pages::camera::camera.dart::CameraPage" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::camera::camera.dart::CameraPage"
 
 class "socialio::pages::camera::parts::background.dart::Background" {
-  +dynamic child
-  +dynamic build()
+  +Widget child
+  +Widget build()
 }
 
-class "socialio::pages::camera::parts::body.dart::Body" {
-  +dynamic build()
-}
+"socialio::pages::camera::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::camera::parts::background.dart::Background"
 
 class "socialio::pages::camera::parts::body.dart::ImageCapture" {
-  +dynamic createState()
+  +State createState()
 }
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::camera::parts::body.dart::ImageCapture"
 
 class "socialio::pages::camera::parts::body.dart::_ImageCaptureState" {
   -File _imageFile
-  -Future _pickImage()
+  -dynamic _faces
+  -Image _image
+  -ImagePicker _picker
+  +bool isLoading
+  +QuerySnapshot searchshot
+  +DatabaseMethods databaseMethods
+  -dynamic _pickImage()
+  -dynamic _loadImage()
   -void _clear()
-  -Future _cropImage()
-  +dynamic build()
+  -dynamic _cropImage()
+  +dynamic initSearch()
+  +Widget SearchTile()
+  +Widget build()
 }
 
 "socialio::pages::camera::parts::body.dart::_ImageCaptureState" o-- "dart::io::File"
+"socialio::pages::camera::parts::body.dart::_ImageCaptureState" o-- "dart::ui::Image"
+"socialio::pages::camera::parts::body.dart::_ImageCaptureState" o-- "image_picker::image_picker.dart::ImagePicker"
+"socialio::pages::camera::parts::body.dart::_ImageCaptureState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"socialio::pages::camera::parts::body.dart::_ImageCaptureState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::camera::parts::body.dart::_ImageCaptureState"
 
 class "socialio::pages::camera::parts::body.dart::Uploader" {
   +File file
-  +dynamic createState()
+  +State createState()
 }
 
 "socialio::pages::camera::parts::body.dart::Uploader" o-- "dart::io::File"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::camera::parts::body.dart::Uploader"
 
 class "socialio::pages::camera::parts::body.dart::_UploaderState" {
-  -dynamic _storage
-  -dynamic _uploadTask
+  +DatabaseMethods databaseMethods
+  -FirebaseStorage _storage
+  +FirebaseAuth auth
+  +dynamic files
+  -UploadTask _uploadTask
+  +dynamic badges
+  +dynamic elephant
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic uploadMissionComplete()
+  +dynamic cowMissionComplete()
+  +dynamic tigerMissionComplete()
+  +dynamic giraffeMissionComplete()
+  +dynamic elephantMissionComplete()
   -void _startUpload()
-  +dynamic build()
+  +Widget build()
 }
+
+"socialio::pages::camera::parts::body.dart::_UploaderState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::pages::camera::parts::body.dart::_UploaderState" o-- "firebase_storage::firebase_storage.dart::FirebaseStorage"
+"socialio::pages::camera::parts::body.dart::_UploaderState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"socialio::pages::camera::parts::body.dart::_UploaderState" o-- "firebase_storage::firebase_storage.dart::UploadTask"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::camera::parts::body.dart::_UploaderState"
+
+class "socialio::pages::camera::parts::body.dart::FacePainter" {
+  +Image image
+  +dynamic faces
+  +dynamic rects
+  +void paint()
+  +bool shouldRepaint()
+}
+
+"socialio::pages::camera::parts::body.dart::FacePainter" o-- "dart::ui::Image"
+"flutter::src::rendering::custom_paint.dart::CustomPainter" <|-- "socialio::pages::camera::parts::body.dart::FacePainter"
+
+class "socialio::pages::darkmode::darkmode.dart::DarkMode" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::darkmode::darkmode.dart::DarkMode"
+
+class "socialio::pages::darkmode::parts::background.dart::Background" {
+  +Widget child
+  +Widget build()
+}
+
+"socialio::pages::darkmode::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::darkmode::parts::background.dart::Background"
+
+class "socialio::pages::darkmode::parts::body.dart::Body" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::darkmode::parts::body.dart::Body"
+
+class "socialio::pages::darkmode::parts::body.dart::DarkMode1" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::darkmode::parts::body.dart::DarkMode1"
+
+class "socialio::pages::darkmode::parts::body.dart::DarkModeState" {
+  -MaterialColor _bottomNavigationColor
+  -int _currentIndex
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic updateTheme()
+  +Widget build()
+}
+
+"socialio::pages::darkmode::parts::body.dart::DarkModeState" o-- "flutter::src::material::colors.dart::MaterialColor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::darkmode::parts::body.dart::DarkModeState"
 
 class "socialio::pages::home::home_page.dart::HomePage" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::home::home_page.dart::HomePage"
 
 class "socialio::pages::home::parts::background.dart::Background" {
-  +dynamic child
-  +dynamic build()
+  +Widget child
+  +Widget build()
 }
+
+"socialio::pages::home::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::home::parts::background.dart::Background"
 
 class "socialio::pages::home::parts::body.dart::Body" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::home::parts::body.dart::Body"
+
+class "socialio::pages::lightmode::lightmode.dart::LightMode" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::lightmode::lightmode.dart::LightMode"
+
+class "socialio::pages::lightmode::parts::background.dart::Background" {
+  +Widget child
+  +Widget build()
+}
+
+"socialio::pages::lightmode::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::lightmode::parts::background.dart::Background"
+
+class "socialio::pages::lightmode::parts::body.dart::Body" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::lightmode::parts::body.dart::Body"
+
+class "socialio::pages::lightmode::parts::body.dart::LightMode1" {
+  +State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::lightmode::parts::body.dart::LightMode1"
+
+class "socialio::pages::lightmode::parts::body.dart::LightModeState" {
+  -MaterialColor _bottomNavigationColor
+  -int _currentIndex
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic updateTheme()
+  +Widget build()
+}
+
+"socialio::pages::lightmode::parts::body.dart::LightModeState" o-- "flutter::src::material::colors.dart::MaterialColor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::lightmode::parts::body.dart::LightModeState"
 
 class "socialio::pages::login::login_screen.dart::LoginPage" {
-  +dynamic build()
+  +Widget build()
 }
 
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::login::login_screen.dart::LoginPage"
+
 class "socialio::pages::login::parts::background.dart::Background" {
-  +dynamic child
-  +dynamic build()
+  +Widget child
+  +Widget build()
 }
+
+"socialio::pages::login::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::login::parts::background.dart::Background"
 
 class "socialio::pages::login::parts::body.dart::Body" {
   +_BodyState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::login::parts::body.dart::Body"
+
 class "socialio::pages::login::parts::body.dart::_BodyState" {
-  -dynamic _formKey
-  +dynamic emailController
-  +dynamic passController
+  -GlobalKey<FormState> _formKey
+  +TextEditingController emailController
+  +TextEditingController passController
   +bool isLoading
   +DatabaseMethods databaseMethods
-  +dynamic querySnapshot
-  +dynamic build()
+  +QuerySnapshot querySnapshot
+  +Widget build()
 }
 
+"socialio::pages::login::parts::body.dart::_BodyState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"socialio::pages::login::parts::body.dart::_BodyState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
 "socialio::pages::login::parts::body.dart::_BodyState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::pages::login::parts::body.dart::_BodyState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::login::parts::body.dart::_BodyState"
 
-class "socialio::pages::navbar::bottombar.dart::BottomBar" {
-  +_BottomBar createState()
+class "socialio::pages::navbar::about_us.dart::AboutUs" {
+  +AboutUsState createState()
 }
 
-class "socialio::pages::navbar::bottombar.dart::_BottomBar" {
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::about_us.dart::AboutUs"
+
+class "socialio::pages::navbar::about_us.dart::AboutUsState" {
+  -MaterialColor _bottomNavigationColor
   -int _currentIndex
-  -List _pageList
-  +dynamic build()
+  +void initState()
+  +dynamic getUserInfo()
+  -dynamic _launchURL()
+  +Widget build()
 }
+
+"socialio::pages::navbar::about_us.dart::AboutUsState" o-- "flutter::src::material::colors.dart::MaterialColor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::about_us.dart::AboutUsState"
+
+class "socialio::pages::navbar::account_info.dart::AccountInfo" {
+  +AccountInfoState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::account_info.dart::AccountInfo"
+
+class "socialio::pages::navbar::account_info.dart::AccountInfoState" {
+  -MaterialColor _bottomNavigationColor
+  -int _currentIndex
+  +int totallikes
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic deleteAccount()
+  +dynamic deleteBox()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::navbar::account_info.dart::AccountInfoState" o-- "flutter::src::material::colors.dart::MaterialColor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::account_info.dart::AccountInfoState"
+
+class "socialio::pages::navbar::account_tag.dart::AccountTag" {
+  +AccountTagState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::account_tag.dart::AccountTag"
+
+class "socialio::pages::navbar::account_tag.dart::AccountTagState" {
+  -MaterialColor _bottomNavigationColor
+  {static} +RegExp validTag
+  -GlobalKey<FormState> _formKey
+  -int _currentIndex
+  +int totallikes
+  +TextEditingController tagInfo
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic setTag()
+  +dynamic tagDialogBox()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::navbar::account_tag.dart::AccountTagState" o-- "flutter::src::material::colors.dart::MaterialColor"
+"socialio::pages::navbar::account_tag.dart::AccountTagState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"socialio::pages::navbar::account_tag.dart::AccountTagState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::account_tag.dart::AccountTagState"
+
+class "socialio::pages::navbar::bottom.dart::bottomPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::navbar::bottom.dart::bottomPage"
+
+class "socialio::pages::navbar::comments.dart::CommentPage" {
+  +dynamic imageId
+  +dynamic userName
+  +_CommentPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::comments.dart::CommentPage"
+
+class "socialio::pages::navbar::comments.dart::_CommentPageState" {
+  +List comments
+  +List commenters
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic returnAlignment()
+  +dynamic returnCommentAlignment()
+  +void getComments()
+  -Widget _getPost()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::comments.dart::_CommentPageState"
 
 class "socialio::pages::navbar::fake_profile.dart::TargetPage4" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::navbar::fake_profile.dart::TargetPage4"
 
 class "socialio::pages::navbar::fake_timeline.dart::TargetPage" {
   +_TargetPageState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::fake_timeline.dart::TargetPage"
+
 class "socialio::pages::navbar::fake_timeline.dart::_TargetPageState" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::fake_timeline.dart::_TargetPageState"
+
+class "socialio::pages::navbar::parts::background.dart::Background" {
+  +Widget child
+  +Widget build()
+}
+
+"socialio::pages::navbar::parts::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::navbar::parts::background.dart::Background"
+
+class "socialio::pages::navbar::parts::bottombar.dart::BodyB" {
+  +dynamic getTheme()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::navbar::parts::bottombar.dart::BodyB"
+
+class "socialio::pages::navbar::parts::bottombar.dart::BottomBar" {
+  +_BottomBar createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::parts::bottombar.dart::BottomBar"
+
+class "socialio::pages::navbar::parts::bottombar.dart::_BottomBar" {
+  -int _currentIndex
+  -List _pageList
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic returnStudentButton()
+  +dynamic returnStudentButtonDARK()
+  +dynamic userCameraButton()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::parts::bottombar.dart::_BottomBar"
+
+class "socialio::pages::navbar::profile_settings.dart::ProfileSettings" {
+  +_ProfileSettingsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::profile_settings.dart::ProfileSettings"
+
+class "socialio::pages::navbar::profile_settings.dart::_ProfileSettingsState" {
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::profile_settings.dart::_ProfileSettingsState"
+
+class "socialio::pages::navbar::report_panel.dart::ReportPanel" {
+  +_ReportPanelState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::report_panel.dart::ReportPanel"
+
+class "socialio::pages::navbar::report_panel.dart::_ReportPanelState" {
+  +bool isVisible
+  +List<ExactAssetImage> displayPic
+  +List userPosts
+  +List<ExactAssetImage> userPostImage
+  +List test
+  +dynamic url
+  +int postCount
+  +List postUpvotes
+  +dynamic posterName
+  +bool upVoted
+  +bool downVoted
+  +List posts
+  +List images
+  +List posters
+  +List reasons
+  +List reporters
+  +List likedposts
+  +dynamic getUserInfo()
+  +void initState()
+  +void checkImages()
+  +void deletePost()
+  +void deleteReport()
+  +dynamic returnWidth()
+  +dynamic returnAlignment()
+  +dynamic returnCommentAlignment()
+  -dynamic _getPost()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::report_panel.dart::_ReportPanelState"
+
+class "socialio::pages::navbar::saved_posts.dart::SavedPosts" {
+  +_SavedPostsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::saved_posts.dart::SavedPosts"
+
+class "socialio::pages::navbar::saved_posts.dart::_SavedPostsState" {
+  +bool isVisible
+  +dynamic url
+  +dynamic posterName
+  +bool upVoted
+  +bool downVoted
+  +List posts
+  +List images
+  +List usernames
+  +List<int> upvotes
+  +List captions
+  +List taggedUsers
+  +List likedposts
+  +List downvotedposts
+  +List taggedbuttons
+  +List profilepics
+  +List comments
+  +List commenters
+  +List savedposts
+  +StreamController upvoteStream
+  +TextEditingController commentText
+  +QuerySnapshot searchshot
+  +DatabaseMethods databaseMethods
+  +TextEditingController searchController
+  +dynamic getUserInfo()
+  +void initState()
+  +dynamic checkImages()
+  +dynamic returnSaveColor()
+  +dynamic getSavedPosts()
+  +dynamic addSavedPost()
+  +dynamic removeSavedPost()
+  +dynamic getUpvotes()
+  +dynamic getLikedPosts()
+  +void addLikedPost()
+  +void addDownvotedPost()
+  +void addComment()
+  +void incrementUpvotes()
+  +void unIncrementUpvotes()
+  +void decrementUpvotes()
+  +void unDecrementUpvotes()
+  +dynamic commentMissionComplete()
+  +dynamic likeMissionComplete()
+  +dynamic getLikeMissionComplete()
+  +dynamic getCommentMissionComplete()
+  +dynamic returnUpvoteColor()
+  +dynamic returnDownvoteColor()
+  +dynamic returnWidth()
+  +dynamic returnHeight()
+  +dynamic returnAlignment()
+  +dynamic returnCommentAlignment()
+  +dynamic returnReportButton()
+  +dynamic returnReportIcon()
+  +dynamic returnReportIconDark()
+  +dynamic editPost()
+  +dynamic confirmDelete()
+  +void deletePost()
+  +dynamic reportUser()
+  +dynamic confirmReport()
+  +dynamic commentPopUp()
+  +dynamic createReport()
+  +dynamic shareImage()
+  +dynamic returnMessageIcon()
+  +dynamic returnShareIcon()
+  +dynamic returnMessageIconDark()
+  +dynamic returnShareIconDark()
+  +dynamic initSearch()
+  +dynamic sendMessage()
+  +dynamic createChat()
+  +dynamic getRoomId()
+  +Widget SearchTile()
+  +dynamic returnTaggedUsers()
+  -Widget _getPost()
+  -Widget _getPostDark()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::navbar::saved_posts.dart::_SavedPostsState" o-- "dart::async::StreamController"
+"socialio::pages::navbar::saved_posts.dart::_SavedPostsState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::navbar::saved_posts.dart::_SavedPostsState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"socialio::pages::navbar::saved_posts.dart::_SavedPostsState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::saved_posts.dart::_SavedPostsState"
+
+class "socialio::pages::navbar::search::explore.dart::Explore" {
+  +ExploreState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::search::explore.dart::Explore"
+
+class "socialio::pages::navbar::search::explore.dart::ExploreState" {
+  +DatabaseMethods databaseMethods
+  +TextEditingController searchEditingController
+  +QuerySnapshot searchshot
+  +bool isVisible
+  +List<ExactAssetImage> displayPic
+  +List userPosts
+  +List<ExactAssetImage> userPostImage
+  +List test
+  +dynamic url
+  +int postCount
+  +List postUpvotes
+  +dynamic posterName
+  +bool upVoted
+  +bool downVoted
+  +int listCount
+  +bool listWanted
+  +List posts
+  +List images
+  +List usernames
+  +List<int> upvotes
+  +List captions
+  +List taggedUsers
+  +List likedposts
+  +List downvotedposts
+  +List taggedbuttons
+  +List profilepics
+  +List comments
+  +List commenters
+  +List username
+  +TextEditingController commentText
+  +dynamic getUserInfo()
+  +void initState()
+  +void checkImages()
+  +dynamic checkImagesTagged()
+  +dynamic removePostsArray()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic displayPicsList()
+  +dynamic returnWidth()
+  +dynamic returnAlignment()
+  +dynamic initSearch()
+  +dynamic createChat()
+  +Widget listSearch()
+  +Widget listSearchTag()
+  +Widget SearchTile()
+  +Widget SearchTileTag()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::navbar::search::explore.dart::ExploreState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::pages::navbar::search::explore.dart::ExploreState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::navbar::search::explore.dart::ExploreState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::search::explore.dart::ExploreState"
+
+class "socialio::pages::navbar::search::user_profile.dart::UserProfile" {
+  +dynamic userName
+  +_UserProfile1State createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::search::user_profile.dart::UserProfile"
+
+class "socialio::pages::navbar::search::user_profile.dart::_UserProfile1State" {
+  +int imageCount
+  +int listCount
+  +int followers
+  +int following
+  +List followerslist
+  +List myfollowing
+  +bool followed
+  +bool listWanted
+  +List images
+  +List posts
+  +dynamic profilepic
+  +dynamic profilebanner
+  +dynamic accType
+  +dynamic profileborder
+  +dynamic url
+  +void initState()
+  +dynamic getUserInfo()
+  +void checkUser()
+  +dynamic getProfilePic()
+  +void getUserFollowers()
+  +void getMyFollowing()
+  +void updateFollowers()
+  +void updateFollowing()
+  +void decrementFollowers()
+  +void decrementFollowing()
+  +dynamic returnFollowButton()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic displayPicsList()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::search::user_profile.dart::_UserProfile1State"
 
 class "socialio::pages::navbar::search::user_search.dart::UserSearch" {
   +_UserSearchState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::search::user_search.dart::UserSearch"
+
 class "socialio::pages::navbar::search::user_search.dart::_UserSearchState" {
   +DatabaseMethods databaseMethods
-  +dynamic searchEditingController
-  +dynamic searchshot
+  +TextEditingController searchEditingController
+  +QuerySnapshot searchshot
   +void initState()
-  +dynamic listSearch()
+  +dynamic getUserInfo()
+  +Widget listSearch()
   +dynamic initSearch()
-  +dynamic SearchTile()
   +dynamic createChat()
-  +dynamic build()
+  +Widget SearchTile()
+  +dynamic returnAppBar()
+  +Widget build()
 }
 
 "socialio::pages::navbar::search::user_search.dart::_UserSearchState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::pages::navbar::search::user_search.dart::_UserSearchState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::navbar::search::user_search.dart::_UserSearchState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::search::user_search.dart::_UserSearchState"
 
 class "socialio::pages::navbar::setting.dart::Setup_page" {
   +_Setup_pageState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::setting.dart::Setup_page"
+
 class "socialio::pages::navbar::setting.dart::_Setup_pageState" {
-  -dynamic _bottomNavigationColor
+  -MaterialColor _bottomNavigationColor
   -int _currentIndex
-  +dynamic build()
+  +void initState()
+  +dynamic getUserInfo()
+  -dynamic _launchURL()
+  -dynamic _launchURL2()
+  +dynamic returnAppBar()
+  +Widget build()
 }
+
+"socialio::pages::navbar::setting.dart::_Setup_pageState" o-- "flutter::src::material::colors.dart::MaterialColor"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::setting.dart::_Setup_pageState"
 
 class "socialio::pages::navbar::timeline.dart::Posts" {
   +_PostsState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::navbar::timeline.dart::Posts"
+
 class "socialio::pages::navbar::timeline.dart::_PostsState" {
   +bool isVisible
-  +List displayPic
-  +List<String> userPosts
-  +List userPostImage
-  +List<String> postUpvotes
+  +dynamic url
+  +dynamic posterName
   +bool upVoted
   +bool downVoted
-  -dynamic _getPost()
-  +dynamic build()
+  +dynamic posts
+  +dynamic images
+  +dynamic usernames
+  +dynamic upvotes
+  +dynamic captions
+  +dynamic taggedUsers
+  +dynamic likedposts
+  +dynamic downvotedposts
+  +dynamic taggedbuttons
+  +dynamic profilepics
+  +dynamic comments
+  +dynamic commenters
+  +dynamic savedposts
+  +dynamic myfollowing
+  +StreamController upvoteStream
+  +TextEditingController commentText
+  +QuerySnapshot searchshot
+  +DatabaseMethods databaseMethods
+  +TextEditingController searchController
+  +dynamic getUserInfo()
+  +void initState()
+  +dynamic checkImages()
+  +void getMyFollowing()
+  +dynamic getUpvotes()
+  +dynamic getLikedPosts()
+  +void addLikedPost()
+  +void addDownvotedPost()
+  +void addComment()
+  +void incrementUpvotes()
+  +void unIncrementUpvotes()
+  +void decrementUpvotes()
+  +void unDecrementUpvotes()
+  +dynamic commentMissionComplete()
+  +dynamic likeMissionComplete()
+  +dynamic getLikeMissionComplete()
+  +dynamic getCommentMissionComplete()
+  +dynamic returnUpvoteColor()
+  +dynamic returnSaveColor()
+  +dynamic returnDownvoteColor()
+  +dynamic getSavedPosts()
+  +dynamic addSavedPost()
+  +dynamic removeSavedPost()
+  +dynamic returnWidth()
+  +dynamic returnHeight()
+  +dynamic returnAlignment()
+  +dynamic returnCommentAlignment()
+  +dynamic returnReportButton()
+  +dynamic returnReportIcon()
+  +dynamic returnReportIconDark()
+  +dynamic editPost()
+  +dynamic confirmDelete()
+  +void deletePost()
+  +dynamic reportUser()
+  +dynamic confirmReport()
+  +dynamic commentPopUp()
+  +dynamic shareImage()
+  +dynamic initSearch()
+  +dynamic sendMessage()
+  +dynamic createChat()
+  +dynamic getRoomId()
+  +dynamic returnMessageIcon()
+  +dynamic returnShareIcon()
+  +dynamic returnMessageIconDark()
+  +dynamic returnShareIconDark()
+  +Widget SearchTile()
+  +dynamic createReport()
+  +dynamic returnTaggedUsers()
+  -Widget _getPost()
+  -Widget _getPostDark()
+  +dynamic returnMessaging()
+  +dynamic returnCreateQuiz()
+  +dynamic returnAppBar()
+  +Widget build()
 }
+
+"socialio::pages::navbar::timeline.dart::_PostsState" o-- "dart::async::StreamController"
+"socialio::pages::navbar::timeline.dart::_PostsState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::navbar::timeline.dart::_PostsState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"socialio::pages::navbar::timeline.dart::_PostsState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::navbar::timeline.dart::_PostsState"
+
+class "socialio::pages::profile::bannerpages::city_banners.dart::CityBanners" {
+  +_CityBannersState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::bannerpages::city_banners.dart::CityBanners"
+
+class "socialio::pages::profile::bannerpages::city_banners.dart::_CityBannersState" {
+  +Map<dynamic, int> banners
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfileBanner()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::bannerpages::city_banners.dart::_CityBannersState"
+
+class "socialio::pages::profile::bannerpages::gamer_banners.dart::GamerBanners" {
+  +_GamerBannersState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::bannerpages::gamer_banners.dart::GamerBanners"
+
+class "socialio::pages::profile::bannerpages::gamer_banners.dart::_GamerBannersState" {
+  +Map<dynamic, int> banners
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfileBanner()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::bannerpages::gamer_banners.dart::_GamerBannersState"
+
+class "socialio::pages::profile::bannerpages::landscape_banners.dart::LandscapeBanners" {
+  +_LandscapeBannersState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::bannerpages::landscape_banners.dart::LandscapeBanners"
+
+class "socialio::pages::profile::bannerpages::landscape_banners.dart::_LandscapeBannersState" {
+  +Map<dynamic, int> banners
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfileBanner()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::bannerpages::landscape_banners.dart::_LandscapeBannersState"
+
+class "socialio::pages::profile::bannerpages::nightsky_banners.dart::NightskyBanners" {
+  +_NightskyBannersState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::bannerpages::nightsky_banners.dart::NightskyBanners"
+
+class "socialio::pages::profile::bannerpages::nightsky_banners.dart::_NightskyBannersState" {
+  +Map<dynamic, int> banners
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfileBanner()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::bannerpages::nightsky_banners.dart::_NightskyBannersState"
+
+class "socialio::pages::profile::choose_banner.dart::ChooseBanner" {
+  +_ChooseBannerState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::choose_banner.dart::ChooseBanner"
+
+class "socialio::pages::profile::choose_banner.dart::_ChooseBannerState" {
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::choose_banner.dart::_ChooseBannerState"
+
+class "socialio::pages::profile::choose_profile_pic.dart::ChooseProfilePic" {
+  +_ChooseProfilePicState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::choose_profile_pic.dart::ChooseProfilePic"
+
+class "socialio::pages::profile::choose_profile_pic.dart::_ChooseProfilePicState" {
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::choose_profile_pic.dart::_ChooseProfilePicState"
+
+class "socialio::pages::profile::post_page.dart::PostPage" {
+  +dynamic imageId
+  +_PostPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::post_page.dart::PostPage"
+
+class "socialio::pages::profile::post_page.dart::_PostPageState" {
+  +bool isVisible
+  +dynamic url
+  +dynamic posterName
+  +bool upVoted
+  +bool downVoted
+  +List posts
+  +List images
+  +List usernames
+  +List<int> upvotes
+  +List captions
+  +List taggedUsers
+  +List likedposts
+  +List downvotedposts
+  +List taggedbuttons
+  +List profilepics
+  +List comments
+  +List commenters
+  +List savedposts
+  +StreamController upvoteStream
+  +TextEditingController commentText
+  +QuerySnapshot searchshot
+  +DatabaseMethods databaseMethods
+  +TextEditingController searchController
+  +dynamic getUserInfo()
+  +void initState()
+  +dynamic checkImages()
+  +dynamic getUpvotes()
+  +dynamic getLikedPosts()
+  +void addLikedPost()
+  +void addDownvotedPost()
+  +void addComment()
+  +void incrementUpvotes()
+  +void unIncrementUpvotes()
+  +void decrementUpvotes()
+  +void unDecrementUpvotes()
+  +dynamic commentMissionComplete()
+  +dynamic likeMissionComplete()
+  +dynamic getLikeMissionComplete()
+  +dynamic getCommentMissionComplete()
+  +dynamic returnUpvoteColor()
+  +dynamic returnSaveColor()
+  +dynamic returnDownvoteColor()
+  +dynamic getSavedPosts()
+  +dynamic addSavedPost()
+  +dynamic removeSavedPost()
+  +dynamic returnWidth()
+  +dynamic returnHeight()
+  +dynamic returnAlignment()
+  +dynamic returnCommentAlignment()
+  +dynamic editPost()
+  +dynamic confirmDelete()
+  +dynamic returnReportColor()
+  +dynamic returnReportButton()
+  +void deletePost()
+  +dynamic reportUser()
+  +dynamic confirmReport()
+  +dynamic commentPopUp()
+  +dynamic createReport()
+  +dynamic shareImage()
+  +dynamic initSearch()
+  +dynamic sendMessage()
+  +dynamic createChat()
+  +dynamic getRoomId()
+  +Widget SearchTile()
+  +dynamic returnTaggedUsers()
+  +dynamic returnMessageIcon()
+  +dynamic returnShareIcon()
+  +dynamic returnMessageIconDark()
+  +dynamic returnShareIconDark()
+  -Widget _getPost()
+  -Widget _getPostDark()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::profile::post_page.dart::_PostPageState" o-- "dart::async::StreamController"
+"socialio::pages::profile::post_page.dart::_PostPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::profile::post_page.dart::_PostPageState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"socialio::pages::profile::post_page.dart::_PostPageState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::post_page.dart::_PostPageState"
+
+class "socialio::pages::profile::profilepicpages::animal_profiles.dart::AnimalProfilePicPage" {
+  +_AnimalProfilePicPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profilepicpages::animal_profiles.dart::AnimalProfilePicPage"
+
+class "socialio::pages::profile::profilepicpages::animal_profiles.dart::_AnimalProfilePicPageState" {
+  +Map<dynamic, int> banners
+  +List categories
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfilePic()
+  +dynamic updateUploadProfilePics()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profilepicpages::animal_profiles.dart::_AnimalProfilePicPageState"
+
+class "socialio::pages::profile::profilepicpages::cartoon_animal_profiles.dart::CartoonAnimalProfilePicPage" {
+  +_CartoonAnimalProfilePicPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profilepicpages::cartoon_animal_profiles.dart::CartoonAnimalProfilePicPage"
+
+class "socialio::pages::profile::profilepicpages::cartoon_animal_profiles.dart::_CartoonAnimalProfilePicPageState" {
+  +Map<dynamic, int> banners
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfilePic()
+  +dynamic updateUploadProfilePics()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profilepicpages::cartoon_animal_profiles.dart::_CartoonAnimalProfilePicPageState"
+
+class "socialio::pages::profile::profilepicpages::landmark_profiles.dart::LandmarkProfilePicPage" {
+  +_LandmarkProfilePicPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profilepicpages::landmark_profiles.dart::LandmarkProfilePicPage"
+
+class "socialio::pages::profile::profilepicpages::landmark_profiles.dart::_LandmarkProfilePicPageState" {
+  +Map<dynamic, int> banners
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfilePic()
+  +dynamic updateUploadProfilePics()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profilepicpages::landmark_profiles.dart::_LandmarkProfilePicPageState"
+
+class "socialio::pages::profile::profilepicpages::legacy_profiles.dart::LegacyProfilePicPage" {
+  +_LegacyProfilePicPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profilepicpages::legacy_profiles.dart::LegacyProfilePicPage"
+
+class "socialio::pages::profile::profilepicpages::legacy_profiles.dart::_LegacyProfilePicPageState" {
+  +Map<dynamic, int> banners
+  +List categories
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfilePic()
+  +dynamic updateUploadProfilePics()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profilepicpages::legacy_profiles.dart::_LegacyProfilePicPageState"
+
+class "socialio::pages::profile::profilepicpages::nature_profiles.dart::NatureProfilePicPage" {
+  +_NatureProfilePicPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profilepicpages::nature_profiles.dart::NatureProfilePicPage"
+
+class "socialio::pages::profile::profilepicpages::nature_profiles.dart::_NatureProfilePicPageState" {
+  +Map<dynamic, int> banners
+  +List categories
+  +dynamic chosen
+  +int totallikes
+  +dynamic bannernames
+  +dynamic bannervalues
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfilePic()
+  +dynamic updateUploadProfilePics()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profilepicpages::nature_profiles.dart::_NatureProfilePicPageState"
 
 class "socialio::pages::profile::profile_1.dart::Profile" {
   +_Profile1State createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profile_1.dart::Profile"
+
 class "socialio::pages::profile::profile_1.dart::_Profile1State" {
+  +dynamic dropdownValue
+  +int followers
+  +int following
+  +int postTime
   +int listCount
   +bool listWanted
+  +List images
+  +List posts
+  +dynamic url
   +void initState()
   +dynamic getUserInfo()
+  +void checkImages()
+  +dynamic checkImagesLikesAscending()
+  +dynamic checkImagesLikesDescending()
+  +dynamic checkImagesDateAscending()
+  +dynamic initSearch()
+  +void returnFollowers()
   +dynamic printImages()
   +dynamic displayPics()
   +dynamic displayPicsList()
-  +dynamic build()
+  +dynamic returnAppBar()
+  +Widget build()
 }
 
-class "socialio::pages::signup::partstwo::background.dart::Background" {
-  +dynamic child
-  +dynamic build()
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profile_1.dart::_Profile1State"
+
+class "socialio::pages::profile::profile_appbar.dart::ProfileAppBar" {
+  +_ProfileAppBarState createState()
 }
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profile_appbar.dart::ProfileAppBar"
+
+class "socialio::pages::profile::profile_appbar.dart::_ProfileAppBarState" {
+  +Map<dynamic, int> appbars
+  +dynamic chosen
+  +int totallikes
+  +dynamic appbarvalues
+  +dynamic appbarnames
+  +bool requiredPointsBool
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getTotalLikes()
+  +dynamic returnImageColor()
+  +dynamic checkLikes()
+  +dynamic printImages()
+  +dynamic displayPics()
+  +dynamic returnChosenImage()
+  +dynamic updateProfileAppbar()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profile_appbar.dart::_ProfileAppBarState"
+
+class "socialio::pages::profile::profile_badges.dart::ProfileBadges" {
+  +_ProfileBadgesState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::profile::profile_badges.dart::ProfileBadges"
+
+class "socialio::pages::profile::profile_badges.dart::_ProfileBadgesState" {
+  +List list
+  +dynamic checkUserRewards()
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::profile::profile_badges.dart::_ProfileBadgesState"
+
+class "socialio::pages::signup::partstwo::background.dart::Background" {
+  +Widget child
+  +Widget build()
+}
+
+"socialio::pages::signup::partstwo::background.dart::Background" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::signup::partstwo::background.dart::Background"
 
 class "socialio::pages::signup::partstwo::body.dart::Body" {
   +_BodyState createState()
 }
 
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::signup::partstwo::body.dart::Body"
+
 class "socialio::pages::signup::partstwo::body.dart::_BodyState" {
-  +String dropdownValue
-  +dynamic child
+  +dynamic dropdownValue
+  +Widget child
   {static} +RegExp validNameCharacters
   {static} +RegExp validEmailCharacters
-  -dynamic _formKey
-  -dynamic _pass
-  -dynamic _confirmPass
-  +dynamic emailController
-  +dynamic fnameController
-  +dynamic lnameController
-  +dynamic usernameController
-  +dynamic mobileController
-  +dynamic accTypeController
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _pass
+  -TextEditingController _confirmPass
+  +TextEditingController emailController
+  +TextEditingController fnameController
+  +TextEditingController lnameController
+  +TextEditingController usernameController
+  +TextEditingController mobileController
+  +TextEditingController accTypeController
   +bool isLoading
   +DatabaseMethods databaseMethods
-  +dynamic build()
+  +int userfollowers
+  +int userfollowing
+  +List followerslist
+  +List followinglist
+  +List likedposts
+  +List savedposts
+  +List rewards
+  +int totallikes
+  +bool isDark
+  +dynamic appbar
+  +dynamic banner
+  +dynamic border
+  +dynamic profilepic
+  +dynamic printEmailError()
+  +Widget build()
 }
 
+"socialio::pages::signup::partstwo::body.dart::_BodyState" o-- "flutter::src::widgets::framework.dart::Widget"
+"socialio::pages::signup::partstwo::body.dart::_BodyState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"socialio::pages::signup::partstwo::body.dart::_BodyState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
 "socialio::pages::signup::partstwo::body.dart::_BodyState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::signup::partstwo::body.dart::_BodyState"
 
 class "socialio::pages::signup::sign_up_second.dart::SignUpSecond" {
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::pages::signup::sign_up_second.dart::SignUpSecond"
+
+class "socialio::pages::student::classroom.dart::Classroom" {
+  +_ClassroomState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::student::classroom.dart::Classroom"
+
+class "socialio::pages::student::classroom.dart::QuizPick" {
+  +dynamic quizName
+}
+
+class "socialio::pages::student::classroom.dart::_ClassroomState" {
+  -bool _isEditingText
+  -TextEditingController _editingController
+  +dynamic classNameText
+  +DatabaseMethods databaseMethods
+  +TextEditingController searchEditingController
+  +QuerySnapshot searchshot
+  +List listOfQuizzes
+  +void initState()
+  +dynamic getUserInfo()
+  +void dispose()
+  -Widget _setClassroomName()
+  +dynamic getQuizBtn()
+  -Widget _getClassroom()
+  +dynamic getQuizzes()
+  -Widget _quizPicker()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::student::classroom.dart::_ClassroomState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::student::classroom.dart::_ClassroomState" o-- "socialio::database.dart::DatabaseMethods"
+"socialio::pages::student::classroom.dart::_ClassroomState" o-- "cloud_firestore::cloud_firestore.dart::QuerySnapshot"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::student::classroom.dart::_ClassroomState"
+
+class "socialio::pages::student::make_quiz.dart::Quizmaker" {
+  +_QuizMakerState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::student::make_quiz.dart::Quizmaker"
+
+class "socialio::pages::student::make_quiz.dart::QuestionCard" {
+  +int questionNo
+  +dynamic actualQuestion
+  +dynamic answerOne
+  +dynamic answerTwo
+  +dynamic answerThree
+  +dynamic answerFour
+  +bool isBeingEdited
+  +bool isOneBeingEdited
+  +bool isTwoBeingEdited
+  +bool isThreeBeingEdited
+  +bool isFourBeingEdited
+  -TextEditingController _editControl
+  -TextEditingController _editControlOne
+  -TextEditingController _editControlTwo
+  -TextEditingController _editControlThree
+  -TextEditingController _editControlFour
+  +bool isOneCorrect
+  +bool isTwoCorrect
+  +bool isThreeCorrect
+  +bool isFourCorrect
+}
+
+"socialio::pages::student::make_quiz.dart::QuestionCard" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+
+class "socialio::pages::student::make_quiz.dart::ButtonQuestionNo" {
+  +int buttonNo
+}
+
+class "socialio::pages::student::make_quiz.dart::_QuizMakerState" {
+  -bool _isEditingText
+  -TextEditingController _editingController
+  +dynamic classNameText
+  +Color color
+  +dynamic questionText
+  +dynamic answerText
+  +DatabaseMethods databaseMethods
+  +List<QuestionCard> listOfQuestions
+  +void initState()
+  +void dispose()
+  -Widget _setQuizName()
+  -Widget _saveQuizBtn()
+  -Widget _newQuestionBtn()
+  +void addQuestionToList()
+  +void makeQuiz()
+  -Widget _setQuestionText()
+  -Widget _deleteQuestionBtn()
+  -Widget _setAnswerOneText()
+  -Widget _setAnswerTwoText()
+  -Widget _setAnswerThreeText()
+  -Widget _setAnswerFourText()
+  -Widget _answerCard()
+  -Widget _questionCards()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::student::make_quiz.dart::_QuizMakerState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::pages::student::make_quiz.dart::_QuizMakerState" o-- "dart::ui::Color"
+"socialio::pages::student::make_quiz.dart::_QuizMakerState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::student::make_quiz.dart::_QuizMakerState"
+
+class "socialio::pages::student::quiz.dart::Quiz" {
+  +dynamic quizName
+  +_QuizState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::student::quiz.dart::Quiz"
+
+class "socialio::pages::student::quiz.dart::Question" {
+  +int questionNo
+  +dynamic actualQuestion
+  +dynamic answerOne
+  +dynamic answerTwo
+  +dynamic answerThree
+  +dynamic answerFour
+  +bool isOnePickedCorrect
+  +bool isTwoPickedCorrect
+  +bool isThreePickedCorrect
+  +bool isFourPickedCorrect
+}
+
+class "socialio::pages::student::quiz.dart::_QuizState" {
+  +int counter
+  +List listOfQuizzes
+  +List listOfQuestions2
+  +List listOfFirstAnswers
+  +List listOfSecondtAnswers
+  +List listOfThirdAnswers
+  +List listOfFourthAnswers
+  +List listOfFirstBoolAnswers
+  +List listOfSecondBoolAnswers
+  +List listOfThirdBoolAnswers
+  +List listOfFourthBoolAnswers
+  +List<Question> listOfQuestions
+  +List<List> listOfListOfAnswers
+  +bool firstselected
+  +bool secondselected
+  +bool thirdselected
+  +bool fourthselected
+  +List listOfBooleanHolder
+  +List listOfBooleans
+  +List listOfBooleansFirstSelected
+  +List listOfBooleansSecondSelected
+  +List listOfBooleansThirdSelected
+  +List listOfBooleansFourthSelected
+  +int answerIndex
+  +int userScore
+  +List<bool> answers
+  +void initState()
+  +dynamic getQuestions()
+  +dynamic generateListOfBooleans()
+  -Widget _answerCard()
+  -Widget _questionCards()
+  -Widget _sumbitQuizBtn()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::student::quiz.dart::_QuizState"
+
+class "socialio::pages::student::score.dart::Score" {
+  +int score
+  +int outOf
+  +_ScoreState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::student::score.dart::Score"
+
+class "socialio::pages::student::score.dart::_ScoreState" {
+  -Widget _returnScore()
+  -Widget _returnToClassroomBtn()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::student::score.dart::_ScoreState"
+
+class "socialio::pages::student::view_quizzes.dart::Viewquizzes" {
+  +_ViewQuizState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "socialio::pages::student::view_quizzes.dart::Viewquizzes"
+
+class "socialio::pages::student::view_quizzes.dart::QuizPick" {
+  +dynamic quizName
+}
+
+class "socialio::pages::student::view_quizzes.dart::_ViewQuizState" {
+  +DatabaseMethods databaseMethods
+  +List listOfQuizzes
+  +void initState()
+  +dynamic getUserInfo()
+  +dynamic getQuizzes()
+  -Widget _quizPicker()
+  +dynamic returnAppBar()
+  +Widget build()
+}
+
+"socialio::pages::student::view_quizzes.dart::_ViewQuizState" o-- "socialio::database.dart::DatabaseMethods"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "socialio::pages::student::view_quizzes.dart::_ViewQuizState"
 
 class "socialio::parts::account_recheck.dart::AccountRecheck" {
   +bool logged
   +Function pressed
-  +dynamic build()
+  +Widget build()
 }
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::parts::account_recheck.dart::AccountRecheck"
 
 class "socialio::parts::button.dart::MainButton" {
-  +String text
-  +dynamic color
-  +dynamic textColor
+  +dynamic text
+  +Color color
+  +Color textColor
   +Function pressed
-  +dynamic build()
+  +Widget build()
 }
+
+"socialio::parts::button.dart::MainButton" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::parts::button.dart::MainButton"
 
 class "socialio::parts::input_field_box.dart::InputField" {
-  +dynamic color
-  +String hint
+  +Color color
+  +dynamic hint
   +Function validate
-  +dynamic control
-  +dynamic type
-  +dynamic changes
-  +dynamic build()
+  +TextEditingController control
+  +TextInputType type
+  +void Function(dynamic) changes
+  +Widget build()
 }
+
+"socialio::parts::input_field_box.dart::InputField" o-- "dart::ui::Color"
+"socialio::parts::input_field_box.dart::InputField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::parts::input_field_box.dart::InputField" o-- "flutter::src::services::text_input.dart::TextInputType"
+"socialio::parts::input_field_box.dart::InputField" o-- "flutter::src::foundation::basic_types.dart::void Function(dynamic)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::parts::input_field_box.dart::InputField"
 
 class "socialio::parts::password_field_box.dart::PassField" {
-  +dynamic changes
-  +dynamic control
+  +void Function(dynamic) changes
+  +TextEditingController control
   +Function validate
-  +String hint
-  +dynamic color
-  +dynamic build()
+  +dynamic hint
+  +Color color
+  +Widget build()
 }
 
+"socialio::parts::password_field_box.dart::PassField" o-- "flutter::src::foundation::basic_types.dart::void Function(dynamic)"
+"socialio::parts::password_field_box.dart::PassField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"socialio::parts::password_field_box.dart::PassField" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::parts::password_field_box.dart::PassField"
+
 class "socialio::parts::text_field_box.dart::TextFieldBox" {
-  +dynamic child
-  +dynamic color
-  +dynamic build()
+  +Widget child
+  +Color color
+  +Widget build()
 }
+
+"socialio::parts::text_field_box.dart::TextFieldBox" o-- "flutter::src::widgets::framework.dart::Widget"
+"socialio::parts::text_field_box.dart::TextFieldBox" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "socialio::parts::text_field_box.dart::TextFieldBox"
 
 class "socialio::parts::user.dart::User" {
   +String id
