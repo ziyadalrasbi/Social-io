@@ -388,15 +388,27 @@ class ExploreState extends State<Explore> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  returnAppBar() {
     Size size = MediaQuery.of(context).size;
-
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
+    if (kIsWeb) {
+      return AppBar(
+        automaticallyImplyLeading: false,
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AppBar(
+        automaticallyImplyLeading: false,
           centerTitle: true,
-          automaticallyImplyLeading: false,
           flexibleSpace: Container(
             width: size.width * 0.5,
             decoration: BoxDecoration(
@@ -407,7 +419,16 @@ class ExploreState extends State<Explore> {
             ),
           ),
           backgroundColor: Colors.transparent,
-        ),
+        );
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: returnAppBar(),
         body: SingleChildScrollView(
           child: Container(
             child: Column(children: [

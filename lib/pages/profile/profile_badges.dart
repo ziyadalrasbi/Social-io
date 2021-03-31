@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 import '../../database.dart';
@@ -41,12 +42,24 @@ class _ProfileBadgesState extends State<ProfileBadges> {
     Constants.myName = await HelperFunction.getUserNameSharedPref();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  returnAppBar() {
     Size size = MediaQuery.of(context).size;
-    checkUserRewards();
-    return Scaffold(
-      appBar: AppBar(
+    if (kIsWeb) {
+      return AppBar(
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AppBar(
           centerTitle: true,
           flexibleSpace: Container(
             width: size.width * 0.5,
@@ -58,7 +71,16 @@ class _ProfileBadgesState extends State<ProfileBadges> {
             ),
           ),
           backgroundColor: Colors.transparent,
-        ),
+        );
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    checkUserRewards();
+    return Scaffold(
+      appBar: returnAppBar(),
       body: Center(
           child: CustomScrollView(
             primary: false,

@@ -1,4 +1,5 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
@@ -71,24 +72,47 @@ class _ConversationRoomState extends State<ConversationRoom> {
   getUserInfo() async {
     Constants.myAppBar = await HelperFunction.getProfileBarSharedPref();
   }
+
+
+  returnAppBar() {
+    Size size = MediaQuery.of(context).size;
+    if (kIsWeb) {
+      return AppBar(
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AppBar(
+          centerTitle: true,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        flexibleSpace: Container(
-          width: size.width * 0.5,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Constants.myAppBar.toString()),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: returnAppBar(),
       body: Container(
         
         child: Stack(

@@ -1592,45 +1592,38 @@ confirmDelete(int index, BuildContext context) {
     }
   }
 
-  
 
-  @override
-  Widget build(BuildContext context) {
+  returnAppBar() {
     Size size = MediaQuery.of(context).size;
-    if (Constants.DarkModeBool == false) {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          centerTitle: true,
+    if (kIsWeb) {
+      return AppBar(
           automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Constants.myAppBar.toString()),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-          actions: <Widget>[
-            Container(
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+          ],
+        ),
+        actions: <Widget>[
+          Container(
               width: size.width,
               child: Row(                
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                         returnCreateQuiz(),
+                        Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
                         returnMessaging(),
                 ],
               ),
             )
-          ],
-        ),
-        body: _getPost(),
+        ],
       );
     } else {
-      return Scaffold(
-        appBar: AppBar(
+      return AppBar(
           centerTitle: true,
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
@@ -1655,7 +1648,23 @@ confirmDelete(int index, BuildContext context) {
               ),
             )
           ],
-        ),
+        );
+    }
+  }
+  
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    if (Constants.DarkModeBool == false) {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: returnAppBar(),
+        body: _getPost(),
+      );
+    } else {
+      return Scaffold(
+        appBar: returnAppBar(),
         body: _getPostDark(),
       );
     }

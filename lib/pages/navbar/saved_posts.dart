@@ -1509,44 +1509,49 @@ confirmDelete(int index, BuildContext context) {
     }
   }
 
+  returnAppBar() {
+    Size size = MediaQuery.of(context).size;
+    if (kIsWeb) {
+      return AppBar(
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AppBar(
+          centerTitle: true,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+        );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     if (Constants.DarkModeBool == false) {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          
-          flexibleSpace: Container(
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Constants.myAppBar.toString()),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: returnAppBar(),
         body: _getPost(),
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          
-          flexibleSpace: Container(
-            width: size.width * 0.5,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Constants.myAppBar.toString()),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          backgroundColor: Colors.transparent,
-          
-        ),
+        appBar: returnAppBar(),
         body: _getPostDark(),
       );
     }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/database.dart';
@@ -157,11 +158,24 @@ class _ClassroomState extends State<Classroom> {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  returnAppBar() {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-        appBar: AppBar(
+    if (kIsWeb) {
+      return AppBar(
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AppBar(
           centerTitle: true,
           flexibleSpace: Container(
             width: size.width * 0.5,
@@ -173,8 +187,15 @@ class _ClassroomState extends State<Classroom> {
             ),
           ),
           backgroundColor: Colors.transparent,
-          
-        ),
+        );
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+        appBar: returnAppBar(),
         body: Column(children: [
           _getClassroom(),
           Expanded(child: Container(child: _quizPicker()))

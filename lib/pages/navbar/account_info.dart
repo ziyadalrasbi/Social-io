@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:socialio/constants.dart';
 import 'package:socialio/form_authentication.dart';
 import 'package:socialio/helpers.dart';
@@ -113,24 +114,43 @@ class AccountInfoState extends State<AccountInfo> {
   }
 
   
-
+  returnAppBar() {
+    Size size = MediaQuery.of(context).size;
+    if (kIsWeb) {
+      return AppBar(
+          backgroundColor: Colors.blue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              "assets/icons/LOGONEW.png", 
+              height: 50, 
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AppBar(
+          centerTitle: true,
+          flexibleSpace: Container(
+            width: size.width * 0.5,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Constants.myAppBar.toString()),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+        );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size dimensions = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        flexibleSpace: Container(
-          width: dimensions.width * 0.5,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(Constants.myAppBar.toString()),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: returnAppBar(),
 
       // 6 navigate botton
       body: Center(
