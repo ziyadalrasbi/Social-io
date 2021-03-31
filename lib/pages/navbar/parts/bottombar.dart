@@ -1,4 +1,5 @@
 // import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:socialio/extra/chatpage/chat_page.dart';
@@ -147,7 +148,7 @@ class _BottomBar extends State<BottomBar> {
   }
 
   userCameraButton() {
-    if (Constants.accType == "Creator" || Constants.accType == "Student") {
+    if ((Constants.accType == "Creator" || Constants.accType == "Student") && !kIsWeb) {
      return FloatingActionButton(
         onPressed: () {
           Navigator.push(
